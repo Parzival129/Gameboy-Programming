@@ -1,0 +1,389 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Thu Apr 01 05:58:46 2021
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc62200
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _cls
+                             13 	.globl _gets
+                             14 	.globl _puts
+                             15 	.globl _printf
+                             16 	.globl _user_input
+                             17 	.globl _main
+                             18 	.globl _cls
+                             19 ;--------------------------------------------------------
+                             20 ; Externals used
+                             21 ;--------------------------------------------------------
+                             22 	.globl __io_out
+                             23 	.globl __io_in
+                             24 	.globl __io_status
+                             25 	.globl _sys_time
+                             26 	.globl __cpu
+                             27 ;--------------------------------------------------------
+                             28 ; special function registers
+                             29 ;--------------------------------------------------------
+                             30 ;--------------------------------------------------------
+                             31 ; special function bits 
+                             32 ;--------------------------------------------------------
+                             33 ;--------------------------------------------------------
+                             34 ; internal ram data
+                             35 ;--------------------------------------------------------
+                             36 	.area _DATA
+   0000                      37 _user_input::
+   0000                      38 	.ds 25
+                             39 ;--------------------------------------------------------
+                             40 ; overlayable items in internal ram 
+                             41 ;--------------------------------------------------------
+                             42 	.area _OVERLAY
+                             43 ;--------------------------------------------------------
+                             44 ; indirectly addressable internal ram data
+                             45 ;--------------------------------------------------------
+                             46 	.area _ISEG
+                             47 ;--------------------------------------------------------
+                             48 ; bit data
+                             49 ;--------------------------------------------------------
+                             50 	.area _BSEG
+                             51 ;--------------------------------------------------------
+                             52 ; external ram data
+                             53 ;--------------------------------------------------------
+                             54 	.area _XSEG
+                             55 ;--------------------------------------------------------
+                             56 ; global & static initialisations
+                             57 ;--------------------------------------------------------
+                             58 	.area _GSINIT
+                             59 	.area _GSFINAL
+                             60 	.area _GSINIT
+                             61 ;--------------------------------------------------------
+                             62 ; Home
+                             63 ;--------------------------------------------------------
+                             64 	.area _HOME
+                             65 	.area _CODE
+                             66 ;--------------------------------------------------------
+                             67 ; code
+                             68 ;--------------------------------------------------------
+                             69 	.area _CODE
+                             70 ;	TEST.c 22
+                             71 ; genLabel
+                             72 ; genFunction
+                             73 ;	---------------------------------
+                             74 ; Function cls
+                             75 ; ---------------------------------
+   0000                      76 ___cls_start:
+   0000                      77 _cls:
+   0000 C5                   78 	push	bc
+   0001 E8 FB                79 	lda	sp,-5(sp)
+                             80 ;	TEST.c 26
+                             81 ; genAssign
+                             82 ; AOP_STK for _cls_y_1_1
+   0003 F8 03                83 	lda	hl,3(sp)
+   0005 36 00                84 	ld	(hl),#0x00
+   0007 23                   85 	inc	hl
+   0008 36 00                86 	ld	(hl),#0x00
+                             87 ; genLabel
+   000A                      88 00105$:
+                             89 ; genCmpLt
+                             90 ; AOP_STK for _cls_y_1_1
+   000A F8 03                91 	lda	hl,3(sp)
+   000C 5E                   92 	ld	e,(hl)
+   000D 23                   93 	inc	hl
+   000E 7E                   94 	ld	a,(hl)
+   000F EE 80                95 	xor	a,#0x80
+   0011 57                   96 	ld	d,a
+   0012 21 EC 7F             97 	ld	hl,#0x7FEC
+   0015 19                   98 	add	hl,de
+   0016 DA 61 00             99 	jp	c,00108$
+                            100 ;	TEST.c 27
+                            101 ; genAssign
+   0019 01 00 00            102 	ld	bc,#0x0000
+                            103 ; genLabel
+   001C                     104 00101$:
+                            105 ; genCmpLt
+                            106 ; AOP_STK for _cls_sloc0_1_0
+   001C 59                  107 	ld	e,c
+   001D 78                  108 	ld	a,b
+   001E EE 80               109 	xor	a,#0x80
+   0020 57                  110 	ld	d,a
+   0021 21 E2 7F            111 	ld	hl,#0x7FE2
+   0024 19                  112 	add	hl,de
+   0025 3E 00               113 	ld	a,#0x00
+   0027 17                  114 	rla
+   0028 EE 01               115 	xor	a,#0x01
+   002A F8 02               116 	lda	hl,2(sp)
+   002C 77                  117 	ld	(hl),a
+                            118 ; genIfx
+                            119 ; AOP_STK for _cls_sloc0_1_0
+                            120 ; Removed redundent or a,a
+   002D AF                  121 	xor	a,a
+   002E B6                  122 	or	a,(hl)
+   002F CA 57 00            123 	jp	z,00107$
+                            124 ;	TEST.c 29
+                            125 ; genIpush
+                            126 ; AOP_STK for _cls_y_1_1
+   0032 23                  127 	inc	hl
+   0033 2A                  128 	ld	a,(hl+)
+   0034 66                  129 	ld	h,(hl)
+   0035 6F                  130 	ld	l,a
+   0036 E5                  131 	push	hl
+                            132 ; genIpush
+   0037 C5                  133 	push	bc
+                            134 ; genCall
+   0038 CD 00 00            135 	call	gotoxy
+   003B E8 04               136 	lda	sp,4(sp)
+                            137 ;	TEST.c 30
+                            138 ; genIpush
+   003D 3E 20               139 	ld	a,#0x20
+   003F F5                  140 	push	af
+   0040 33                  141 	inc	sp
+                            142 ; genCall
+   0041 CD 00 00            143 	call	setchar
+   0044 E8 01               144 	lda	sp,1(sp)
+                            145 ;	TEST.c 27
+                            146 ; genPlus
+                            147 ; AOP_STK for _cls_sloc1_1_0
+                            148 ; genPlusIncr
+                            149 ;	genPlusIncr failed
+   0046 21 01 00            150 	ld	hl,#0x0001
+   0049 09                  151 	add	hl,bc
+   004A 7D                  152 	ld	a,l
+   004B 54                  153 	ld	d,h
+   004C F8 00               154 	lda	hl,0(sp)
+   004E 22                  155 	ld	(hl+),a
+   004F 72                  156 	ld	(hl),d
+                            157 ; genAssign
+                            158 ; AOP_STK for _cls_sloc1_1_0
+   0050 2B                  159 	dec	hl
+   0051 4E                  160 	ld	c,(hl)
+   0052 23                  161 	inc	hl
+   0053 46                  162 	ld	b,(hl)
+                            163 ; genGoto
+   0054 C3 1C 00            164 	jp	00101$
+                            165 ; genLabel
+   0057                     166 00107$:
+                            167 ;	TEST.c 26
+                            168 ; genPlus
+                            169 ; AOP_STK for _cls_y_1_1
+                            170 ; genPlusIncr
+   0057 F8 03               171 	lda	hl,3(sp)
+   0059 34                  172 	inc	(hl)
+   005A 20 02               173 	jr	nz,00115$
+   005C 23                  174 	inc	hl
+   005D 34                  175 	inc	(hl)
+   005E                     176 00115$:
+                            177 ; genGoto
+   005E C3 0A 00            178 	jp	00105$
+                            179 ; genLabel
+   0061                     180 00108$:
+                            181 ;	TEST.c 32
+                            182 ; genIpush
+   0061 3E 00               183 	ld	a,#0x00
+   0063 F5                  184 	push	af
+   0064 33                  185 	inc	sp
+                            186 ; genIpush
+   0065 3E 00               187 	ld	a,#0x00
+   0067 F5                  188 	push	af
+   0068 33                  189 	inc	sp
+                            190 ; genCall
+   0069 CD 00 00            191 	call	gotoxy
+   006C E8 02               192 	lda	sp,2(sp)
+                            193 ; genLabel
+   006E                     194 00109$:
+                            195 ; genEndFunction
+   006E E8 05               196 	lda	sp,5(sp)
+   0070 C1                  197 	pop	bc
+   0071 C9                  198 	ret
+   0072                     199 ___cls_end:
+                            200 ;	TEST.c 36
+                            201 ; genLabel
+                            202 ; genFunction
+                            203 ;	---------------------------------
+                            204 ; Function main
+                            205 ; ---------------------------------
+   0072                     206 ___main_start:
+   0072                     207 _main:
+   0072 C5                  208 	push	bc
+   0073 E8 E7               209 	lda	sp,-25(sp)
+                            210 ;	TEST.c 40
+                            211 ; genLabel
+   0075                     212 00104$:
+                            213 ;	TEST.c 42
+                            214 ; genAddrOf
+   0075 F8 00               215 	lda	hl,0(sp)
+   0077 54                  216 	ld	d,h
+   0078 5D                  217 	ld	e,l
+   0079 4B                  218 	ld	c,e
+   007A 42                  219 	ld	b,d
+                            220 ; genAssign (pointer)
+   007B 3E 64               221 	ld	a,#0x64
+   007D 02                  222 	ld	(bc),a
+                            223 ; genPlus
+                            224 ; genPlusIncr
+   007E 59                  225 	ld	e,c
+   007F 50                  226 	ld	d,b
+   0080 13                  227 	inc	de
+                            228 ; genAssign (pointer)
+   0081 3E 6F               229 	ld	a,#0x6F
+   0083 12                  230 	ld	(de),a
+                            231 ; genPlus
+                            232 ; genPlusIncr
+   0084 59                  233 	ld	e,c
+   0085 50                  234 	ld	d,b
+   0086 13                  235 	inc	de
+   0087 13                  236 	inc	de
+                            237 ; genAssign (pointer)
+   0088 3E 64               238 	ld	a,#0x64
+   008A 12                  239 	ld	(de),a
+                            240 ; genPlus
+                            241 ; genPlusIncr
+                            242 ;	genPlusIncr failed
+   008B 79                  243 	ld	a,c
+   008C C6 03               244 	add	a,#0x03
+   008E 5F                  245 	ld	e,a
+   008F 78                  246 	ld	a,b
+   0090 CE 00               247 	adc	a,#0x00
+   0092 57                  248 	ld	d,a
+                            249 ; genAssign (pointer)
+   0093 3E 00               250 	ld	a,#0x00
+   0095 12                  251 	ld	(de),a
+                            252 ;	TEST.c 44
+                            253 ; genIpush
+   0096 21 F2 00            254 	ld	hl,#__str_1 + 0
+   0099 E5                  255 	push	hl
+                            256 ; genCall
+   009A CD 00 00            257 	call	_printf
+   009D E8 02               258 	lda	sp,2(sp)
+                            259 ;	TEST.c 45
+                            260 ; genIpush
+   009F 21 00 00            261 	ld	hl,#_user_input + 0
+   00A2 E5                  262 	push	hl
+                            263 ; genCall
+   00A3 CD 00 00            264 	call	_gets
+   00A6 E8 02               265 	lda	sp,2(sp)
+                            266 ;	TEST.c 46
+                            267 ; genIpush
+   00A8 21 FF 00            268 	ld	hl,#__str_2 + 0
+   00AB E5                  269 	push	hl
+                            270 ; genCall
+   00AC CD 00 00            271 	call	_printf
+   00AF E8 02               272 	lda	sp,2(sp)
+                            273 ;	TEST.c 47
+                            274 ; genIpush
+   00B1 C5                  275 	push	bc
+                            276 ; genCall
+   00B2 CD 00 00            277 	call	_printf
+   00B5 E8 02               278 	lda	sp,2(sp)
+                            279 ;	TEST.c 49
+                            280 ; genIpush
+   00B7 21 00 00            281 	ld	hl,#_user_input + 0
+   00BA E5                  282 	push	hl
+                            283 ; genIpush
+   00BB 21 01 01            284 	ld	hl,#__str_3 + 0
+   00BE E5                  285 	push	hl
+                            286 ; genCall
+   00BF CD 00 00            287 	call	_printf
+   00C2 E8 04               288 	lda	sp,4(sp)
+                            289 ;	TEST.c 51
+                            290 ; genCmpEq
+   00C4 3E 00               291 	ld	a,#<_user_input
+   00C6 B9                  292 	cp	c ; 4
+   00C7 C2 D2 00            293 	jp	nz,00110$
+   00CA 3E 00               294 	ld	a,#>_user_input
+   00CC B8                  295 	cp	b ; 4
+   00CD C2 D2 00            296 	jp	nz,00110$
+   00D0 18 03               297 	jr	00111$
+   00D2                     298 00110$:
+   00D2 C3 75 00            299 	jp	00104$
+   00D5                     300 00111$:
+                            301 ;	TEST.c 52
+                            302 ; genIpush
+   00D5 21 11 01            303 	ld	hl,#__str_4 + 0
+   00D8 E5                  304 	push	hl
+                            305 ; genCall
+   00D9 CD 00 00            306 	call	_printf
+   00DC E8 02               307 	lda	sp,2(sp)
+                            308 ;	TEST.c 53
+                            309 ; genIpush
+   00DE 21 1B 01            310 	ld	hl,#__str_5 + 0
+   00E1 E5                  311 	push	hl
+                            312 ; genCall
+   00E2 CD 00 00            313 	call	_puts
+   00E5 E8 02               314 	lda	sp,2(sp)
+                            315 ; genGoto
+   00E7 C3 75 00            316 	jp	00104$
+                            317 ; genLabel
+   00EA                     318 00106$:
+                            319 ; genEndFunction
+   00EA E8 19               320 	lda	sp,25(sp)
+   00EC C1                  321 	pop	bc
+   00ED C9                  322 	ret
+   00EE                     323 ___main_end:
+   00EE                     324 __str_0:
+   00EE 64 6F 64            325 	.ascii "dod"
+   00F1 00                  326 	.db 0x00
+   00F2                     327 __str_1:
+   00F2 52 6F 6F 74 40 4F   328 	.ascii "Root@Onions>"
+        6E 69 6F 6E 73 3E
+   00FE 00                  329 	.db 0x00
+   00FF                     330 __str_2:
+   00FF 0A                  331 	.db 0x0A
+   0100 00                  332 	.db 0x00
+   0101                     333 __str_3:
+   0101 59 6F 75 20 74 79   334 	.ascii "You typed: %s "
+        70 65 64 3A 20 25
+        73 20
+   010F 0A                  335 	.db 0x0A
+   0110 00                  336 	.db 0x00
+   0111                     337 __str_4:
+   0111 49 74 20 77 6F 72   338 	.ascii "It worked"
+        6B 65 64
+   011A 00                  339 	.db 0x00
+   011B                     340 __str_5:
+   011B 61 6E 6F 74 68 65   341 	.ascii "another"
+        72
+   0122 00                  342 	.db 0x00
+                            343 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___cls_end                         0072 R
+  0 ___cls_start                       0000 R
+  0 ___main_end                        00EE R
+  0 ___main_start                      0072 R
+    __cpu                              **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+  0 __str_0                            00EE R
+  0 __str_1                            00F2 R
+  0 __str_2                            00FF R
+  0 __str_3                            0101 R
+  0 __str_4                            0111 R
+  0 __str_5                            011B R
+  0 _cls                               0000 GR
+    _gets                              **** GX
+  0 _main                              0072 GR
+    _printf                            **** GX
+    _puts                              **** GX
+    _sys_time                          **** GX
+  1 _user_input                        0000 GR
+    gotoxy                             **** GX
+    setchar                            **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size  123   flags 0
+   1 _DATA                              size   19   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size    0   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

@@ -1,0 +1,971 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Sat Apr 03 15:01:53 2021
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc155720
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _read_op
+                             13 	.globl _top
+                             14 	.globl _pop
+                             15 	.globl _push
+                             16 	.globl _gets
+                             17 	.globl _puts
+                             18 	.globl _printf
+                             19 	.globl _n
+                             20 	.globl _pos
+                             21 	.globl _s
+                             22 	.globl _stack
+                             23 	.globl _sp
+                             24 	.globl _main
+                             25 	.globl _read_op
+                             26 	.globl _top
+                             27 	.globl _pop
+                             28 	.globl _push
+                             29 ;--------------------------------------------------------
+                             30 ; Externals used
+                             31 ;--------------------------------------------------------
+                             32 	.globl __io_out
+                             33 	.globl __io_in
+                             34 	.globl __io_status
+                             35 	.globl _sys_time
+                             36 	.globl __cpu
+                             37 ;--------------------------------------------------------
+                             38 ; special function registers
+                             39 ;--------------------------------------------------------
+                             40 ;--------------------------------------------------------
+                             41 ; special function bits 
+                             42 ;--------------------------------------------------------
+                             43 ;--------------------------------------------------------
+                             44 ; internal ram data
+                             45 ;--------------------------------------------------------
+                             46 	.area _DATA
+   0000                      47 _sp::
+   0000                      48 	.ds 1
+   0001                      49 _stack::
+   0001                      50 	.ds 80
+   0051                      51 _s::
+   0051                      52 	.ds 40
+   0079                      53 _pos::
+   0079                      54 	.ds 1
+   007A                      55 _n::
+   007A                      56 	.ds 2
+                             57 ;--------------------------------------------------------
+                             58 ; overlayable items in internal ram 
+                             59 ;--------------------------------------------------------
+                             60 	.area _OVERLAY
+                             61 ;--------------------------------------------------------
+                             62 ; indirectly addressable internal ram data
+                             63 ;--------------------------------------------------------
+                             64 	.area _ISEG
+                             65 ;--------------------------------------------------------
+                             66 ; bit data
+                             67 ;--------------------------------------------------------
+                             68 	.area _BSEG
+                             69 ;--------------------------------------------------------
+                             70 ; external ram data
+                             71 ;--------------------------------------------------------
+                             72 	.area _XSEG
+                             73 ;--------------------------------------------------------
+                             74 ; global & static initialisations
+                             75 ;--------------------------------------------------------
+                             76 	.area _GSINIT
+                             77 	.area _GSFINAL
+                             78 	.area _GSINIT
+                             79 ;--------------------------------------------------------
+                             80 ; Home
+                             81 ;--------------------------------------------------------
+                             82 	.area _HOME
+                             83 	.area _CODE
+                             84 ;--------------------------------------------------------
+                             85 ; code
+                             86 ;--------------------------------------------------------
+                             87 	.area _CODE
+                             88 ;	rpn.c 15
+                             89 ; genLabel
+                             90 ; genFunction
+                             91 ;	---------------------------------
+                             92 ; Function push
+                             93 ; ---------------------------------
+   0000                      94 ___push_start:
+   0000                      95 _push:
+   0000 C5                   96 	push	bc
+                             97 	
+                             98 ;	rpn.c 17
+                             99 ; genCmpLt
+                            100 ; AOP_HL for _sp
+   0001 21 00 00            101 	ld	hl,#_sp + 0
+   0004 7E                  102 	ld	a,(hl)
+   0005 FE 28               103 	cp	#0x28
+   0007 D2 23 00            104 	jp	nc,00102$
+                            105 ;	rpn.c 18
+                            106 ; genAssign
+                            107 ; AOP_HL for _sp
+   000A 4E                  108 	ld	c,(hl)
+                            109 ; genPlus
+                            110 ; AOP_HL for _sp
+                            111 ; genPlusIncr
+   000B 34                  112 	inc	(hl)
+                            113 ; genLeftShift
+   000C 79                  114 	ld	a,c
+   000D 87                  115 	add	a,a
+   000E 4F                  116 	ld	c,a
+                            117 ; genPlus
+                            118 ;	genPlusIncr failed
+   000F 3E 01               119 	ld	a,#<_stack
+   0011 81                  120 	add	a,c
+   0012 5F                  121 	ld	e,a
+   0013 3E 00               122 	ld	a,#>_stack
+   0015 CE 00               123 	adc	a,#0x00
+   0017 57                  124 	ld	d,a
+                            125 ; genAssign (pointer)
+                            126 ; AOP_STK for 
+   0018 F8 04               127 	lda	hl,4(sp)
+   001A 7E                  128 	ld	a,(hl)
+   001B 12                  129 	ld	(de),a
+   001C 13                  130 	inc	de
+   001D 23                  131 	inc	hl
+   001E 7E                  132 	ld	a,(hl)
+   001F 12                  133 	ld	(de),a
+                            134 ; genGoto
+   0020 C3 2C 00            135 	jp	00104$
+                            136 ; genLabel
+   0023                     137 00102$:
+                            138 ;	rpn.c 20
+                            139 ; genIpush
+   0023 21 2E 00            140 	ld	hl,#__str_0 + 0
+   0026 E5                  141 	push	hl
+                            142 ; genCall
+   0027 CD 00 00            143 	call	_puts
+   002A E8 02               144 	lda	sp,2(sp)
+                            145 ; genLabel
+   002C                     146 00104$:
+                            147 ; genEndFunction
+                            148 	
+   002C C1                  149 	pop	bc
+   002D C9                  150 	ret
+   002E                     151 ___push_end:
+   002E                     152 __str_0:
+   002E 53 74 61 63 6B 20   153 	.ascii "Stack full"
+        66 75 6C 6C
+   0038 00                  154 	.db 0x00
+                            155 ;	rpn.c 23
+                            156 ; genLabel
+                            157 ; genFunction
+                            158 ;	---------------------------------
+                            159 ; Function pop
+                            160 ; ---------------------------------
+   0039                     161 ___pop_start:
+   0039                     162 _pop:
+   0039 C5                  163 	push	bc
+                            164 	
+                            165 ;	rpn.c 25
+                            166 ; genCmpGt
+                            167 ; AOP_HL for _sp
+   003A AF                  168 	xor	a,a
+   003B 3E 00               169 	ld	a,#0x00
+   003D 21 00 00            170 	ld	hl,#_sp + 0
+   0040 9E                  171 	sbc	a,(hl) ; 2
+   0041 D2 5B 00            172 	jp	nc,00102$
+                            173 ;	rpn.c 26
+                            174 ; genMinus
+                            175 ; AOP_HL for _sp
+   0044 35                  176 	dec	(hl)
+                            177 ; genLeftShift
+                            178 ; AOP_HL for _sp
+   0045 7E                  179 	ld	a,(hl)
+   0046 87                  180 	add	a,a
+   0047 4F                  181 	ld	c,a
+                            182 ; genPlus
+                            183 ;	genPlusIncr failed
+   0048 3E 01               184 	ld	a,#<_stack
+   004A 81                  185 	add	a,c
+   004B 5F                  186 	ld	e,a
+   004C 3E 00               187 	ld	a,#>_stack
+   004E CE 00               188 	adc	a,#0x00
+   0050 57                  189 	ld	d,a
+                            190 ; genPointerGet
+                            191 ; Removed redundent load
+                            192 ; Removed redundent load
+   0051 1A                  193 	ld	a,(de)
+   0052 4F                  194 	ld	c,a
+   0053 13                  195 	inc	de
+   0054 1A                  196 	ld	a,(de)
+   0055 47                  197 	ld	b,a
+                            198 ; genRet
+   0056 59                  199 	ld	e,c
+   0057 50                  200 	ld	d,b
+   0058 C3 67 00            201 	jp	00104$
+                            202 ; genLabel
+   005B                     203 00102$:
+                            204 ;	rpn.c 28
+                            205 ; genIpush
+   005B 21 69 00            206 	ld	hl,#__str_1 + 0
+   005E E5                  207 	push	hl
+                            208 ; genCall
+   005F CD 00 00            209 	call	_puts
+   0062 E8 02               210 	lda	sp,2(sp)
+                            211 ;	rpn.c 29
+                            212 ; genRet
+   0064 11 00 00            213 	ld	de,#0x0000
+                            214 ; genLabel
+   0067                     215 00104$:
+                            216 ; genEndFunction
+                            217 	
+   0067 C1                  218 	pop	bc
+   0068 C9                  219 	ret
+   0069                     220 ___pop_end:
+   0069                     221 __str_1:
+   0069 53 74 61 63 6B 20   222 	.ascii "Stack empty"
+        65 6D 70 74 79
+   0074 00                  223 	.db 0x00
+                            224 ;	rpn.c 32
+                            225 ; genLabel
+                            226 ; genFunction
+                            227 ;	---------------------------------
+                            228 ; Function top
+                            229 ; ---------------------------------
+   0075                     230 ___top_start:
+   0075                     231 _top:
+   0075 C5                  232 	push	bc
+                            233 	
+                            234 ;	rpn.c 34
+                            235 ; genCmpGt
+                            236 ; AOP_HL for _sp
+   0076 AF                  237 	xor	a,a
+   0077 3E 00               238 	ld	a,#0x00
+   0079 21 00 00            239 	ld	hl,#_sp + 0
+   007C 9E                  240 	sbc	a,(hl) ; 2
+   007D D2 9A 00            241 	jp	nc,00102$
+                            242 ;	rpn.c 35
+                            243 ; genMinus
+                            244 ; AOP_HL for _sp
+   0080 7E                  245 	ld	a,(hl)
+   0081 C6 FF               246 	add	a,#0xFF
+   0083 4F                  247 	ld	c,a
+                            248 ; genLeftShift
+   0084 79                  249 	ld	a,c
+   0085 87                  250 	add	a,a
+   0086 4F                  251 	ld	c,a
+                            252 ; genPlus
+                            253 ;	genPlusIncr failed
+   0087 3E 01               254 	ld	a,#<_stack
+   0089 81                  255 	add	a,c
+   008A 5F                  256 	ld	e,a
+   008B 3E 00               257 	ld	a,#>_stack
+   008D CE 00               258 	adc	a,#0x00
+   008F 57                  259 	ld	d,a
+                            260 ; genPointerGet
+                            261 ; Removed redundent load
+                            262 ; Removed redundent load
+   0090 1A                  263 	ld	a,(de)
+   0091 4F                  264 	ld	c,a
+   0092 13                  265 	inc	de
+   0093 1A                  266 	ld	a,(de)
+   0094 47                  267 	ld	b,a
+                            268 ; genRet
+   0095 59                  269 	ld	e,c
+   0096 50                  270 	ld	d,b
+   0097 C3 A6 00            271 	jp	00104$
+                            272 ; genLabel
+   009A                     273 00102$:
+                            274 ;	rpn.c 37
+                            275 ; genIpush
+   009A 21 A8 00            276 	ld	hl,#__str_2 + 0
+   009D E5                  277 	push	hl
+                            278 ; genCall
+   009E CD 00 00            279 	call	_puts
+   00A1 E8 02               280 	lda	sp,2(sp)
+                            281 ;	rpn.c 38
+                            282 ; genRet
+   00A3 11 00 00            283 	ld	de,#0x0000
+                            284 ; genLabel
+   00A6                     285 00104$:
+                            286 ; genEndFunction
+                            287 	
+   00A6 C1                  288 	pop	bc
+   00A7 C9                  289 	ret
+   00A8                     290 ___top_end:
+   00A8                     291 __str_2:
+   00A8 53 74 61 63 6B 20   292 	.ascii "Stack empty"
+        65 6D 70 74 79
+   00B3 00                  293 	.db 0x00
+                            294 ;	rpn.c 41
+                            295 ; genLabel
+                            296 ; genFunction
+                            297 ;	---------------------------------
+                            298 ; Function read_op
+                            299 ; ---------------------------------
+   00B4                     300 ___read_op_start:
+   00B4                     301 _read_op:
+   00B4 C5                  302 	push	bc
+   00B5 E8 FE               303 	lda	sp,-2(sp)
+                            304 ;	rpn.c 43
+                            305 ; genCmpEq
+                            306 ; AOP_HL for _pos
+   00B7 21 79 00            307 	ld	hl,#_pos + 0
+   00BA 7E                  308 	ld	a,(hl)
+   00BB B7                  309 	or	a,a
+   00BC C2 C1 00            310 	jp	nz,00123$
+   00BF 18 03               311 	jr	00124$
+   00C1                     312 00123$:
+   00C1 C3 CD 00            313 	jp	00118$
+   00C4                     314 00124$:
+                            315 ;	rpn.c 44
+                            316 ; genIpush
+   00C4 21 51 00            317 	ld	hl,#_s + 0
+   00C7 E5                  318 	push	hl
+                            319 ; genCall
+   00C8 CD 00 00            320 	call	_gets
+   00CB E8 02               321 	lda	sp,2(sp)
+                            322 ;	rpn.c 47
+                            323 ; genLabel
+   00CD                     324 00118$:
+                            325 ; genLabel
+   00CD                     326 00104$:
+                            327 ; genAssign
+                            328 ; AOP_HL for _pos
+   00CD 21 79 00            329 	ld	hl,#_pos + 0
+   00D0 4E                  330 	ld	c,(hl)
+                            331 ; genPlus
+                            332 ;	genPlusIncr failed
+   00D1 3E 51               333 	ld	a,#<_s
+   00D3 81                  334 	add	a,c
+   00D4 5F                  335 	ld	e,a
+   00D5 3E 00               336 	ld	a,#>_s
+   00D7 CE 00               337 	adc	a,#0x00
+   00D9 57                  338 	ld	d,a
+                            339 ; genPointerGet
+   00DA 1A                  340 	ld	a,(de)
+   00DB 4F                  341 	ld	c,a
+                            342 ; genCmpEq
+   00DC 79                  343 	ld	a,c ; 2
+   00DD FE 20               344 	cp	a,#0x20
+                            345 ; Rule 5
+   00DF CA FC 00            346 	jp	z,00105$
+   00E2                     347 00125$:
+                            348 ; genAssign
+                            349 ; AOP_HL for _pos
+   00E2 21 79 00            350 	ld	hl,#_pos + 0
+   00E5 4E                  351 	ld	c,(hl)
+                            352 ; genPlus
+                            353 ;	genPlusIncr failed
+   00E6 3E 51               354 	ld	a,#<_s
+   00E8 81                  355 	add	a,c
+   00E9 5F                  356 	ld	e,a
+   00EA 3E 00               357 	ld	a,#>_s
+   00EC CE 00               358 	adc	a,#0x00
+   00EE 57                  359 	ld	d,a
+                            360 ; genPointerGet
+   00EF 1A                  361 	ld	a,(de)
+   00F0 4F                  362 	ld	c,a
+                            363 ; genCmpEq
+   00F1 79                  364 	ld	a,c ; 2
+   00F2 FE 09               365 	cp	a,#0x09
+   00F4 C2 F9 00            366 	jp	nz,00126$
+   00F7 18 03               367 	jr	00127$
+   00F9                     368 00126$:
+   00F9 C3 03 01            369 	jp	00106$
+   00FC                     370 00127$:
+                            371 ; genLabel
+   00FC                     372 00105$:
+                            373 ;	rpn.c 48
+                            374 ; genPlus
+                            375 ; AOP_HL for _pos
+                            376 ; genPlusIncr
+   00FC 21 79 00            377 	ld	hl,#_pos + 0
+   00FF 34                  378 	inc	(hl)
+                            379 ; genGoto
+   0100 C3 CD 00            380 	jp	00104$
+                            381 ; genLabel
+   0103                     382 00106$:
+                            383 ;	rpn.c 50
+                            384 ; genAssign
+                            385 ; AOP_HL for _pos
+   0103 21 79 00            386 	ld	hl,#_pos + 0
+   0106 4E                  387 	ld	c,(hl)
+                            388 ; genPlus
+                            389 ;	genPlusIncr failed
+   0107 3E 51               390 	ld	a,#<_s
+   0109 81                  391 	add	a,c
+   010A 5F                  392 	ld	e,a
+   010B 3E 00               393 	ld	a,#>_s
+   010D CE 00               394 	adc	a,#0x00
+   010F 57                  395 	ld	d,a
+                            396 ; genPointerGet
+   0110 1A                  397 	ld	a,(de)
+   0111 4F                  398 	ld	c,a
+                            399 ; genCmpEq
+   0112 79                  400 	ld	a,c
+   0113 B7                  401 	or	a,a
+   0114 C2 19 01            402 	jp	nz,00128$
+   0117 18 03               403 	jr	00129$
+   0119                     404 00128$:
+   0119 C3 26 01            405 	jp	00108$
+   011C                     406 00129$:
+                            407 ;	rpn.c 51
+                            408 ; genAssign
+                            409 ; AOP_HL for _pos
+   011C 21 79 00            410 	ld	hl,#_pos + 0
+   011F 36 00               411 	ld	(hl),#0x00
+                            412 ;	rpn.c 52
+                            413 ; genRet
+   0121 1E 0A               414 	ld	e,#0x0A
+   0123 C3 D4 01            415 	jp	00114$
+                            416 ; genLabel
+   0126                     417 00108$:
+                            418 ;	rpn.c 55
+                            419 ; genAssign
+                            420 ; AOP_HL for _pos
+   0126 21 79 00            421 	ld	hl,#_pos + 0
+   0129 4E                  422 	ld	c,(hl)
+                            423 ; genPlus
+                            424 ;	genPlusIncr failed
+   012A 3E 51               425 	ld	a,#<_s
+   012C 81                  426 	add	a,c
+   012D 5F                  427 	ld	e,a
+   012E 3E 00               428 	ld	a,#>_s
+   0130 CE 00               429 	adc	a,#0x00
+   0132 57                  430 	ld	d,a
+                            431 ; genPointerGet
+   0133 1A                  432 	ld	a,(de)
+   0134 4F                  433 	ld	c,a
+                            434 ; genIpush
+   0135 79                  435 	ld	a,c
+   0136 F5                  436 	push	af
+   0137 33                  437 	inc	sp
+                            438 ; genCall
+   0138 CD 00 00            439 	call	isdigit
+   013B 42                  440 	ld	b,d
+   013C 4B                  441 	ld	c,e
+   013D E8 01               442 	lda	sp,1(sp)
+                            443 ; genIfx
+                            444 ; Rule 8
+   013F 79                  445 	ld	a,c
+   0140 B0                  446 	or	a,b
+   0141 C2 58 01            447 	jp	nz,00110$
+                            448 ;	rpn.c 56
+                            449 ; genAssign
+                            450 ; AOP_HL for _pos
+   0144 21 79 00            451 	ld	hl,#_pos + 0
+   0147 4E                  452 	ld	c,(hl)
+                            453 ; genPlus
+                            454 ; AOP_HL for _pos
+                            455 ; genPlusIncr
+   0148 34                  456 	inc	(hl)
+                            457 ; genPlus
+                            458 ;	genPlusIncr failed
+   0149 3E 51               459 	ld	a,#<_s
+   014B 81                  460 	add	a,c
+   014C 5F                  461 	ld	e,a
+   014D 3E 00               462 	ld	a,#>_s
+   014F CE 00               463 	adc	a,#0x00
+   0151 57                  464 	ld	d,a
+                            465 ; genPointerGet
+   0152 1A                  466 	ld	a,(de)
+   0153 4F                  467 	ld	c,a
+                            468 ; genRet
+   0154 59                  469 	ld	e,c
+   0155 C3 D4 01            470 	jp	00114$
+                            471 ; genLabel
+   0158                     472 00110$:
+                            473 ;	rpn.c 58
+                            474 ; genAssign
+                            475 ; AOP_HL for _pos
+   0158 21 79 00            476 	ld	hl,#_pos + 0
+   015B 4E                  477 	ld	c,(hl)
+                            478 ; genPlus
+                            479 ;	genPlusIncr failed
+   015C 3E 51               480 	ld	a,#<_s
+   015E 81                  481 	add	a,c
+   015F 5F                  482 	ld	e,a
+   0160 3E 00               483 	ld	a,#>_s
+   0162 CE 00               484 	adc	a,#0x00
+   0164 57                  485 	ld	d,a
+                            486 ; genPointerGet
+   0165 1A                  487 	ld	a,(de)
+   0166 4F                  488 	ld	c,a
+                            489 ; genMinus
+   0167 79                  490 	ld	a,c
+   0168 C6 D0               491 	add	a,#0xD0
+   016A 4F                  492 	ld	c,a
+                            493 ; genCast
+                            494 ; AOP_HL for _n
+   016B 21 7A 00            495 	ld	hl,#_n + 0
+   016E 71                  496 	ld	(hl),c
+   016F 79                  497 	ld	a,c
+                            498 ; genCast: sign extend untested.
+   0170 17                  499 	rla	
+   0171 9F                  500 	sbc	a,a
+   0172 23                  501 	inc	hl
+   0173 77                  502 	ld	(hl),a
+                            503 ;	rpn.c 59
+                            504 ; genLabel
+   0174                     505 00111$:
+                            506 ; genPlus
+                            507 ; AOP_HL for _pos
+                            508 ; genPlusIncr
+   0174 21 79 00            509 	ld	hl,#_pos + 0
+   0177 34                  510 	inc	(hl)
+                            511 ; genAssign
+                            512 ; AOP_HL for _pos
+   0178 4E                  513 	ld	c,(hl)
+                            514 ; genPlus
+                            515 ;	genPlusIncr failed
+   0179 3E 51               516 	ld	a,#<_s
+   017B 81                  517 	add	a,c
+   017C 5F                  518 	ld	e,a
+   017D 3E 00               519 	ld	a,#>_s
+   017F CE 00               520 	adc	a,#0x00
+   0181 57                  521 	ld	d,a
+                            522 ; genPointerGet
+   0182 1A                  523 	ld	a,(de)
+   0183 4F                  524 	ld	c,a
+                            525 ; genIpush
+   0184 79                  526 	ld	a,c
+   0185 F5                  527 	push	af
+   0186 33                  528 	inc	sp
+                            529 ; genCall
+   0187 CD 00 00            530 	call	isdigit
+   018A 42                  531 	ld	b,d
+   018B 4B                  532 	ld	c,e
+   018C E8 01               533 	lda	sp,1(sp)
+                            534 ; genIfx
+                            535 ; Rule 8
+   018E 79                  536 	ld	a,c
+   018F B0                  537 	or	a,b
+   0190 CA D2 01            538 	jp	z,00113$
+                            539 ;	rpn.c 60
+                            540 ; genIpush
+   0193 21 0A 00            541 	ld	hl,#0x000A
+   0196 E5                  542 	push	hl
+                            543 ; genIpush
+                            544 ; AOP_HL for _n
+   0197 21 7A 00            545 	ld	hl,#_n + 0
+   019A 2A                  546 	ld	a,(hl+)
+   019B 66                  547 	ld	h,(hl)
+   019C 6F                  548 	ld	l,a
+   019D E5                  549 	push	hl
+                            550 ; genCall
+   019E CD 00 00            551 	call	__mulsint
+                            552 ; AOP_STK for _read_op_sloc0_1_0
+   01A1 F8 05               553 	lda	hl,5(sp)
+   01A3 72                  554 	ld	(hl),d
+   01A4 2B                  555 	dec	hl
+   01A5 73                  556 	ld	(hl),e
+   01A6 E8 04               557 	lda	sp,4(sp)
+                            558 ; genAssign
+                            559 ; AOP_HL for _pos
+   01A8 21 79 00            560 	ld	hl,#_pos + 0
+   01AB 4E                  561 	ld	c,(hl)
+                            562 ; genPlus
+                            563 ;	genPlusIncr failed
+   01AC 3E 51               564 	ld	a,#<_s
+   01AE 81                  565 	add	a,c
+   01AF 5F                  566 	ld	e,a
+   01B0 3E 00               567 	ld	a,#>_s
+   01B2 CE 00               568 	adc	a,#0x00
+   01B4 57                  569 	ld	d,a
+                            570 ; genPointerGet
+   01B5 1A                  571 	ld	a,(de)
+   01B6 4F                  572 	ld	c,a
+                            573 ; genCast
+                            574 ; Removed redundent load
+   01B7 79                  575 	ld	a,c
+                            576 ; genCast: sign extend untested.
+   01B8 17                  577 	rla	
+   01B9 9F                  578 	sbc	a,a
+   01BA 47                  579 	ld	b,a
+                            580 ; genPlus
+                            581 ; AOP_STK for _read_op_sloc0_1_0
+                            582 ;	genPlusIncr failed
+   01BB F8 00               583 	lda	hl,0(sp)
+   01BD 2A                  584 	ld	a,(hl+)
+   01BE 66                  585 	ld	h,(hl)
+   01BF 6F                  586 	ld	l,a
+   01C0 09                  587 	add	hl,bc
+   01C1 4D                  588 	ld	c,l
+   01C2 44                  589 	ld	b,h
+                            590 ; genMinus
+                            591 ; AOP_HL for _n
+   01C3 79                  592 	ld	a,c
+   01C4 C6 D0               593 	add	a,#0xD0
+   01C6 21 7A 00            594 	ld	hl,#_n + 0
+   01C9 77                  595 	ld	(hl),a
+   01CA 78                  596 	ld	a,b
+   01CB CE FF               597 	adc	a,#0xFF
+   01CD 23                  598 	inc	hl
+   01CE 77                  599 	ld	(hl),a
+                            600 ; genGoto
+   01CF C3 74 01            601 	jp	00111$
+                            602 ; genLabel
+   01D2                     603 00113$:
+                            604 ;	rpn.c 62
+                            605 ; genRet
+   01D2 1E 30               606 	ld	e,#0x30
+                            607 ; genLabel
+   01D4                     608 00114$:
+                            609 ; genEndFunction
+   01D4 E8 02               610 	lda	sp,2(sp)
+   01D6 C1                  611 	pop	bc
+   01D7 C9                  612 	ret
+   01D8                     613 ___read_op_end:
+                            614 ;	rpn.c 65
+                            615 ; genLabel
+                            616 ; genFunction
+                            617 ;	---------------------------------
+                            618 ; Function main
+                            619 ; ---------------------------------
+   01D8                     620 ___main_start:
+   01D8                     621 _main:
+   01D8 C5                  622 	push	bc
+   01D9 E8 FC               623 	lda	sp,-4(sp)
+                            624 ;	rpn.c 70
+                            625 ; genIpush
+   01DB 21 E5 02            626 	ld	hl,#__str_3 + 0
+   01DE E5                  627 	push	hl
+                            628 ; genCall
+   01DF CD 00 00            629 	call	_puts
+   01E2 E8 02               630 	lda	sp,2(sp)
+                            631 ;	rpn.c 71
+                            632 ; genAssign
+                            633 ; AOP_HL for _sp
+   01E4 21 00 00            634 	ld	hl,#_sp + 0
+   01E7 36 00               635 	ld	(hl),#0x00
+                            636 ;	rpn.c 72
+                            637 ; genAssign
+                            638 ; AOP_HL for _pos
+   01E9 21 79 00            639 	ld	hl,#_pos + 0
+   01EC 36 00               640 	ld	(hl),#0x00
+                            641 ;	rpn.c 74
+                            642 ; genLabel
+   01EE                     643 00111$:
+                            644 ; genIpush
+   01EE 21 51 00            645 	ld	hl,#_s + 0
+   01F1 E5                  646 	push	hl
+                            647 ; genCall
+   01F2 CD B4 00            648 	call	_read_op
+   01F5 4B                  649 	ld	c,e
+   01F6 E8 02               650 	lda	sp,2(sp)
+                            651 ; genAssign
+   01F8 41                  652 	ld	b,c
+                            653 ; genCmpEq
+   01F9 79                  654 	ld	a,c
+   01FA B7                  655 	or	a,a
+                            656 ; Rule 5
+   01FB CA E1 02            657 	jp	z,00114$
+   01FE                     658 00125$:
+                            659 ;	rpn.c 75
+                            660 ; genCmpEq
+   01FE 78                  661 	ld	a,b ; 2
+   01FF FE 0A               662 	cp	a,#0x0A
+                            663 ; Rule 5
+   0201 CA CF 02            664 	jp	z,00109$
+   0204                     665 00126$:
+                            666 ; genCmpEq
+   0204 78                  667 	ld	a,b ; 2
+   0205 FE 2A               668 	cp	a,#0x2A
+                            669 ; Rule 5
+   0207 CA 54 02            670 	jp	z,00103$
+   020A                     671 00127$:
+                            672 ; genCmpEq
+   020A 78                  673 	ld	a,b ; 2
+   020B FE 2B               674 	cp	a,#0x2B
+                            675 ; Rule 5
+   020D CA 36 02            676 	jp	z,00102$
+   0210                     677 00128$:
+                            678 ; genCmpEq
+   0210 78                  679 	ld	a,b ; 2
+   0211 FE 2D               680 	cp	a,#0x2D
+                            681 ; Rule 5
+   0213 CA 78 02            682 	jp	z,00104$
+   0216                     683 00129$:
+                            684 ; genCmpEq
+   0216 78                  685 	ld	a,b ; 2
+   0217 FE 2F               686 	cp	a,#0x2F
+                            687 ; Rule 5
+   0219 CA 9A 02            688 	jp	z,00105$
+   021C                     689 00130$:
+                            690 ; genCmpEq
+   021C 78                  691 	ld	a,b ; 2
+   021D FE 30               692 	cp	a,#0x30
+   021F C2 24 02            693 	jp	nz,00131$
+   0222 18 03               694 	jr	00132$
+   0224                     695 00131$:
+   0224 C3 EE 01            696 	jp	00111$
+   0227                     697 00132$:
+                            698 ;	rpn.c 77
+                            699 ; genIpush
+                            700 ; AOP_HL for _n
+   0227 21 7A 00            701 	ld	hl,#_n + 0
+   022A 2A                  702 	ld	a,(hl+)
+   022B 66                  703 	ld	h,(hl)
+   022C 6F                  704 	ld	l,a
+   022D E5                  705 	push	hl
+                            706 ; genCall
+   022E CD 00 00            707 	call	_push
+   0231 E8 02               708 	lda	sp,2(sp)
+                            709 ;	rpn.c 78
+                            710 ; genGoto
+   0233 C3 EE 01            711 	jp	00111$
+                            712 ;	rpn.c 80
+                            713 ; genLabel
+   0236                     714 00102$:
+                            715 ; genCall
+   0236 CD 39 00            716 	call	_pop
+                            717 ; AOP_STK for _main_sloc0_1_0
+   0239 F8 01               718 	lda	hl,1(sp)
+   023B 72                  719 	ld	(hl),d
+   023C 2B                  720 	dec	hl
+   023D 73                  721 	ld	(hl),e
+                            722 ; genCall
+   023E CD 39 00            723 	call	_pop
+   0241 42                  724 	ld	b,d
+   0242 4B                  725 	ld	c,e
+                            726 ; genPlus
+                            727 ; AOP_STK for _main_sloc0_1_0
+                            728 ;	genPlusIncr failed
+   0243 F8 00               729 	lda	hl,0(sp)
+   0245 2A                  730 	ld	a,(hl+)
+   0246 66                  731 	ld	h,(hl)
+   0247 6F                  732 	ld	l,a
+   0248 09                  733 	add	hl,bc
+   0249 4D                  734 	ld	c,l
+   024A 44                  735 	ld	b,h
+                            736 ; genIpush
+   024B C5                  737 	push	bc
+                            738 ; genCall
+   024C CD 00 00            739 	call	_push
+   024F E8 02               740 	lda	sp,2(sp)
+                            741 ;	rpn.c 81
+                            742 ; genGoto
+   0251 C3 EE 01            743 	jp	00111$
+                            744 ;	rpn.c 83
+                            745 ; genLabel
+   0254                     746 00103$:
+                            747 ; genCall
+   0254 CD 39 00            748 	call	_pop
+                            749 ; AOP_STK for _main_sloc0_1_0
+   0257 F8 01               750 	lda	hl,1(sp)
+   0259 72                  751 	ld	(hl),d
+   025A 2B                  752 	dec	hl
+   025B 73                  753 	ld	(hl),e
+                            754 ; genCall
+   025C CD 39 00            755 	call	_pop
+   025F 42                  756 	ld	b,d
+   0260 4B                  757 	ld	c,e
+                            758 ; genIpush
+   0261 C5                  759 	push	bc
+                            760 ; genIpush
+                            761 ; AOP_STK for _main_sloc0_1_0
+   0262 F8 02               762 	lda	hl,2(sp)
+   0264 2A                  763 	ld	a,(hl+)
+   0265 66                  764 	ld	h,(hl)
+   0266 6F                  765 	ld	l,a
+   0267 E5                  766 	push	hl
+                            767 ; genCall
+   0268 CD 00 00            768 	call	__mulsint
+   026B 42                  769 	ld	b,d
+   026C 4B                  770 	ld	c,e
+   026D E8 04               771 	lda	sp,4(sp)
+                            772 ; genIpush
+   026F C5                  773 	push	bc
+                            774 ; genCall
+   0270 CD 00 00            775 	call	_push
+   0273 E8 02               776 	lda	sp,2(sp)
+                            777 ;	rpn.c 84
+                            778 ; genGoto
+   0275 C3 EE 01            779 	jp	00111$
+                            780 ;	rpn.c 86
+                            781 ; genLabel
+   0278                     782 00104$:
+                            783 ; genCall
+   0278 CD 39 00            784 	call	_pop
+                            785 ; AOP_STK for _main_op2_1_1
+   027B F8 03               786 	lda	hl,3(sp)
+   027D 72                  787 	ld	(hl),d
+   027E 2B                  788 	dec	hl
+   027F 73                  789 	ld	(hl),e
+                            790 ;	rpn.c 87
+                            791 ; genCall
+   0280 CD 39 00            792 	call	_pop
+   0283 42                  793 	ld	b,d
+   0284 4B                  794 	ld	c,e
+                            795 ; genMinus
+                            796 ; AOP_STK for _main_op2_1_1
+                            797 ; Removed redundent load
+                            798 ; Removed redundent load
+   0285 F8 02               799 	lda	hl,2(sp)
+   0287 5E                  800 	ld	e,(hl)
+   0288 23                  801 	inc	hl
+   0289 56                  802 	ld	d,(hl)
+   028A 79                  803 	ld	a,c
+   028B 93                  804 	sub	a,e
+   028C 5F                  805 	ld	e,a
+   028D 78                  806 	ld	a,b
+   028E 9A                  807 	sbc	a,d
+   028F 47                  808 	ld	b,a
+   0290 4B                  809 	ld	c,e
+                            810 ; genIpush
+   0291 C5                  811 	push	bc
+                            812 ; genCall
+   0292 CD 00 00            813 	call	_push
+   0295 E8 02               814 	lda	sp,2(sp)
+                            815 ;	rpn.c 88
+                            816 ; genGoto
+   0297 C3 EE 01            817 	jp	00111$
+                            818 ;	rpn.c 90
+                            819 ; genLabel
+   029A                     820 00105$:
+                            821 ; genCall
+   029A CD 39 00            822 	call	_pop
+                            823 ; AOP_STK for _main_op2_1_1
+   029D F8 03               824 	lda	hl,3(sp)
+   029F 72                  825 	ld	(hl),d
+   02A0 2B                  826 	dec	hl
+   02A1 73                  827 	ld	(hl),e
+                            828 ;	rpn.c 91
+                            829 ; genCmpEq
+                            830 ; AOP_STK for _main_op2_1_1
+   02A2 2A                  831 	ld	a,(hl+)
+   02A3 B6                  832 	or	a,(hl)
+                            833 ; Rule 5
+   02A4 CA C3 02            834 	jp	z,00107$
+   02A7                     835 00133$:
+                            836 ;	rpn.c 92
+                            837 ; genCall
+   02A7 CD 39 00            838 	call	_pop
+   02AA 42                  839 	ld	b,d
+   02AB 4B                  840 	ld	c,e
+                            841 ; genIpush
+                            842 ; AOP_STK for _main_op2_1_1
+   02AC F8 02               843 	lda	hl,2(sp)
+   02AE 2A                  844 	ld	a,(hl+)
+   02AF 66                  845 	ld	h,(hl)
+   02B0 6F                  846 	ld	l,a
+   02B1 E5                  847 	push	hl
+                            848 ; genIpush
+   02B2 C5                  849 	push	bc
+                            850 ; genCall
+   02B3 CD 00 00            851 	call	__divsint
+   02B6 42                  852 	ld	b,d
+   02B7 4B                  853 	ld	c,e
+   02B8 E8 04               854 	lda	sp,4(sp)
+                            855 ; genIpush
+   02BA C5                  856 	push	bc
+                            857 ; genCall
+   02BB CD 00 00            858 	call	_push
+   02BE E8 02               859 	lda	sp,2(sp)
+                            860 ; genGoto
+   02C0 C3 EE 01            861 	jp	00111$
+                            862 ; genLabel
+   02C3                     863 00107$:
+                            864 ;	rpn.c 94
+                            865 ; genIpush
+   02C3 21 F4 02            866 	ld	hl,#__str_4 + 0
+   02C6 E5                  867 	push	hl
+                            868 ; genCall
+   02C7 CD 00 00            869 	call	_puts
+   02CA E8 02               870 	lda	sp,2(sp)
+                            871 ;	rpn.c 95
+                            872 ; genGoto
+   02CC C3 EE 01            873 	jp	00111$
+                            874 ;	rpn.c 97
+                            875 ; genLabel
+   02CF                     876 00109$:
+                            877 ; genCall
+   02CF CD 75 00            878 	call	_top
+   02D2 42                  879 	ld	b,d
+   02D3 4B                  880 	ld	c,e
+                            881 ; genIpush
+   02D4 C5                  882 	push	bc
+                            883 ; genIpush
+   02D5 21 00 03            884 	ld	hl,#__str_5 + 0
+   02D8 E5                  885 	push	hl
+                            886 ; genCall
+   02D9 CD 00 00            887 	call	_printf
+   02DC E8 04               888 	lda	sp,4(sp)
+                            889 ;	rpn.c 99
+                            890 ; genGoto
+   02DE C3 EE 01            891 	jp	00111$
+                            892 ; genLabel
+   02E1                     893 00114$:
+                            894 ; genEndFunction
+   02E1 E8 04               895 	lda	sp,4(sp)
+   02E3 C1                  896 	pop	bc
+   02E4 C9                  897 	ret
+   02E5                     898 ___main_end:
+   02E5                     899 __str_3:
+   02E5 52 50 4E 20 43 61   900 	.ascii "RPN Calculator"
+        6C 63 75 6C 61 74
+        6F 72
+   02F3 00                  901 	.db 0x00
+   02F4                     902 __str_4:
+   02F4 44 69 76 69 64 65   903 	.ascii "Divide by 0"
+        20 62 79 20 30
+   02FF 00                  904 	.db 0x00
+   0300                     905 __str_5:
+   0300 3D 3D 3E 20 25 6C   906 	.ascii "==> %ld"
+        64
+   0307 0A                  907 	.db 0x0A
+   0308 00                  908 	.db 0x00
+                            909 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___main_end                        02E5 R
+  0 ___main_start                      01D8 R
+  0 ___pop_end                         0069 R
+  0 ___pop_start                       0039 R
+  0 ___push_end                        002E R
+  0 ___push_start                      0000 R
+  0 ___read_op_end                     01D8 R
+  0 ___read_op_start                   00B4 R
+  0 ___top_end                         00A8 R
+  0 ___top_start                       0075 R
+    __cpu                              **** GX
+    __divsint                          **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+    __mulsint                          **** GX
+  0 __str_0                            002E R
+  0 __str_1                            0069 R
+  0 __str_2                            00A8 R
+  0 __str_3                            02E5 R
+  0 __str_4                            02F4 R
+  0 __str_5                            0300 R
+    _gets                              **** GX
+  0 _main                              01D8 GR
+  1 _n                                 007A GR
+  0 _pop                               0039 GR
+  1 _pos                               0079 GR
+    _printf                            **** GX
+  0 _push                              0000 GR
+    _puts                              **** GX
+  0 _read_op                           00B4 GR
+  1 _s                                 0051 GR
+  1 _sp                                0000 GR
+  1 _stack                             0001 GR
+    _sys_time                          **** GX
+  0 _top                               0075 GR
+    isdigit                            **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size  309   flags 0
+   1 _DATA                              size   7C   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size    0   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

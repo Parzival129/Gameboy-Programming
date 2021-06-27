@@ -1,0 +1,771 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Fri Apr 02 07:44:09 2021
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc141120
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _jump
+                             13 	.globl _wouldhitsurface
+                             14 	.globl _performantdelay
+                             15 	.globl _move_sprite
+                             16 	.globl _set_sprite_tile
+                             17 	.globl _set_sprite_data
+                             18 	.globl _wait_vbl_done
+                             19 	.globl _joypad
+                             20 	.globl _bloke
+                             21 	.globl _floorYposition
+                             22 	.globl _currentspeedY
+                             23 	.globl _gravity
+                             24 	.globl _jumping
+                             25 	.globl _playerlocation
+                             26 	.globl _main
+                             27 	.globl _jump
+                             28 	.globl _wouldhitsurface
+                             29 	.globl _performantdelay
+                             30 ;--------------------------------------------------------
+                             31 ; Externals used
+                             32 ;--------------------------------------------------------
+                             33 	.globl __io_out
+                             34 	.globl __io_in
+                             35 	.globl __io_status
+                             36 	.globl _sys_time
+                             37 	.globl __cpu
+                             38 ;--------------------------------------------------------
+                             39 ; special function registers
+                             40 ;--------------------------------------------------------
+                             41 ;--------------------------------------------------------
+                             42 ; special function bits 
+                             43 ;--------------------------------------------------------
+                             44 ;--------------------------------------------------------
+                             45 ; internal ram data
+                             46 ;--------------------------------------------------------
+                             47 	.area _DATA
+   0000                      48 _playerlocation::
+   0000                      49 	.ds 2
+   0002                      50 _jumping::
+   0002                      51 	.ds 1
+   0003                      52 _gravity::
+   0003                      53 	.ds 1
+   0004                      54 _currentspeedY::
+   0004                      55 	.ds 1
+   0005                      56 _floorYposition::
+   0005                      57 	.ds 1
+   0006                      58 _bloke::
+   0006                      59 	.ds 16
+                             60 ;--------------------------------------------------------
+                             61 ; overlayable items in internal ram 
+                             62 ;--------------------------------------------------------
+                             63 	.area _OVERLAY
+                             64 ;--------------------------------------------------------
+                             65 ; indirectly addressable internal ram data
+                             66 ;--------------------------------------------------------
+                             67 	.area _ISEG
+                             68 ;--------------------------------------------------------
+                             69 ; bit data
+                             70 ;--------------------------------------------------------
+                             71 	.area _BSEG
+                             72 ;--------------------------------------------------------
+                             73 ; external ram data
+                             74 ;--------------------------------------------------------
+                             75 	.area _XSEG
+                             76 ;--------------------------------------------------------
+                             77 ; global & static initialisations
+                             78 ;--------------------------------------------------------
+                             79 	.area _GSINIT
+                             80 	.area _GSFINAL
+                             81 	.area _GSINIT
+                             82 ;	main.c 86
+                             83 ; genAssign
+                             84 ; AOP_HL for _gravity
+   0000 21 03 00             85 	ld	hl,#_gravity + 0
+   0003 36 FE                86 	ld	(hl),#0xFE
+                             87 ;	main.c 86
+                             88 ; genAssign
+                             89 ; AOP_HL for _floorYposition
+   0005 21 05 00             90 	ld	hl,#_floorYposition + 0
+   0008 36 64                91 	ld	(hl),#0x64
+                             92 ;	main.c 86
+                             93 ; genAssign (pointer)
+   000A 11 06 00             94 	ld	de,#_bloke + 0
+   000D 3E 7C                95 	ld	a,#0x7C
+   000F 12                   96 	ld	(de),a
+                             97 ; genPlus
+                             98 ; genPlusIncr
+   0010 11 07 00             99 	ld	de,#_bloke + 0 + 1
+                            100 ; genAssign (pointer)
+   0013 3E 7C               101 	ld	a,#0x7C
+   0015 12                  102 	ld	(de),a
+                            103 ; genPlus
+                            104 ; genPlusIncr
+   0016 11 08 00            105 	ld	de,#_bloke + 0 + 2
+                            106 ; genAssign (pointer)
+   0019 3E FF               107 	ld	a,#0xFF
+   001B 12                  108 	ld	(de),a
+                            109 ; genPlus
+                            110 ; genPlusIncr
+   001C 11 09 00            111 	ld	de,#_bloke + 0 + 3
+                            112 ; genAssign (pointer)
+   001F 3E FF               113 	ld	a,#0xFF
+   0021 12                  114 	ld	(de),a
+                            115 ; genPlus
+                            116 ; genPlusIncr
+   0022 11 0A 00            117 	ld	de,#_bloke + 0 + 4
+                            118 ; genAssign (pointer)
+   0025 3E F6               119 	ld	a,#0xF6
+   0027 12                  120 	ld	(de),a
+                            121 ; genPlus
+                            122 ; genPlusIncr
+   0028 11 0B 00            123 	ld	de,#_bloke + 0 + 5
+                            124 ; genAssign (pointer)
+   002B 3E E8               125 	ld	a,#0xE8
+   002D 12                  126 	ld	(de),a
+                            127 ; genPlus
+                            128 ; genPlusIncr
+   002E 11 0C 00            129 	ld	de,#_bloke + 0 + 6
+                            130 ; genAssign (pointer)
+   0031 3E FF               131 	ld	a,#0xFF
+   0033 12                  132 	ld	(de),a
+                            133 ; genPlus
+                            134 ; genPlusIncr
+   0034 11 0D 00            135 	ld	de,#_bloke + 0 + 7
+                            136 ; genAssign (pointer)
+   0037 3E A4               137 	ld	a,#0xA4
+   0039 12                  138 	ld	(de),a
+                            139 ; genPlus
+                            140 ; genPlusIncr
+   003A 11 0E 00            141 	ld	de,#_bloke + 0 + 8
+                            142 ; genAssign (pointer)
+   003D 3E 7E               143 	ld	a,#0x7E
+   003F 12                  144 	ld	(de),a
+                            145 ; genPlus
+                            146 ; genPlusIncr
+   0040 11 0F 00            147 	ld	de,#_bloke + 0 + 9
+                            148 ; genAssign (pointer)
+   0043 3E 0E               149 	ld	a,#0x0E
+   0045 12                  150 	ld	(de),a
+                            151 ; genPlus
+                            152 ; genPlusIncr
+   0046 11 10 00            153 	ld	de,#_bloke + 0 + 10
+                            154 ; genAssign (pointer)
+   0049 3E 54               155 	ld	a,#0x54
+   004B 12                  156 	ld	(de),a
+                            157 ; genPlus
+                            158 ; genPlusIncr
+   004C 11 11 00            159 	ld	de,#_bloke + 0 + 11
+                            160 ; genAssign (pointer)
+   004F 3E 28               161 	ld	a,#0x28
+   0051 12                  162 	ld	(de),a
+                            163 ; genPlus
+                            164 ; genPlusIncr
+   0052 11 12 00            165 	ld	de,#_bloke + 0 + 12
+                            166 ; genAssign (pointer)
+   0055 3E AA               167 	ld	a,#0xAA
+   0057 12                  168 	ld	(de),a
+                            169 ; genPlus
+                            170 ; genPlusIncr
+   0058 11 13 00            171 	ld	de,#_bloke + 0 + 13
+                            172 ; genAssign (pointer)
+   005B 3E 7C               173 	ld	a,#0x7C
+   005D 12                  174 	ld	(de),a
+                            175 ; genPlus
+                            176 ; genPlusIncr
+   005E 11 14 00            177 	ld	de,#_bloke + 0 + 14
+                            178 ; genAssign (pointer)
+   0061 3E 00               179 	ld	a,#0x00
+   0063 12                  180 	ld	(de),a
+                            181 ; genPlus
+                            182 ; genPlusIncr
+   0064 11 15 00            183 	ld	de,#_bloke + 0 + 15
+                            184 ; genAssign (pointer)
+   0067 3E 6C               185 	ld	a,#0x6C
+   0069 12                  186 	ld	(de),a
+                            187 ;--------------------------------------------------------
+                            188 ; Home
+                            189 ;--------------------------------------------------------
+                            190 	.area _HOME
+                            191 	.area _CODE
+                            192 ;--------------------------------------------------------
+                            193 ; code
+                            194 ;--------------------------------------------------------
+                            195 	.area _CODE
+                            196 ;	main.c 16
+                            197 ; genLabel
+                            198 ; genFunction
+                            199 ;	---------------------------------
+                            200 ; Function performantdelay
+                            201 ; ---------------------------------
+   0000                     202 ___performantdelay_start:
+   0000                     203 _performantdelay:
+   0000 C5                  204 	push	bc
+                            205 	
+                            206 ;	main.c 18
+                            207 ; genAssign
+   0001 0E 00               208 	ld	c,#0x00
+                            209 ; genLabel
+   0003                     210 00101$:
+                            211 ; genCmpLt
+                            212 ; AOP_STK for 
+   0003 AF                  213 	xor	a,a
+   0004 79                  214 	ld	a,c
+   0005 F8 04               215 	lda	hl,4(sp)
+   0007 9E                  216 	sbc	a,(hl) ; 2
+   0008 D2 12 00            217 	jp	nc,00105$
+                            218 ;	main.c 19
+                            219 ; genCall
+   000B CD 00 00            220 	call	_wait_vbl_done
+                            221 ;	main.c 18
+                            222 ; genPlus
+                            223 ; genPlusIncr
+   000E 0C                  224 	inc	c
+                            225 ; genGoto
+   000F C3 03 00            226 	jp	00101$
+                            227 ; genLabel
+   0012                     228 00105$:
+                            229 ; genEndFunction
+                            230 	
+   0012 C1                  231 	pop	bc
+   0013 C9                  232 	ret
+   0014                     233 ___performantdelay_end:
+                            234 ;	main.c 23
+                            235 ; genLabel
+                            236 ; genFunction
+                            237 ;	---------------------------------
+                            238 ; Function wouldhitsurface
+                            239 ; ---------------------------------
+   0014                     240 ___wouldhitsurface_start:
+   0014                     241 _wouldhitsurface:
+   0014 C5                  242 	push	bc
+                            243 	
+                            244 ;	main.c 24
+                            245 ; genCmpLt
+                            246 ; AOP_STK for 
+                            247 ; AOP_HL for _floorYposition
+   0015 AF                  248 	xor	a,a
+   0016 F8 04               249 	lda	hl,4(sp)
+   0018 7E                  250 	ld	a,(hl)
+   0019 21 05 00            251 	ld	hl,#_floorYposition + 0
+   001C 9E                  252 	sbc	a,(hl) ; 2
+   001D DA 25 00            253 	jp	c,00102$
+                            254 ;	main.c 25
+                            255 ; genAssign
+                            256 ; AOP_HL for _floorYposition
+   0020 4E                  257 	ld	c,(hl)
+                            258 ; genRet
+   0021 59                  259 	ld	e,c
+   0022 C3 27 00            260 	jp	00103$
+                            261 ; genLabel
+   0025                     262 00102$:
+                            263 ;	main.c 27
+                            264 ; genRet
+   0025 1E FF               265 	ld	e,#0xFF
+                            266 ; genLabel
+   0027                     267 00103$:
+                            268 ; genEndFunction
+                            269 	
+   0027 C1                  270 	pop	bc
+   0028 C9                  271 	ret
+   0029                     272 ___wouldhitsurface_end:
+                            273 ;	main.c 30
+                            274 ; genLabel
+                            275 ; genFunction
+                            276 ;	---------------------------------
+                            277 ; Function jump
+                            278 ; ---------------------------------
+   0029                     279 ___jump_start:
+   0029                     280 _jump:
+   0029 C5                  281 	push	bc
+   002A E8 FD               282 	lda	sp,-3(sp)
+                            283 ;	main.c 33
+                            284 ; genCmpEq
+                            285 ; AOP_HL for _jumping
+   002C 21 02 00            286 	ld	hl,#_jumping + 0
+   002F 7E                  287 	ld	a,(hl)
+   0030 B7                  288 	or	a,a
+   0031 C2 36 00            289 	jp	nz,00110$
+   0034 18 03               290 	jr	00111$
+   0036                     291 00110$:
+   0036 C3 43 00            292 	jp	00102$
+   0039                     293 00111$:
+                            294 ;	main.c 34
+                            295 ; genAssign
+                            296 ; AOP_HL for _jumping
+   0039 21 02 00            297 	ld	hl,#_jumping + 0
+   003C 36 01               298 	ld	(hl),#0x01
+                            299 ;	main.c 35
+                            300 ; genAssign
+                            301 ; AOP_HL for _currentspeedY
+   003E 21 04 00            302 	ld	hl,#_currentspeedY + 0
+   0041 36 0A               303 	ld	(hl),#0x0A
+                            304 ; genLabel
+   0043                     305 00102$:
+                            306 ;	main.c 38
+                            307 ; genPlus
+                            308 ; AOP_HL for _currentspeedY
+                            309 ; AOP_HL for _gravity
+                            310 ;	genPlusIncr failed
+   0043 21 04 00            311 	ld	hl,#_currentspeedY + 0
+   0046 7E                  312 	ld	a,(hl)
+   0047 21 03 00            313 	ld	hl,#_gravity + 0
+   004A 86                  314 	add	a,(hl)
+   004B 21 04 00            315 	ld	hl,#_currentspeedY + 0
+   004E 77                  316 	ld	(hl),a
+                            317 ;	main.c 40
+                            318 ; genPlus
+                            319 ; AOP_STK for _jump_sloc1_1_0
+                            320 ; genPlusIncr
+                            321 ;	genPlusIncr failed
+   004F 11 00 00            322 	ld	de,#_playerlocation + 0
+   0052 21 01 00            323 	ld	hl,#0x0001
+   0055 19                  324 	add	hl,de
+   0056 7D                  325 	ld	a,l
+   0057 54                  326 	ld	d,h
+   0058 F8 00               327 	lda	hl,0(sp)
+   005A 22                  328 	ld	(hl+),a
+   005B 72                  329 	ld	(hl),d
+                            330 ; genPointerGet
+                            331 ; AOP_STK for _jump_sloc1_1_0
+                            332 ; AOP_STK for _jump_sloc0_1_0
+   005C 2B                  333 	dec	hl
+   005D 5E                  334 	ld	e,(hl)
+   005E 23                  335 	inc	hl
+   005F 56                  336 	ld	d,(hl)
+   0060 1A                  337 	ld	a,(de)
+   0061 23                  338 	inc	hl
+   0062 77                  339 	ld	(hl),a
+                            340 ; genMinus
+                            341 ; AOP_STK for _jump_sloc0_1_0
+                            342 ; AOP_HL for _currentspeedY
+   0063 7E                  343 	ld	a,(hl)
+   0064 21 04 00            344 	ld	hl,#_currentspeedY + 0
+   0067 96                  345 	sub	a,(hl)
+   0068 4F                  346 	ld	c,a
+                            347 ; genAssign (pointer)
+                            348 ; AOP_STK for _jump_sloc1_1_0
+   0069 F8 00               349 	lda	hl,0(sp)
+   006B 5E                  350 	ld	e,(hl)
+   006C 23                  351 	inc	hl
+   006D 56                  352 	ld	d,(hl)
+   006E 79                  353 	ld	a,c
+   006F 12                  354 	ld	(de),a
+                            355 ;	main.c 42
+                            356 ; genIpush
+   0070 79                  357 	ld	a,c
+   0071 F5                  358 	push	af
+   0072 33                  359 	inc	sp
+                            360 ; genCall
+   0073 CD 14 00            361 	call	_wouldhitsurface
+   0076 4B                  362 	ld	c,e
+   0077 E8 01               363 	lda	sp,1(sp)
+                            364 ;	main.c 44
+                            365 ; genCmpGt
+   0079 1E 7F               366 	ld	e,#0x7F
+   007B 79                  367 	ld	a,c
+   007C EE 80               368 	xor	a,#0x80
+   007E 57                  369 	ld	d,a
+   007F 7B                  370 	ld	a,e
+   0080 9A                  371 	sbc	a,d
+   0081 D2 A8 00            372 	jp	nc,00104$
+                            373 ;	main.c 45
+                            374 ; genAssign
+                            375 ; AOP_HL for _jumping
+   0084 21 02 00            376 	ld	hl,#_jumping + 0
+   0087 36 00               377 	ld	(hl),#0x00
+                            378 ;	main.c 46
+                            379 ; genPointerGet
+                            380 ; AOP_STK for _jump_sloc1_1_0
+   0089 F8 00               381 	lda	hl,0(sp)
+   008B 5E                  382 	ld	e,(hl)
+   008C 23                  383 	inc	hl
+   008D 56                  384 	ld	d,(hl)
+   008E 1A                  385 	ld	a,(de)
+   008F 4F                  386 	ld	c,a
+                            387 ; genPointerGet
+   0090 11 00 00            388 	ld	de,#_playerlocation + 0
+   0093 1A                  389 	ld	a,(de)
+   0094 47                  390 	ld	b,a
+                            391 ; genIpush
+   0095 79                  392 	ld	a,c
+   0096 F5                  393 	push	af
+   0097 33                  394 	inc	sp
+                            395 ; genIpush
+   0098 78                  396 	ld	a,b
+   0099 F5                  397 	push	af
+   009A 33                  398 	inc	sp
+                            399 ; genIpush
+                            400 ; AOP_STK for 
+   009B F8 09               401 	lda	hl,9(sp)
+   009D 7E                  402 	ld	a,(hl)
+   009E F5                  403 	push	af
+   009F 33                  404 	inc	sp
+                            405 ; genCall
+   00A0 CD 00 00            406 	call	_move_sprite
+   00A3 E8 03               407 	lda	sp,3(sp)
+                            408 ; genGoto
+   00A5 C3 C5 00            409 	jp	00106$
+                            410 ; genLabel
+   00A8                     411 00104$:
+                            412 ;	main.c 50
+                            413 ; genPlus
+                            414 ; AOP_STK for 
+                            415 ; genPlusIncr
+   00A8 F8 08               416 	lda	hl,8(sp)
+   00AA 5E                  417 	ld	e,(hl)
+   00AB 23                  418 	inc	hl
+   00AC 56                  419 	ld	d,(hl)
+   00AD 13                  420 	inc	de
+                            421 ; genPointerGet
+   00AE 1A                  422 	ld	a,(de)
+   00AF 4F                  423 	ld	c,a
+                            424 ; genPointerGet
+   00B0 11 00 00            425 	ld	de,#_playerlocation + 0
+   00B3 1A                  426 	ld	a,(de)
+   00B4 47                  427 	ld	b,a
+                            428 ; genIpush
+   00B5 79                  429 	ld	a,c
+   00B6 F5                  430 	push	af
+   00B7 33                  431 	inc	sp
+                            432 ; genIpush
+   00B8 78                  433 	ld	a,b
+   00B9 F5                  434 	push	af
+   00BA 33                  435 	inc	sp
+                            436 ; genIpush
+                            437 ; AOP_STK for 
+   00BB 2B                  438 	dec	hl
+   00BC 2B                  439 	dec	hl
+   00BD 7E                  440 	ld	a,(hl)
+   00BE F5                  441 	push	af
+   00BF 33                  442 	inc	sp
+                            443 ; genCall
+   00C0 CD 00 00            444 	call	_move_sprite
+   00C3 E8 03               445 	lda	sp,3(sp)
+                            446 ; genLabel
+   00C5                     447 00106$:
+                            448 ; genEndFunction
+   00C5 E8 03               449 	lda	sp,3(sp)
+   00C7 C1                  450 	pop	bc
+   00C8 C9                  451 	ret
+   00C9                     452 ___jump_end:
+                            453 ;	main.c 55
+                            454 ; genLabel
+                            455 ; genFunction
+                            456 ;	---------------------------------
+                            457 ; Function main
+                            458 ; ---------------------------------
+   00C9                     459 ___main_start:
+   00C9                     460 _main:
+   00C9 C5                  461 	push	bc
+   00CA E8 FE               462 	lda	sp,-2(sp)
+                            463 ;	main.c 56
+                            464 ; genIpush
+   00CC 21 06 00            465 	ld	hl,#_bloke + 0
+   00CF E5                  466 	push	hl
+                            467 ; genIpush
+   00D0 3E 08               468 	ld	a,#0x08
+   00D2 F5                  469 	push	af
+   00D3 33                  470 	inc	sp
+                            471 ; genIpush
+   00D4 3E 00               472 	ld	a,#0x00
+   00D6 F5                  473 	push	af
+   00D7 33                  474 	inc	sp
+                            475 ; genCall
+   00D8 CD 00 00            476 	call	_set_sprite_data
+   00DB E8 04               477 	lda	sp,4(sp)
+                            478 ;	main.c 58
+                            479 ; genIpush
+   00DD 3E 00               480 	ld	a,#0x00
+   00DF F5                  481 	push	af
+   00E0 33                  482 	inc	sp
+                            483 ; genIpush
+   00E1 3E 00               484 	ld	a,#0x00
+   00E3 F5                  485 	push	af
+   00E4 33                  486 	inc	sp
+                            487 ; genCall
+   00E5 CD 00 00            488 	call	_set_sprite_tile
+   00E8 E8 02               489 	lda	sp,2(sp)
+                            490 ;	main.c 60
+                            491 ; genAssign (pointer)
+   00EA 11 00 00            492 	ld	de,#_playerlocation + 0
+   00ED 3E 0A               493 	ld	a,#0x0A
+   00EF 12                  494 	ld	(de),a
+                            495 ;	main.c 61
+                            496 ; genPlus
+                            497 ; genPlusIncr
+   00F0 11 01 00            498 	ld	de,#_playerlocation + 0 + 1
+                            499 ; genAssign
+                            500 ; AOP_HL for _floorYposition
+   00F3 21 05 00            501 	ld	hl,#_floorYposition + 0
+   00F6 4E                  502 	ld	c,(hl)
+                            503 ; genAssign (pointer)
+   00F7 79                  504 	ld	a,c
+   00F8 12                  505 	ld	(de),a
+                            506 ;	main.c 62
+                            507 ; genAssign
+                            508 ; AOP_HL for _jumping
+   00F9 21 02 00            509 	ld	hl,#_jumping + 0
+   00FC 36 00               510 	ld	(hl),#0x00
+                            511 ;	main.c 64
+                            512 ; genPointerGet
+   00FE 11 00 00            513 	ld	de,#_playerlocation + 0
+   0101 1A                  514 	ld	a,(de)
+   0102 47                  515 	ld	b,a
+                            516 ; genIpush
+   0103 79                  517 	ld	a,c
+   0104 F5                  518 	push	af
+   0105 33                  519 	inc	sp
+                            520 ; genIpush
+   0106 78                  521 	ld	a,b
+   0107 F5                  522 	push	af
+   0108 33                  523 	inc	sp
+                            524 ; genIpush
+   0109 3E 00               525 	ld	a,#0x00
+   010B F5                  526 	push	af
+   010C 33                  527 	inc	sp
+                            528 ; genCall
+   010D CD 00 00            529 	call	_move_sprite
+   0110 E8 03               530 	lda	sp,3(sp)
+                            531 ;	main.c 66
+                            532 ; genAssign
+                            533 ; AOP_STK for _main_sloc0_1_0
+   0112 F8 00               534 	lda	hl,0(sp)
+   0114 36 40               535 	ld	(hl),#0x40
+   0116 23                  536 	inc	hl
+   0117 36 FF               537 	ld	(hl),#0xFF
+                            538 ; genAssign
+   0119 11 40 FF            539 	ld	de,#0xFF40
+                            540 ; genPointerGet
+   011C 1A                  541 	ld	a,(de)
+   011D 4F                  542 	ld	c,a
+                            543 ; genOr
+                            544 ; Type res[2] = l[2]&r[1]
+                            545 ; Size res[1] = l[1]&r[1]
+   011E 79                  546 	ld	a,c
+   011F F6 80               547 	or	a,#0x80
+   0121 4F                  548 	ld	c,a
+                            549 ; genAssign (pointer)
+                            550 ; AOP_STK for _main_sloc0_1_0
+   0122 2B                  551 	dec	hl
+   0123 5E                  552 	ld	e,(hl)
+   0124 23                  553 	inc	hl
+   0125 56                  554 	ld	d,(hl)
+   0126 79                  555 	ld	a,c
+   0127 12                  556 	ld	(de),a
+                            557 ;	main.c 67
+                            558 ; genAssign
+                            559 ; AOP_STK for _main_sloc0_1_0
+   0128 2B                  560 	dec	hl
+   0129 36 40               561 	ld	(hl),#0x40
+   012B 23                  562 	inc	hl
+   012C 36 FF               563 	ld	(hl),#0xFF
+                            564 ; genAssign
+   012E 11 40 FF            565 	ld	de,#0xFF40
+                            566 ; genPointerGet
+   0131 1A                  567 	ld	a,(de)
+   0132 4F                  568 	ld	c,a
+                            569 ; genOr
+                            570 ; Type res[2] = l[2]&r[1]
+                            571 ; Size res[1] = l[1]&r[1]
+   0133 79                  572 	ld	a,c
+   0134 F6 02               573 	or	a,#0x02
+   0136 4F                  574 	ld	c,a
+                            575 ; genAssign (pointer)
+                            576 ; AOP_STK for _main_sloc0_1_0
+   0137 2B                  577 	dec	hl
+   0138 5E                  578 	ld	e,(hl)
+   0139 23                  579 	inc	hl
+   013A 56                  580 	ld	d,(hl)
+   013B 79                  581 	ld	a,c
+   013C 12                  582 	ld	(de),a
+                            583 ;	main.c 69
+                            584 ; genLabel
+   013D                     585 00109$:
+                            586 ;	main.c 71
+                            587 ; genCall
+   013D CD 00 00            588 	call	_joypad
+   0140 4B                  589 	ld	c,e
+                            590 ; genAnd
+   0141 79                  591 	ld	a,c
+   0142 CB 67               592 	bit	4,a
+   0144 C2 55 01            593 	jp	nz,00101$
+                            594 ; genCmpEq
+                            595 ; AOP_HL for _jumping
+   0147 21 02 00            596 	ld	hl,#_jumping + 0
+   014A 7E                  597 	ld	a,(hl) ; 2
+   014B FE 01               598 	cp	a,#0x01
+   014D C2 52 01            599 	jp	nz,00117$
+   0150 18 03               600 	jr	00118$
+   0152                     601 00117$:
+   0152 C3 62 01            602 	jp	00102$
+   0155                     603 00118$:
+                            604 ; genLabel
+   0155                     605 00101$:
+                            606 ;	main.c 72
+                            607 ; genIpush
+   0155 21 00 00            608 	ld	hl,#_playerlocation + 0
+   0158 E5                  609 	push	hl
+                            610 ; genIpush
+   0159 3E 00               611 	ld	a,#0x00
+   015B F5                  612 	push	af
+   015C 33                  613 	inc	sp
+                            614 ; genCall
+   015D CD 29 00            615 	call	_jump
+   0160 E8 03               616 	lda	sp,3(sp)
+                            617 ; genLabel
+   0162                     618 00102$:
+                            619 ;	main.c 75
+                            620 ; genCall
+   0162 CD 00 00            621 	call	_joypad
+   0165 4B                  622 	ld	c,e
+                            623 ; genAnd
+   0166 79                  624 	ld	a,c
+   0167 CB 4F               625 	bit	1,a
+   0169 CA 8C 01            626 	jp	z,00105$
+                            627 ;	main.c 76
+                            628 ; genPointerGet
+   016C 11 00 00            629 	ld	de,#_playerlocation + 0
+   016F 1A                  630 	ld	a,(de)
+   0170 4F                  631 	ld	c,a
+                            632 ; genMinus
+   0171 0D                  633 	dec	c
+   0172 0D                  634 	dec	c
+                            635 ; genAssign (pointer)
+   0173 11 00 00            636 	ld	de,#_playerlocation + 0
+   0176 79                  637 	ld	a,c
+   0177 12                  638 	ld	(de),a
+                            639 ;	main.c 77
+                            640 ; genPlus
+                            641 ; genPlusIncr
+   0178 11 01 00            642 	ld	de,#_playerlocation + 0 + 1
+                            643 ; genPointerGet
+   017B 1A                  644 	ld	a,(de)
+   017C 47                  645 	ld	b,a
+                            646 ; genIpush
+   017D 78                  647 	ld	a,b
+   017E F5                  648 	push	af
+   017F 33                  649 	inc	sp
+                            650 ; genIpush
+   0180 79                  651 	ld	a,c
+   0181 F5                  652 	push	af
+   0182 33                  653 	inc	sp
+                            654 ; genIpush
+   0183 3E 00               655 	ld	a,#0x00
+   0185 F5                  656 	push	af
+   0186 33                  657 	inc	sp
+                            658 ; genCall
+   0187 CD 00 00            659 	call	_move_sprite
+   018A E8 03               660 	lda	sp,3(sp)
+                            661 ; genLabel
+   018C                     662 00105$:
+                            663 ;	main.c 79
+                            664 ; genCall
+   018C CD 00 00            665 	call	_joypad
+   018F 4B                  666 	ld	c,e
+                            667 ; genAnd
+   0190 79                  668 	ld	a,c
+   0191 CB 47               669 	bit	0,a
+   0193 CA B6 01            670 	jp	z,00107$
+                            671 ;	main.c 80
+                            672 ; genPointerGet
+   0196 11 00 00            673 	ld	de,#_playerlocation + 0
+   0199 1A                  674 	ld	a,(de)
+   019A 4F                  675 	ld	c,a
+                            676 ; genPlus
+                            677 ; genPlusIncr
+   019B 0C                  678 	inc	c
+   019C 0C                  679 	inc	c
+                            680 ; genAssign (pointer)
+   019D 11 00 00            681 	ld	de,#_playerlocation + 0
+   01A0 79                  682 	ld	a,c
+   01A1 12                  683 	ld	(de),a
+                            684 ;	main.c 81
+                            685 ; genPlus
+                            686 ; genPlusIncr
+   01A2 11 01 00            687 	ld	de,#_playerlocation + 0 + 1
+                            688 ; genPointerGet
+   01A5 1A                  689 	ld	a,(de)
+   01A6 47                  690 	ld	b,a
+                            691 ; genIpush
+   01A7 78                  692 	ld	a,b
+   01A8 F5                  693 	push	af
+   01A9 33                  694 	inc	sp
+                            695 ; genIpush
+   01AA 79                  696 	ld	a,c
+   01AB F5                  697 	push	af
+   01AC 33                  698 	inc	sp
+                            699 ; genIpush
+   01AD 3E 00               700 	ld	a,#0x00
+   01AF F5                  701 	push	af
+   01B0 33                  702 	inc	sp
+                            703 ; genCall
+   01B1 CD 00 00            704 	call	_move_sprite
+   01B4 E8 03               705 	lda	sp,3(sp)
+                            706 ; genLabel
+   01B6                     707 00107$:
+                            708 ;	main.c 83
+                            709 ; genIpush
+   01B6 3E 05               710 	ld	a,#0x05
+   01B8 F5                  711 	push	af
+   01B9 33                  712 	inc	sp
+                            713 ; genCall
+   01BA CD 00 00            714 	call	_performantdelay
+   01BD E8 01               715 	lda	sp,1(sp)
+                            716 ; genGoto
+   01BF C3 3D 01            717 	jp	00109$
+                            718 ; genLabel
+   01C2                     719 00111$:
+                            720 ; genEndFunction
+   01C2 E8 02               721 	lda	sp,2(sp)
+   01C4 C1                  722 	pop	bc
+   01C5 C9                  723 	ret
+   01C6                     724 ___main_end:
+                            725 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___jump_end                        00C9 R
+  0 ___jump_start                      0029 R
+  0 ___main_end                        01C6 R
+  0 ___main_start                      00C9 R
+  0 ___performantdelay_end             0014 R
+  0 ___performantdelay_start           0000 R
+  0 ___wouldhitsurface_end             0029 R
+  0 ___wouldhitsurface_start           0014 R
+    __cpu                              **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+  1 _bloke                             0006 GR
+  1 _currentspeedY                     0004 GR
+  1 _floorYposition                    0005 GR
+  1 _gravity                           0003 GR
+    _joypad                            **** GX
+  0 _jump                              0029 GR
+  1 _jumping                           0002 GR
+  0 _main                              00C9 GR
+    _move_sprite                       **** GX
+  0 _performantdelay                   0000 GR
+  1 _playerlocation                    0000 GR
+    _set_sprite_data                   **** GX
+    _set_sprite_tile                   **** GX
+    _sys_time                          **** GX
+    _wait_vbl_done                     **** GX
+  0 _wouldhitsurface                   0014 GR
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size  1C6   flags 0
+   1 _DATA                              size   16   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size   6A   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

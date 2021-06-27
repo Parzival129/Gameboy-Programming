@@ -1,0 +1,1781 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Fri Apr 02 12:52:46 2021
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc146240
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _drawScreen
+                             13 	.globl _cls
+                             14 	.globl _setchar
+                             15 	.globl _gotoxy
+                             16 	.globl _printf
+                             17 	.globl _waitpadup
+                             18 	.globl _joypad
+                             19 	.globl _currentScreenPointer
+                             20 	.globl _screens_array
+                             21 	.globl _configValues
+                             22 	.globl _main
+                             23 	.globl _drawScreen
+                             24 	.globl _screen_3
+                             25 	.globl _screen_2
+                             26 	.globl _screen_1
+                             27 	.globl _screen_0
+                             28 	.globl _cls
+                             29 ;--------------------------------------------------------
+                             30 ; Externals used
+                             31 ;--------------------------------------------------------
+                             32 	.globl __io_out
+                             33 	.globl __io_in
+                             34 	.globl __io_status
+                             35 	.globl _sys_time
+                             36 	.globl __cpu
+                             37 ;--------------------------------------------------------
+                             38 ; special function registers
+                             39 ;--------------------------------------------------------
+                             40 ;--------------------------------------------------------
+                             41 ; special function bits 
+                             42 ;--------------------------------------------------------
+                             43 ;--------------------------------------------------------
+                             44 ; internal ram data
+                             45 ;--------------------------------------------------------
+                             46 	.area _DATA
+   0000                      47 _configValues::
+   0000                      48 	.ds 20
+   0014                      49 _screens_array::
+   0014                      50 	.ds 8
+   001C                      51 _currentScreenPointer::
+   001C                      52 	.ds 2
+                             53 ;--------------------------------------------------------
+                             54 ; overlayable items in internal ram 
+                             55 ;--------------------------------------------------------
+                             56 	.area _OVERLAY
+                             57 ;--------------------------------------------------------
+                             58 ; indirectly addressable internal ram data
+                             59 ;--------------------------------------------------------
+                             60 	.area _ISEG
+                             61 ;--------------------------------------------------------
+                             62 ; bit data
+                             63 ;--------------------------------------------------------
+                             64 	.area _BSEG
+                             65 ;--------------------------------------------------------
+                             66 ; external ram data
+                             67 ;--------------------------------------------------------
+                             68 	.area _XSEG
+                             69 ;--------------------------------------------------------
+                             70 ; global & static initialisations
+                             71 ;--------------------------------------------------------
+                             72 	.area _GSINIT
+                             73 	.area _GSFINAL
+                             74 	.area _GSINIT
+                             75 ;	menu_test.c 267
+                             76 ; genAssign (pointer)
+   0000 11 14 00             77 	ld	de,#_screens_array + 0
+   0003 3E 3F                78 	ld	a,#<_screen_0
+   0005 12                   79 	ld	(de),a
+   0006 13                   80 	inc	de
+   0007 3E 00                81 	ld	a,#>_screen_0
+   0009 12                   82 	ld	(de),a
+                             83 ; genPlus
+                             84 ; genPlusIncr
+   000A 11 16 00             85 	ld	de,#_screens_array + 0 + 2
+                             86 ; genAssign (pointer)
+   000D 3E 67                87 	ld	a,#<_screen_1
+   000F 12                   88 	ld	(de),a
+   0010 13                   89 	inc	de
+   0011 3E 00                90 	ld	a,#>_screen_1
+   0013 12                   91 	ld	(de),a
+                             92 ; genPlus
+                             93 ; genPlusIncr
+   0014 11 18 00             94 	ld	de,#_screens_array + 0 + 4
+                             95 ; genAssign (pointer)
+   0017 3E 7B                96 	ld	a,#<_screen_2
+   0019 12                   97 	ld	(de),a
+   001A 13                   98 	inc	de
+   001B 3E 00                99 	ld	a,#>_screen_2
+   001D 12                  100 	ld	(de),a
+                            101 ; genPlus
+                            102 ; genPlusIncr
+   001E 11 1A 00            103 	ld	de,#_screens_array + 0 + 6
+                            104 ; genAssign (pointer)
+   0021 3E 8F               105 	ld	a,#<_screen_3
+   0023 12                  106 	ld	(de),a
+   0024 13                  107 	inc	de
+   0025 3E 00               108 	ld	a,#>_screen_3
+   0027 12                  109 	ld	(de),a
+                            110 ;--------------------------------------------------------
+                            111 ; Home
+                            112 ;--------------------------------------------------------
+                            113 	.area _HOME
+                            114 	.area _CODE
+                            115 ;--------------------------------------------------------
+                            116 ; code
+                            117 ;--------------------------------------------------------
+                            118 	.area _CODE
+                            119 ;	menu_test.c 78
+                            120 ; genLabel
+                            121 ; genFunction
+                            122 ;	---------------------------------
+                            123 ; Function cls
+                            124 ; ---------------------------------
+   0000                     125 ___cls_start:
+   0000                     126 _cls:
+   0000 C5                  127 	push	bc
+   0001 E8 FF               128 	lda	sp,-1(sp)
+                            129 ;	menu_test.c 82
+                            130 ; genAssign
+   0003 01 00 00            131 	ld	bc,#0x0000
+                            132 ; genLabel
+   0006                     133 00101$:
+                            134 ; genCmpLt
+   0006 59                  135 	ld	e,c
+   0007 78                  136 	ld	a,b
+   0008 EE 80               137 	xor	a,#0x80
+   000A 57                  138 	ld	d,a
+   000B 21 EE 7F            139 	ld	hl,#0x7FEE
+   000E 19                  140 	add	hl,de
+   000F DA 2E 00            141 	jp	c,00104$
+                            142 ;	menu_test.c 84
+                            143 ; genCast
+                            144 ; AOP_STK for _cls_sloc0_1_0
+   0012 F8 00               145 	lda	hl,0(sp)
+   0014 71                  146 	ld	(hl),c
+                            147 ; genIpush
+                            148 ; AOP_STK for _cls_sloc0_1_0
+   0015 7E                  149 	ld	a,(hl)
+   0016 F5                  150 	push	af
+   0017 33                  151 	inc	sp
+                            152 ; genIpush
+   0018 3E 01               153 	ld	a,#0x01
+   001A F5                  154 	push	af
+   001B 33                  155 	inc	sp
+                            156 ; genCall
+   001C CD 00 00            157 	call	_gotoxy
+   001F E8 02               158 	lda	sp,2(sp)
+                            159 ;	menu_test.c 85
+                            160 ; genIpush
+   0021 21 A3 00            161 	ld	hl,#__str_0 + 0
+   0024 E5                  162 	push	hl
+                            163 ; genCall
+   0025 CD 00 00            164 	call	_printf
+   0028 E8 02               165 	lda	sp,2(sp)
+                            166 ;	menu_test.c 82
+                            167 ; genPlus
+                            168 ; genPlusIncr
+   002A 03                  169 	inc	bc
+                            170 ; genGoto
+   002B C3 06 00            171 	jp	00101$
+                            172 ; genLabel
+   002E                     173 00104$:
+                            174 ;	menu_test.c 87
+                            175 ; genIpush
+   002E 3E 01               176 	ld	a,#0x01
+   0030 F5                  177 	push	af
+   0031 33                  178 	inc	sp
+                            179 ; genIpush
+   0032 3E 01               180 	ld	a,#0x01
+   0034 F5                  181 	push	af
+   0035 33                  182 	inc	sp
+                            183 ; genCall
+   0036 CD 00 00            184 	call	_gotoxy
+   0039 E8 02               185 	lda	sp,2(sp)
+                            186 ; genLabel
+   003B                     187 00105$:
+                            188 ; genEndFunction
+   003B E8 01               189 	lda	sp,1(sp)
+   003D C1                  190 	pop	bc
+   003E C9                  191 	ret
+   003F                     192 ___cls_end:
+   003F                     193 _screen_0:
+   003F B8 00               194 	.dw _str_1
+   0041 04                  195 	.db #0x04
+   0042 01                  196 	.db #0x01
+   0043 C6 00               197 	.dw _str_2
+   0045 04                  198 	.db #0x04
+   0046 03                  199 	.db #0x03
+   0047 D4 00               200 	.dw _str_3
+   0049 02                  201 	.db #0x02
+   004A 00                  202 	.db #0x00
+   004B D5 00               203 	.dw _str_4
+   004D 01                  204 	.db #0x01
+   004E 00                  205 	.db #0x00
+   004F E3 00               206 	.dw _str_5
+   0051 08                  207 	.db #0x08
+   0052 00                  208 	.db #0x00
+   0053 F1 00               209 	.dw _str_6
+   0055 08                  210 	.db #0x08
+   0056 00                  211 	.db #0x00
+   0057 FF 00               212 	.dw _str_7
+   0059 02                  213 	.db #0x02
+   005A 00                  214 	.db #0x00
+   005B 00 01               215 	.dw _str_8
+   005D 02                  216 	.db #0x02
+   005E 00                  217 	.db #0x00
+   005F 01 01               218 	.dw _str_9
+   0061 00                  219 	.db #0x00
+   0062 00                  220 	.db #0x00
+   0063 00 00               221 	.dw #0x0000
+   0065 00                  222 	.db #0x00
+   0066 00                  223 	.db #0x00
+   0067                     224 _screen_1:
+   0067 0F 01               225 	.dw _str_10
+   0069 00                  226 	.db #0x00
+   006A 00                  227 	.db #0x00
+   006B 1D 01               228 	.dw _str_11
+   006D 00                  229 	.db #0x00
+   006E 00                  230 	.db #0x00
+   006F 2B 01               231 	.dw _str_12
+   0071 00                  232 	.db #0x00
+   0072 00                  233 	.db #0x00
+   0073 39 01               234 	.dw _str_13
+   0075 00                  235 	.db #0x00
+   0076 00                  236 	.db #0x00
+   0077 00 00               237 	.dw #0x0000
+   0079 00                  238 	.db #0x00
+   007A 00                  239 	.db #0x00
+   007B                     240 _screen_2:
+   007B 47 01               241 	.dw _str_14
+   007D 00                  242 	.db #0x00
+   007E 00                  243 	.db #0x00
+   007F 55 01               244 	.dw _str_15
+   0081 00                  245 	.db #0x00
+   0082 00                  246 	.db #0x00
+   0083 63 01               247 	.dw _str_16
+   0085 00                  248 	.db #0x00
+   0086 00                  249 	.db #0x00
+   0087 71 01               250 	.dw _str_17
+   0089 00                  251 	.db #0x00
+   008A 00                  252 	.db #0x00
+   008B 00 00               253 	.dw #0x0000
+   008D 00                  254 	.db #0x00
+   008E 00                  255 	.db #0x00
+   008F                     256 _screen_3:
+   008F 7F 01               257 	.dw _str_18
+   0091 00                  258 	.db #0x00
+   0092 00                  259 	.db #0x00
+   0093 8E 01               260 	.dw _str_19
+   0095 00                  261 	.db #0x00
+   0096 00                  262 	.db #0x00
+   0097 9C 01               263 	.dw _str_20
+   0099 00                  264 	.db #0x00
+   009A 00                  265 	.db #0x00
+   009B AA 01               266 	.dw _str_21
+   009D 00                  267 	.db #0x00
+   009E 00                  268 	.db #0x00
+   009F 00 00               269 	.dw #0x0000
+   00A1 00                  270 	.db #0x00
+   00A2 00                  271 	.db #0x00
+   00A3                     272 __str_0:
+   00A3 20 20 20 20 20 20   273 	.ascii "                    "
+        20 20 20 20 20 20
+        20 20 20 20 20 20
+        20 20
+   00B7 00                  274 	.db 0x00
+   00B8                     275 _str_1:
+   00B8 42 61 73 69 63 20   276 	.ascii "Basic Setup  "
+        53 65 74 75 70 20
+        20
+   00C5 00                  277 	.db 0x00
+   00C6                     278 _str_2:
+   00C6 43 6F 6D 70 6C 65   279 	.ascii "Complex Setup"
+        78 20 53 65 74 75
+        70
+   00D3 00                  280 	.db 0x00
+   00D4                     281 _str_3:
+   00D4 00                  282 	.db 0x00
+   00D5                     283 _str_4:
+   00D5 4F 70 74 69 6F 6E   284 	.ascii "Option 1     "
+        20 31 20 20 20 20
+        20
+   00E2 00                  285 	.db 0x00
+   00E3                     286 _str_5:
+   00E3 4F 70 74 69 6F 6E   287 	.ascii "Option 2     "
+        20 32 20 20 20 20
+        20
+   00F0 00                  288 	.db 0x00
+   00F1                     289 _str_6:
+   00F1 4F 70 74 69 6F 6E   290 	.ascii "Option 3     "
+        20 33 20 20 20 20
+        20
+   00FE 00                  291 	.db 0x00
+   00FF                     292 _str_7:
+   00FF 00                  293 	.db 0x00
+   0100                     294 _str_8:
+   0100 00                  295 	.db 0x00
+   0101                     296 _str_9:
+   0101 54 61 6B 65 20 41   297 	.ascii "Take Action  "
+        63 74 69 6F 6E 20
+        20
+   010E 00                  298 	.db 0x00
+   010F                     299 _str_10:
+   010F 42 4F 70 74 69 6F   300 	.ascii "BOption 1    "
+        6E 20 31 20 20 20
+        20
+   011C 00                  301 	.db 0x00
+   011D                     302 _str_11:
+   011D 42 4F 70 74 69 6F   303 	.ascii "BOption 2    "
+        6E 20 32 20 20 20
+        20
+   012A 00                  304 	.db 0x00
+   012B                     305 _str_12:
+   012B 42 4F 70 74 69 6F   306 	.ascii "BOption 3    "
+        6E 20 33 20 20 20
+        20
+   0138 00                  307 	.db 0x00
+   0139                     308 _str_13:
+   0139 42 4F 70 74 69 6F   309 	.ascii "BOption 4    "
+        6E 20 34 20 20 20
+        20
+   0146 00                  310 	.db 0x00
+   0147                     311 _str_14:
+   0147 43 4F 70 74 69 6F   312 	.ascii "COption 1    "
+        6E 20 31 20 20 20
+        20
+   0154 00                  313 	.db 0x00
+   0155                     314 _str_15:
+   0155 43 4F 70 74 69 6F   315 	.ascii "COption 2    "
+        6E 20 32 20 20 20
+        20
+   0162 00                  316 	.db 0x00
+   0163                     317 _str_16:
+   0163 43 4F 70 74 69 6F   318 	.ascii "COption 3    "
+        6E 20 33 20 20 20
+        20
+   0170 00                  319 	.db 0x00
+   0171                     320 _str_17:
+   0171 43 4F 70 74 69 6F   321 	.ascii "COption 4    "
+        6E 20 34 20 20 20
+        20
+   017E 00                  322 	.db 0x00
+   017F                     323 _str_18:
+   017F 4C 4F 4C 70 74 69   324 	.ascii "LOLption 1    "
+        6F 6E 20 31 20 20
+        20 20
+   018D 00                  325 	.db 0x00
+   018E                     326 _str_19:
+   018E 43 4F 70 74 69 6F   327 	.ascii "COption 2    "
+        6E 20 32 20 20 20
+        20
+   019B 00                  328 	.db 0x00
+   019C                     329 _str_20:
+   019C 43 4F 70 74 69 6F   330 	.ascii "COption 3    "
+        6E 20 33 20 20 20
+        20
+   01A9 00                  331 	.db 0x00
+   01AA                     332 _str_21:
+   01AA 43 4F 70 74 69 6F   333 	.ascii "COption 4    "
+        6E 20 34 20 20 20
+        20
+   01B7 00                  334 	.db 0x00
+                            335 ;	menu_test.c 90
+                            336 ; genLabel
+                            337 ; genFunction
+                            338 ;	---------------------------------
+                            339 ; Function drawScreen
+                            340 ; ---------------------------------
+   01B8                     341 ___drawScreen_start:
+   01B8                     342 _drawScreen:
+   01B8 C5                  343 	push	bc
+   01B9 E8 F9               344 	lda	sp,-7(sp)
+                            345 ;	menu_test.c 95
+                            346 ; genCall
+   01BB CD 00 00            347 	call	_cls
+                            348 ;	menu_test.c 97
+                            349 ; genAssign
+                            350 ; AOP_STK for _drawScreen_counter_1_1
+   01BE F8 06               351 	lda	hl,6(sp)
+   01C0 36 00               352 	ld	(hl),#0x00
+                            353 ; genLabel
+   01C2                     354 00108$:
+                            355 ; genLeftShift
+                            356 ; AOP_STK for _drawScreen_counter_1_1
+   01C2 F8 06               357 	lda	hl,6(sp)
+   01C4 7E                  358 	ld	a,(hl)
+   01C5 87                  359 	add	a,a
+   01C6 87                  360 	add	a,a
+   01C7 47                  361 	ld	b,a
+                            362 ; genPlus
+                            363 ; AOP_HL for _currentScreenPointer
+                            364 ; AOP_STK for _drawScreen_sloc1_1_0
+                            365 ;	genPlusIncr failed
+   01C8 21 1C 00            366 	ld	hl,#_currentScreenPointer + 0
+   01CB 5E                  367 	ld	e,(hl)
+   01CC 23                  368 	inc	hl
+   01CD 56                  369 	ld	d,(hl)
+   01CE 68                  370 	ld	l,b
+   01CF 26 00               371 	ld	h,#0x00
+   01D1 19                  372 	add	hl,de
+   01D2 7D                  373 	ld	a,l
+   01D3 54                  374 	ld	d,h
+   01D4 F8 02               375 	lda	hl,2(sp)
+   01D6 22                  376 	ld	(hl+),a
+   01D7 72                  377 	ld	(hl),d
+                            378 ; genPointerGet
+                            379 ; AOP_STK for _drawScreen_sloc1_1_0
+                            380 ; AOP_STK for _drawScreen_sloc0_1_0
+   01D8 2B                  381 	dec	hl
+   01D9 5E                  382 	ld	e,(hl)
+   01DA 23                  383 	inc	hl
+   01DB 56                  384 	ld	d,(hl)
+   01DC 1A                  385 	ld	a,(de)
+   01DD 23                  386 	inc	hl
+   01DE 77                  387 	ld	(hl),a
+   01DF 13                  388 	inc	de
+   01E0 1A                  389 	ld	a,(de)
+   01E1 23                  390 	inc	hl
+   01E2 77                  391 	ld	(hl),a
+                            392 ; genIfx
+                            393 ; AOP_STK for _drawScreen_sloc0_1_0
+   01E3 2B                  394 	dec	hl
+                            395 ; Rule 8
+   01E4 2A                  396 	ld	a,(hl+)
+   01E5 B6                  397 	or	a,(hl)
+   01E6 CA 93 02            398 	jp	z,00111$
+                            399 ;	menu_test.c 99
+                            400 ; genPlus
+                            401 ; AOP_STK for _drawScreen_counter_1_1
+                            402 ; AOP_STK for _drawScreen_sloc3_1_0
+                            403 ; genPlusIncr
+                            404 ;	genPlusIncr failed
+   01E9 23                  405 	inc	hl
+   01EA 7E                  406 	ld	a,(hl)
+   01EB C6 01               407 	add	a,#0x01
+   01ED F8 00               408 	lda	hl,0(sp)
+   01EF 77                  409 	ld	(hl),a
+                            410 ; genIpush
+                            411 ; AOP_STK for _drawScreen_sloc3_1_0
+   01F0 7E                  412 	ld	a,(hl)
+   01F1 F5                  413 	push	af
+   01F2 33                  414 	inc	sp
+                            415 ; genIpush
+   01F3 3E 02               416 	ld	a,#0x02
+   01F5 F5                  417 	push	af
+   01F6 33                  418 	inc	sp
+                            419 ; genCall
+   01F7 CD 00 00            420 	call	_gotoxy
+   01FA E8 02               421 	lda	sp,2(sp)
+                            422 ;	menu_test.c 100
+                            423 ; genPlus
+                            424 ; AOP_STK for _drawScreen_sloc1_1_0
+                            425 ; genPlusIncr
+   01FC F8 02               426 	lda	hl,2(sp)
+   01FE 5E                  427 	ld	e,(hl)
+   01FF 23                  428 	inc	hl
+   0200 56                  429 	ld	d,(hl)
+   0201 13                  430 	inc	de
+   0202 13                  431 	inc	de
+                            432 ; genPointerGet
+                            433 ; AOP_STK for _drawScreen_sloc2_1_0
+   0203 1A                  434 	ld	a,(de)
+   0204 2B                  435 	dec	hl
+   0205 2B                  436 	dec	hl
+   0206 77                  437 	ld	(hl),a
+                            438 ; genAnd
+                            439 ; AOP_STK for _drawScreen_sloc2_1_0
+   0207 7E                  440 	ld	a,(hl)
+   0208 CB 47               441 	bit	0,a
+   020A CA 3F 02            442 	jp	z,00102$
+                            443 ;	menu_test.c 101
+                            444 ; genPlus
+                            445 ; AOP_STK for _drawScreen_sloc1_1_0
+                            446 ; genPlusIncr
+                            447 ;	genPlusIncr failed
+   020D 23                  448 	inc	hl
+   020E 5E                  449 	ld	e,(hl)
+   020F 23                  450 	inc	hl
+   0210 56                  451 	ld	d,(hl)
+   0211 21 03 00            452 	ld	hl,#0x0003
+   0214 19                  453 	add	hl,de
+   0215 5D                  454 	ld	e,l
+   0216 54                  455 	ld	d,h
+                            456 ; genPointerGet
+   0217 1A                  457 	ld	a,(de)
+   0218 47                  458 	ld	b,a
+                            459 ; genLeftShift
+   0219 78                  460 	ld	a,b
+   021A 87                  461 	add	a,a
+   021B 47                  462 	ld	b,a
+                            463 ; genPlus
+                            464 ;	genPlusIncr failed
+   021C 3E 00               465 	ld	a,#<_configValues
+   021E 80                  466 	add	a,b
+   021F 5F                  467 	ld	e,a
+   0220 3E 00               468 	ld	a,#>_configValues
+   0222 CE 00               469 	adc	a,#0x00
+   0224 57                  470 	ld	d,a
+                            471 ; genPointerGet
+                            472 ; Removed redundent load
+                            473 ; Removed redundent load
+   0225 1A                  474 	ld	a,(de)
+   0226 47                  475 	ld	b,a
+   0227 13                  476 	inc	de
+   0228 1A                  477 	ld	a,(de)
+   0229 4F                  478 	ld	c,a
+                            479 ; genIpush
+   022A 68                  480 	ld	l,b
+   022B 61                  481 	ld	h,c
+   022C E5                  482 	push	hl
+                            483 ; genIpush
+                            484 ; AOP_STK for _drawScreen_sloc0_1_0
+   022D F8 06               485 	lda	hl,6(sp)
+   022F 2A                  486 	ld	a,(hl+)
+   0230 66                  487 	ld	h,(hl)
+   0231 6F                  488 	ld	l,a
+   0232 E5                  489 	push	hl
+                            490 ; genIpush
+   0233 21 B0 02            491 	ld	hl,#__str_22 + 0
+   0236 E5                  492 	push	hl
+                            493 ; genCall
+   0237 CD 00 00            494 	call	_printf
+   023A E8 06               495 	lda	sp,6(sp)
+                            496 ; genGoto
+   023C C3 4E 02            497 	jp	00103$
+                            498 ; genLabel
+   023F                     499 00102$:
+                            500 ;	menu_test.c 103
+                            501 ; genIpush
+                            502 ; AOP_STK for _drawScreen_sloc0_1_0
+   023F F8 04               503 	lda	hl,4(sp)
+   0241 2A                  504 	ld	a,(hl+)
+   0242 66                  505 	ld	h,(hl)
+   0243 6F                  506 	ld	l,a
+   0244 E5                  507 	push	hl
+                            508 ; genIpush
+   0245 21 B6 02            509 	ld	hl,#__str_23 + 0
+   0248 E5                  510 	push	hl
+                            511 ; genCall
+   0249 CD 00 00            512 	call	_printf
+   024C E8 04               513 	lda	sp,4(sp)
+                            514 ; genLabel
+   024E                     515 00103$:
+                            516 ;	menu_test.c 107
+                            517 ; genAnd
+                            518 ; AOP_STK for _drawScreen_sloc2_1_0
+   024E F8 01               519 	lda	hl,1(sp)
+   0250 7E                  520 	ld	a,(hl)
+   0251 CB 57               521 	bit	2,a
+   0253 CA 6C 02            522 	jp	z,00105$
+                            523 ;	menu_test.c 109
+                            524 ; genIpush
+                            525 ; AOP_STK for _drawScreen_sloc3_1_0
+   0256 2B                  526 	dec	hl
+   0257 7E                  527 	ld	a,(hl)
+   0258 F5                  528 	push	af
+   0259 33                  529 	inc	sp
+                            530 ; genIpush
+   025A 3E 10               531 	ld	a,#0x10
+   025C F5                  532 	push	af
+   025D 33                  533 	inc	sp
+                            534 ; genCall
+   025E CD 00 00            535 	call	_gotoxy
+   0261 E8 02               536 	lda	sp,2(sp)
+                            537 ;	menu_test.c 110
+                            538 ; genIpush
+   0263 3E 06               539 	ld	a,#0x06
+   0265 F5                  540 	push	af
+   0266 33                  541 	inc	sp
+                            542 ; genCall
+   0267 CD 00 00            543 	call	_setchar
+   026A E8 01               544 	lda	sp,1(sp)
+                            545 ; genLabel
+   026C                     546 00105$:
+                            547 ;	menu_test.c 114
+                            548 ; genAnd
+                            549 ; AOP_STK for _drawScreen_sloc2_1_0
+   026C F8 01               550 	lda	hl,1(sp)
+   026E 7E                  551 	ld	a,(hl)
+   026F CB 5F               552 	bit	3,a
+   0271 CA 8A 02            553 	jp	z,00110$
+                            554 ;	menu_test.c 116
+                            555 ; genIpush
+                            556 ; AOP_STK for _drawScreen_sloc3_1_0
+   0274 2B                  557 	dec	hl
+   0275 7E                  558 	ld	a,(hl)
+   0276 F5                  559 	push	af
+   0277 33                  560 	inc	sp
+                            561 ; genIpush
+   0278 3E 10               562 	ld	a,#0x10
+   027A F5                  563 	push	af
+   027B 33                  564 	inc	sp
+                            565 ; genCall
+   027C CD 00 00            566 	call	_gotoxy
+   027F E8 02               567 	lda	sp,2(sp)
+                            568 ;	menu_test.c 117
+                            569 ; genIpush
+   0281 3E 05               570 	ld	a,#0x05
+   0283 F5                  571 	push	af
+   0284 33                  572 	inc	sp
+                            573 ; genCall
+   0285 CD 00 00            574 	call	_setchar
+   0288 E8 01               575 	lda	sp,1(sp)
+                            576 ; genLabel
+   028A                     577 00110$:
+                            578 ;	menu_test.c 97
+                            579 ; genAssign
+                            580 ; AOP_STK for _drawScreen_sloc3_1_0
+                            581 ; AOP_STK for _drawScreen_counter_1_1
+   028A F8 00               582 	lda	hl,0(sp)
+   028C 7E                  583 	ld	a,(hl)
+   028D F8 06               584 	lda	hl,6(sp)
+   028F 77                  585 	ld	(hl),a
+                            586 ; genGoto
+   0290 C3 C2 01            587 	jp	00108$
+                            588 ; genLabel
+   0293                     589 00111$:
+                            590 ;	menu_test.c 122
+                            591 ; genIpush
+   0293 3E 01               592 	ld	a,#0x01
+   0295 F5                  593 	push	af
+   0296 33                  594 	inc	sp
+                            595 ; genIpush
+   0297 3E 01               596 	ld	a,#0x01
+   0299 F5                  597 	push	af
+   029A 33                  598 	inc	sp
+                            599 ; genCall
+   029B CD 00 00            600 	call	_gotoxy
+   029E E8 02               601 	lda	sp,2(sp)
+                            602 ;	menu_test.c 123
+                            603 ; genIpush
+   02A0 3E 03               604 	ld	a,#0x03
+   02A2 F5                  605 	push	af
+   02A3 33                  606 	inc	sp
+                            607 ; genCall
+   02A4 CD 00 00            608 	call	_setchar
+   02A7 E8 01               609 	lda	sp,1(sp)
+                            610 ;	menu_test.c 127
+                            611 ; genRet
+                            612 ; AOP_STK for _drawScreen_counter_1_1
+   02A9 F8 06               613 	lda	hl,6(sp)
+   02AB 5E                  614 	ld	e,(hl)
+                            615 ; genLabel
+   02AC                     616 00112$:
+                            617 ; genEndFunction
+   02AC E8 07               618 	lda	sp,7(sp)
+   02AE C1                  619 	pop	bc
+   02AF C9                  620 	ret
+   02B0                     621 ___drawScreen_end:
+   02B0                     622 __str_22:
+   02B0 25 73 20 25 64      623 	.ascii "%s %d"
+   02B5 00                  624 	.db 0x00
+   02B6                     625 __str_23:
+   02B6 25 73               626 	.ascii "%s"
+   02B8 00                  627 	.db 0x00
+                            628 ;	menu_test.c 130
+                            629 ; genLabel
+                            630 ; genFunction
+                            631 ;	---------------------------------
+                            632 ; Function main
+                            633 ; ---------------------------------
+   02B9                     634 ___main_start:
+   02B9                     635 _main:
+   02B9 C5                  636 	push	bc
+   02BA E8 F5               637 	lda	sp,-11(sp)
+                            638 ;	menu_test.c 132
+                            639 ; genAssign
+                            640 ; AOP_STK for _main_currentScreen_1_1
+   02BC F8 0A               641 	lda	hl,10(sp)
+   02BE 36 00               642 	ld	(hl),#0x00
+                            643 ;	menu_test.c 134
+                            644 ; genAssign
+                            645 ; AOP_STK for _main_cursorPosition_1_1
+   02C0 2B                  646 	dec	hl
+   02C1 2B                  647 	dec	hl
+   02C2 36 01               648 	ld	(hl),#0x01
+                            649 ;	menu_test.c 142
+                            650 ; genAssign
+                            651 ; AOP_STK for _main_previousScreen_1_1
+   02C4 23                  652 	inc	hl
+   02C5 36 00               653 	ld	(hl),#0x00
+                            654 ;	menu_test.c 143
+                            655 ; genAssign (pointer)
+   02C7 11 00 00            656 	ld	de,#_configValues + 0
+   02CA 3E 28               657 	ld	a,#0x28
+   02CC 12                  658 	ld	(de),a
+   02CD 13                  659 	inc	de
+   02CE 3E 00               660 	ld	a,#0x00
+   02D0 12                  661 	ld	(de),a
+                            662 ;	menu_test.c 146
+                            663 ; genPointerGet
+                            664 ; AOP_HL for _currentScreenPointer
+   02D1 11 14 00            665 	ld	de,#_screens_array + 0
+   02D4 1A                  666 	ld	a,(de)
+   02D5 21 1C 00            667 	ld	hl,#_currentScreenPointer + 0
+   02D8 77                  668 	ld	(hl),a
+   02D9 13                  669 	inc	de
+   02DA 1A                  670 	ld	a,(de)
+   02DB 23                  671 	inc	hl
+   02DC 77                  672 	ld	(hl),a
+                            673 ;	menu_test.c 147
+                            674 ; genCall
+   02DD CD B8 01            675 	call	_drawScreen
+                            676 ; AOP_STK for _main_counter_1_1
+   02E0 F8 07               677 	lda	hl,7(sp)
+   02E2 73                  678 	ld	(hl),e
+                            679 ;	menu_test.c 149
+                            680 ; genLabel
+   02E3                     681 00136$:
+                            682 ;	menu_test.c 151
+                            683 ; genCall
+   02E3 CD 00 00            684 	call	_joypad
+                            685 ; AOP_STK for _main_input_1_1
+   02E6 F8 06               686 	lda	hl,6(sp)
+   02E8 73                  687 	ld	(hl),e
+                            688 ;	menu_test.c 154
+                            689 ; genAnd
+                            690 ; AOP_STK for _main_input_1_1
+   02E9 7E                  691 	ld	a,(hl)
+   02EA CB 67               692 	bit	4,a
+   02EC CA 4C 03            693 	jp	z,00104$
+                            694 ;	menu_test.c 156
+                            695 ; genCall
+   02EF CD 00 00            696 	call	_waitpadup
+                            697 ;	menu_test.c 158
+                            698 ; genMinus
+                            699 ; AOP_STK for _main_cursorPosition_1_1
+   02F2 F8 08               700 	lda	hl,8(sp)
+   02F4 7E                  701 	ld	a,(hl)
+   02F5 C6 FF               702 	add	a,#0xFF
+   02F7 4F                  703 	ld	c,a
+                            704 ; genLeftShift
+   02F8 79                  705 	ld	a,c
+   02F9 87                  706 	add	a,a
+   02FA 87                  707 	add	a,a
+   02FB 4F                  708 	ld	c,a
+                            709 ; genPlus
+                            710 ; AOP_HL for _currentScreenPointer
+                            711 ; AOP_STK for _main_sloc0_1_0
+                            712 ;	genPlusIncr failed
+   02FC 21 1C 00            713 	ld	hl,#_currentScreenPointer + 0
+   02FF 5E                  714 	ld	e,(hl)
+   0300 23                  715 	inc	hl
+   0301 56                  716 	ld	d,(hl)
+   0302 69                  717 	ld	l,c
+   0303 26 00               718 	ld	h,#0x00
+   0305 19                  719 	add	hl,de
+   0306 7D                  720 	ld	a,l
+   0307 54                  721 	ld	d,h
+   0308 F8 04               722 	lda	hl,4(sp)
+   030A 22                  723 	ld	(hl+),a
+   030B 72                  724 	ld	(hl),d
+                            725 ; genPlus
+                            726 ; AOP_STK for _main_sloc0_1_0
+                            727 ; genPlusIncr
+   030C 2B                  728 	dec	hl
+   030D 5E                  729 	ld	e,(hl)
+   030E 23                  730 	inc	hl
+   030F 56                  731 	ld	d,(hl)
+   0310 13                  732 	inc	de
+   0311 13                  733 	inc	de
+                            734 ; genPointerGet
+   0312 1A                  735 	ld	a,(de)
+   0313 4F                  736 	ld	c,a
+                            737 ; genAnd
+   0314 79                  738 	ld	a,c
+   0315 CB 57               739 	bit	2,a
+   0317 CA 4C 03            740 	jp	z,00104$
+                            741 ;	menu_test.c 162
+                            742 ; genAssign
+                            743 ; AOP_STK for _main_currentScreen_1_1
+                            744 ; AOP_STK for _main_previousScreen_1_1
+   031A F8 0A               745 	lda	hl,10(sp)
+   031C 7E                  746 	ld	a,(hl)
+   031D 2B                  747 	dec	hl
+   031E 77                  748 	ld	(hl),a
+                            749 ;	menu_test.c 163
+                            750 ; genPlus
+                            751 ; AOP_STK for _main_sloc0_1_0
+                            752 ; genPlusIncr
+                            753 ;	genPlusIncr failed
+   031F F8 04               754 	lda	hl,4(sp)
+   0321 5E                  755 	ld	e,(hl)
+   0322 23                  756 	inc	hl
+   0323 56                  757 	ld	d,(hl)
+   0324 21 03 00            758 	ld	hl,#0x0003
+   0327 19                  759 	add	hl,de
+   0328 5D                  760 	ld	e,l
+   0329 54                  761 	ld	d,h
+                            762 ; genPointerGet
+                            763 ; AOP_STK for _main_currentScreen_1_1
+   032A 1A                  764 	ld	a,(de)
+   032B F8 0A               765 	lda	hl,10(sp)
+   032D 77                  766 	ld	(hl),a
+                            767 ;	menu_test.c 164
+                            768 ; genLeftShift
+                            769 ; AOP_STK for _main_currentScreen_1_1
+   032E 7E                  770 	ld	a,(hl)
+   032F 87                  771 	add	a,a
+   0330 4F                  772 	ld	c,a
+                            773 ; genPlus
+                            774 ;	genPlusIncr failed
+   0331 3E 14               775 	ld	a,#<_screens_array
+   0333 81                  776 	add	a,c
+   0334 5F                  777 	ld	e,a
+   0335 3E 00               778 	ld	a,#>_screens_array
+   0337 CE 00               779 	adc	a,#0x00
+   0339 57                  780 	ld	d,a
+                            781 ; genPointerGet
+                            782 ; AOP_HL for _currentScreenPointer
+                            783 ; Removed redundent load
+                            784 ; Removed redundent load
+   033A 1A                  785 	ld	a,(de)
+   033B 21 1C 00            786 	ld	hl,#_currentScreenPointer + 0
+   033E 77                  787 	ld	(hl),a
+   033F 13                  788 	inc	de
+   0340 1A                  789 	ld	a,(de)
+   0341 23                  790 	inc	hl
+   0342 77                  791 	ld	(hl),a
+                            792 ;	menu_test.c 165
+                            793 ; genCall
+   0343 CD B8 01            794 	call	_drawScreen
+                            795 ; AOP_STK for _main_counter_1_1
+   0346 F8 07               796 	lda	hl,7(sp)
+   0348 73                  797 	ld	(hl),e
+                            798 ;	menu_test.c 166
+                            799 ; genAssign
+                            800 ; AOP_STK for _main_cursorPosition_1_1
+   0349 23                  801 	inc	hl
+   034A 36 01               802 	ld	(hl),#0x01
+                            803 ; genLabel
+   034C                     804 00104$:
+                            805 ;	menu_test.c 173
+                            806 ; genAnd
+                            807 ; AOP_STK for _main_input_1_1
+   034C F8 06               808 	lda	hl,6(sp)
+   034E 7E                  809 	ld	a,(hl)
+   034F CB 6F               810 	bit	5,a
+   0351 CA 83 03            811 	jp	z,00108$
+                            812 ;	menu_test.c 175
+                            813 ; genCall
+   0354 CD 00 00            814 	call	_waitpadup
+                            815 ;	menu_test.c 177
+                            816 ; genCmpEq
+                            817 ; AOP_STK for _main_currentScreen_1_1
+                            818 ; AOP_STK for _main_previousScreen_1_1
+   0357 F8 09               819 	lda	hl,9(sp)
+   0359 2A                  820 	ld	a,(hl+)
+   035A BE                  821 	cp	(hl) ; 5
+   035B 20 03               822 	jr	nz,00157$
+   035D C3 83 03            823 	jp	00108$
+   0360                     824 00157$:
+                            825 ;	menu_test.c 179
+                            826 ; genAssign
+                            827 ; AOP_STK for _main_previousScreen_1_1
+                            828 ; AOP_STK for _main_currentScreen_1_1
+   0360 F8 09               829 	lda	hl,9(sp)
+   0362 2A                  830 	ld	a,(hl+)
+   0363 77                  831 	ld	(hl),a
+                            832 ;	menu_test.c 180
+                            833 ; genLeftShift
+                            834 ; AOP_STK for _main_previousScreen_1_1
+   0364 2B                  835 	dec	hl
+   0365 7E                  836 	ld	a,(hl)
+   0366 87                  837 	add	a,a
+   0367 4F                  838 	ld	c,a
+                            839 ; genPlus
+                            840 ;	genPlusIncr failed
+   0368 3E 14               841 	ld	a,#<_screens_array
+   036A 81                  842 	add	a,c
+   036B 5F                  843 	ld	e,a
+   036C 3E 00               844 	ld	a,#>_screens_array
+   036E CE 00               845 	adc	a,#0x00
+   0370 57                  846 	ld	d,a
+                            847 ; genPointerGet
+                            848 ; AOP_HL for _currentScreenPointer
+                            849 ; Removed redundent load
+                            850 ; Removed redundent load
+   0371 1A                  851 	ld	a,(de)
+   0372 21 1C 00            852 	ld	hl,#_currentScreenPointer + 0
+   0375 77                  853 	ld	(hl),a
+   0376 13                  854 	inc	de
+   0377 1A                  855 	ld	a,(de)
+   0378 23                  856 	inc	hl
+   0379 77                  857 	ld	(hl),a
+                            858 ;	menu_test.c 181
+                            859 ; genCall
+   037A CD B8 01            860 	call	_drawScreen
+                            861 ; AOP_STK for _main_counter_1_1
+   037D F8 07               862 	lda	hl,7(sp)
+   037F 73                  863 	ld	(hl),e
+                            864 ;	menu_test.c 182
+                            865 ; genAssign
+                            866 ; AOP_STK for _main_cursorPosition_1_1
+   0380 23                  867 	inc	hl
+   0381 36 01               868 	ld	(hl),#0x01
+                            869 ; genLabel
+   0383                     870 00108$:
+                            871 ;	menu_test.c 187
+                            872 ; genAnd
+                            873 ; AOP_STK for _main_input_1_1
+   0383 F8 06               874 	lda	hl,6(sp)
+   0385 7E                  875 	ld	a,(hl)
+   0386 CB 4F               876 	bit	1,a
+   0388 CA 22 04            877 	jp	z,00112$
+                            878 ;	menu_test.c 189
+                            879 ; genCall
+   038B CD 00 00            880 	call	_waitpadup
+                            881 ;	menu_test.c 191
+                            882 ; genMinus
+                            883 ; AOP_STK for _main_cursorPosition_1_1
+   038E F8 08               884 	lda	hl,8(sp)
+   0390 7E                  885 	ld	a,(hl)
+   0391 C6 FF               886 	add	a,#0xFF
+   0393 4F                  887 	ld	c,a
+                            888 ; genLeftShift
+   0394 79                  889 	ld	a,c
+   0395 87                  890 	add	a,a
+   0396 87                  891 	add	a,a
+   0397 4F                  892 	ld	c,a
+                            893 ; genPlus
+                            894 ; AOP_HL for _currentScreenPointer
+                            895 ; AOP_STK for _main_sloc0_1_0
+                            896 ;	genPlusIncr failed
+   0398 21 1C 00            897 	ld	hl,#_currentScreenPointer + 0
+   039B 5E                  898 	ld	e,(hl)
+   039C 23                  899 	inc	hl
+   039D 56                  900 	ld	d,(hl)
+   039E 69                  901 	ld	l,c
+   039F 26 00               902 	ld	h,#0x00
+   03A1 19                  903 	add	hl,de
+   03A2 7D                  904 	ld	a,l
+   03A3 54                  905 	ld	d,h
+   03A4 F8 04               906 	lda	hl,4(sp)
+   03A6 22                  907 	ld	(hl+),a
+   03A7 72                  908 	ld	(hl),d
+                            909 ; genPlus
+                            910 ; AOP_STK for _main_sloc0_1_0
+                            911 ; genPlusIncr
+   03A8 2B                  912 	dec	hl
+   03A9 5E                  913 	ld	e,(hl)
+   03AA 23                  914 	inc	hl
+   03AB 56                  915 	ld	d,(hl)
+   03AC 13                  916 	inc	de
+   03AD 13                  917 	inc	de
+                            918 ; genPointerGet
+   03AE 1A                  919 	ld	a,(de)
+   03AF 4F                  920 	ld	c,a
+                            921 ; genAnd
+   03B0 79                  922 	ld	a,c
+   03B1 CB 47               923 	bit	0,a
+   03B3 CA 22 04            924 	jp	z,00112$
+                            925 ;	menu_test.c 194
+                            926 ; genPlus
+                            927 ; AOP_STK for _main_sloc0_1_0
+                            928 ; genPlusIncr
+                            929 ;	genPlusIncr failed
+   03B6 2B                  930 	dec	hl
+   03B7 5E                  931 	ld	e,(hl)
+   03B8 23                  932 	inc	hl
+   03B9 56                  933 	ld	d,(hl)
+   03BA 21 03 00            934 	ld	hl,#0x0003
+   03BD 19                  935 	add	hl,de
+   03BE 5D                  936 	ld	e,l
+   03BF 54                  937 	ld	d,h
+                            938 ; genPointerGet
+   03C0 1A                  939 	ld	a,(de)
+   03C1 4F                  940 	ld	c,a
+                            941 ; genLeftShift
+   03C2 79                  942 	ld	a,c
+   03C3 87                  943 	add	a,a
+   03C4 4F                  944 	ld	c,a
+                            945 ; genPlus
+                            946 ; AOP_STK for _main_sloc2_1_0
+                            947 ;	genPlusIncr failed
+   03C5 11 00 00            948 	ld	de,#_configValues + 0
+   03C8 69                  949 	ld	l,c
+   03C9 26 00               950 	ld	h,#0x00
+   03CB 19                  951 	add	hl,de
+   03CC 7D                  952 	ld	a,l
+   03CD 54                  953 	ld	d,h
+   03CE F8 00               954 	lda	hl,0(sp)
+   03D0 22                  955 	ld	(hl+),a
+   03D1 72                  956 	ld	(hl),d
+                            957 ; genPointerGet
+                            958 ; AOP_STK for _main_sloc2_1_0
+                            959 ; AOP_STK for _main_sloc1_1_0
+   03D2 2B                  960 	dec	hl
+   03D3 5E                  961 	ld	e,(hl)
+   03D4 23                  962 	inc	hl
+   03D5 56                  963 	ld	d,(hl)
+   03D6 1A                  964 	ld	a,(de)
+   03D7 23                  965 	inc	hl
+   03D8 77                  966 	ld	(hl),a
+   03D9 13                  967 	inc	de
+   03DA 1A                  968 	ld	a,(de)
+   03DB 23                  969 	inc	hl
+   03DC 77                  970 	ld	(hl),a
+                            971 ; genMinus
+                            972 ; AOP_STK for _main_sloc1_1_0
+   03DD 2B                  973 	dec	hl
+   03DE 5E                  974 	ld	e,(hl)
+   03DF 23                  975 	inc	hl
+   03E0 56                  976 	ld	d,(hl)
+   03E1 21 01 00            977 	ld	hl,#0x0001
+   03E4 7B                  978 	ld	a,e
+   03E5 95                  979 	sub	a,l
+   03E6 5F                  980 	ld	e,a
+   03E7 7A                  981 	ld	a,d
+   03E8 9C                  982 	sbc	a,h
+   03E9 F8 03               983 	lda	hl,3(sp)
+   03EB 77                  984 	ld	(hl),a
+   03EC 2B                  985 	dec	hl
+   03ED 73                  986 	ld	(hl),e
+                            987 ; genAssign (pointer)
+                            988 ; AOP_STK for _main_sloc2_1_0
+                            989 ; AOP_STK for _main_sloc1_1_0
+   03EE 2B                  990 	dec	hl
+   03EF 2B                  991 	dec	hl
+   03F0 5E                  992 	ld	e,(hl)
+   03F1 23                  993 	inc	hl
+   03F2 56                  994 	ld	d,(hl)
+   03F3 23                  995 	inc	hl
+   03F4 7E                  996 	ld	a,(hl)
+   03F5 12                  997 	ld	(de),a
+   03F6 13                  998 	inc	de
+   03F7 23                  999 	inc	hl
+   03F8 7E                 1000 	ld	a,(hl)
+   03F9 12                 1001 	ld	(de),a
+                           1002 ;	menu_test.c 195
+                           1003 ; genIpush
+                           1004 ; AOP_STK for _main_cursorPosition_1_1
+   03FA F8 08              1005 	lda	hl,8(sp)
+   03FC 7E                 1006 	ld	a,(hl)
+   03FD F5                 1007 	push	af
+   03FE 33                 1008 	inc	sp
+                           1009 ; genIpush
+   03FF 3E 02              1010 	ld	a,#0x02
+   0401 F5                 1011 	push	af
+   0402 33                 1012 	inc	sp
+                           1013 ; genCall
+   0403 CD 00 00           1014 	call	_gotoxy
+   0406 E8 02              1015 	lda	sp,2(sp)
+                           1016 ;	menu_test.c 196
+                           1017 ; genPointerGet
+                           1018 ; AOP_STK for _main_sloc0_1_0
+   0408 F8 04              1019 	lda	hl,4(sp)
+   040A 5E                 1020 	ld	e,(hl)
+   040B 23                 1021 	inc	hl
+   040C 56                 1022 	ld	d,(hl)
+   040D 1A                 1023 	ld	a,(de)
+   040E 4F                 1024 	ld	c,a
+   040F 13                 1025 	inc	de
+   0410 1A                 1026 	ld	a,(de)
+   0411 47                 1027 	ld	b,a
+                           1028 ; genIpush
+                           1029 ; AOP_STK for _main_sloc1_1_0
+   0412 F8 02              1030 	lda	hl,2(sp)
+   0414 2A                 1031 	ld	a,(hl+)
+   0415 66                 1032 	ld	h,(hl)
+   0416 6F                 1033 	ld	l,a
+   0417 E5                 1034 	push	hl
+                           1035 ; genIpush
+   0418 C5                 1036 	push	bc
+                           1037 ; genIpush
+   0419 21 67 06           1038 	ld	hl,#__str_24 + 0
+   041C E5                 1039 	push	hl
+                           1040 ; genCall
+   041D CD 00 00           1041 	call	_printf
+   0420 E8 06              1042 	lda	sp,6(sp)
+                           1043 ; genLabel
+   0422                    1044 00112$:
+                           1045 ;	menu_test.c 200
+                           1046 ; genAnd
+                           1047 ; AOP_STK for _main_input_1_1
+   0422 F8 06              1048 	lda	hl,6(sp)
+   0424 7E                 1049 	ld	a,(hl)
+   0425 CB 47              1050 	bit	0,a
+   0427 CA B7 04           1051 	jp	z,00116$
+                           1052 ;	menu_test.c 202
+                           1053 ; genCall
+   042A CD 00 00           1054 	call	_waitpadup
+                           1055 ;	menu_test.c 204
+                           1056 ; genMinus
+                           1057 ; AOP_STK for _main_cursorPosition_1_1
+   042D F8 08              1058 	lda	hl,8(sp)
+   042F 7E                 1059 	ld	a,(hl)
+   0430 C6 FF              1060 	add	a,#0xFF
+   0432 4F                 1061 	ld	c,a
+                           1062 ; genLeftShift
+   0433 79                 1063 	ld	a,c
+   0434 87                 1064 	add	a,a
+   0435 87                 1065 	add	a,a
+   0436 4F                 1066 	ld	c,a
+                           1067 ; genPlus
+                           1068 ; AOP_HL for _currentScreenPointer
+                           1069 ; AOP_STK for _main_sloc2_1_0
+                           1070 ;	genPlusIncr failed
+   0437 21 1C 00           1071 	ld	hl,#_currentScreenPointer + 0
+   043A 5E                 1072 	ld	e,(hl)
+   043B 23                 1073 	inc	hl
+   043C 56                 1074 	ld	d,(hl)
+   043D 69                 1075 	ld	l,c
+   043E 26 00              1076 	ld	h,#0x00
+   0440 19                 1077 	add	hl,de
+   0441 7D                 1078 	ld	a,l
+   0442 54                 1079 	ld	d,h
+   0443 F8 00              1080 	lda	hl,0(sp)
+   0445 22                 1081 	ld	(hl+),a
+   0446 72                 1082 	ld	(hl),d
+                           1083 ; genPlus
+                           1084 ; AOP_STK for _main_sloc2_1_0
+                           1085 ; genPlusIncr
+   0447 2B                 1086 	dec	hl
+   0448 5E                 1087 	ld	e,(hl)
+   0449 23                 1088 	inc	hl
+   044A 56                 1089 	ld	d,(hl)
+   044B 13                 1090 	inc	de
+   044C 13                 1091 	inc	de
+                           1092 ; genPointerGet
+   044D 1A                 1093 	ld	a,(de)
+   044E 4F                 1094 	ld	c,a
+                           1095 ; genAnd
+   044F 79                 1096 	ld	a,c
+   0450 CB 47              1097 	bit	0,a
+   0452 CA B7 04           1098 	jp	z,00116$
+                           1099 ;	menu_test.c 207
+                           1100 ; genPlus
+                           1101 ; AOP_STK for _main_sloc2_1_0
+                           1102 ; genPlusIncr
+                           1103 ;	genPlusIncr failed
+   0455 2B                 1104 	dec	hl
+   0456 5E                 1105 	ld	e,(hl)
+   0457 23                 1106 	inc	hl
+   0458 56                 1107 	ld	d,(hl)
+   0459 21 03 00           1108 	ld	hl,#0x0003
+   045C 19                 1109 	add	hl,de
+   045D 5D                 1110 	ld	e,l
+   045E 54                 1111 	ld	d,h
+                           1112 ; genPointerGet
+   045F 1A                 1113 	ld	a,(de)
+   0460 4F                 1114 	ld	c,a
+                           1115 ; genLeftShift
+   0461 79                 1116 	ld	a,c
+   0462 87                 1117 	add	a,a
+   0463 4F                 1118 	ld	c,a
+                           1119 ; genPlus
+                           1120 ; AOP_STK for _main_sloc0_1_0
+                           1121 ;	genPlusIncr failed
+   0464 11 00 00           1122 	ld	de,#_configValues + 0
+   0467 69                 1123 	ld	l,c
+   0468 26 00              1124 	ld	h,#0x00
+   046A 19                 1125 	add	hl,de
+   046B 7D                 1126 	ld	a,l
+   046C 54                 1127 	ld	d,h
+   046D F8 04              1128 	lda	hl,4(sp)
+   046F 22                 1129 	ld	(hl+),a
+   0470 72                 1130 	ld	(hl),d
+                           1131 ; genPointerGet
+                           1132 ; AOP_STK for _main_sloc0_1_0
+                           1133 ; AOP_STK for _main_sloc1_1_0
+   0471 2B                 1134 	dec	hl
+   0472 5E                 1135 	ld	e,(hl)
+   0473 23                 1136 	inc	hl
+   0474 56                 1137 	ld	d,(hl)
+   0475 1A                 1138 	ld	a,(de)
+   0476 F8 02              1139 	lda	hl,2(sp)
+   0478 77                 1140 	ld	(hl),a
+   0479 13                 1141 	inc	de
+   047A 1A                 1142 	ld	a,(de)
+   047B 23                 1143 	inc	hl
+   047C 77                 1144 	ld	(hl),a
+                           1145 ; genPlus
+                           1146 ; AOP_STK for _main_sloc1_1_0
+                           1147 ; genPlusIncr
+   047D 2B                 1148 	dec	hl
+   047E 34                 1149 	inc	(hl)
+   047F 20 02              1150 	jr	nz,00158$
+   0481 23                 1151 	inc	hl
+   0482 34                 1152 	inc	(hl)
+   0483                    1153 00158$:
+                           1154 ; genAssign (pointer)
+                           1155 ; AOP_STK for _main_sloc0_1_0
+                           1156 ; AOP_STK for _main_sloc1_1_0
+   0483 F8 04              1157 	lda	hl,4(sp)
+   0485 5E                 1158 	ld	e,(hl)
+   0486 23                 1159 	inc	hl
+   0487 56                 1160 	ld	d,(hl)
+   0488 F8 02              1161 	lda	hl,2(sp)
+   048A 7E                 1162 	ld	a,(hl)
+   048B 12                 1163 	ld	(de),a
+   048C 13                 1164 	inc	de
+   048D 23                 1165 	inc	hl
+   048E 7E                 1166 	ld	a,(hl)
+   048F 12                 1167 	ld	(de),a
+                           1168 ;	menu_test.c 208
+                           1169 ; genIpush
+                           1170 ; AOP_STK for _main_cursorPosition_1_1
+   0490 F8 08              1171 	lda	hl,8(sp)
+   0492 7E                 1172 	ld	a,(hl)
+   0493 F5                 1173 	push	af
+   0494 33                 1174 	inc	sp
+                           1175 ; genIpush
+   0495 3E 02              1176 	ld	a,#0x02
+   0497 F5                 1177 	push	af
+   0498 33                 1178 	inc	sp
+                           1179 ; genCall
+   0499 CD 00 00           1180 	call	_gotoxy
+   049C E8 02              1181 	lda	sp,2(sp)
+                           1182 ;	menu_test.c 209
+                           1183 ; genPointerGet
+                           1184 ; AOP_STK for _main_sloc2_1_0
+   049E F8 00              1185 	lda	hl,0(sp)
+   04A0 5E                 1186 	ld	e,(hl)
+   04A1 23                 1187 	inc	hl
+   04A2 56                 1188 	ld	d,(hl)
+   04A3 1A                 1189 	ld	a,(de)
+   04A4 4F                 1190 	ld	c,a
+   04A5 13                 1191 	inc	de
+   04A6 1A                 1192 	ld	a,(de)
+   04A7 47                 1193 	ld	b,a
+                           1194 ; genIpush
+                           1195 ; AOP_STK for _main_sloc1_1_0
+   04A8 23                 1196 	inc	hl
+   04A9 2A                 1197 	ld	a,(hl+)
+   04AA 66                 1198 	ld	h,(hl)
+   04AB 6F                 1199 	ld	l,a
+   04AC E5                 1200 	push	hl
+                           1201 ; genIpush
+   04AD C5                 1202 	push	bc
+                           1203 ; genIpush
+   04AE 21 6D 06           1204 	ld	hl,#__str_25 + 0
+   04B1 E5                 1205 	push	hl
+                           1206 ; genCall
+   04B2 CD 00 00           1207 	call	_printf
+   04B5 E8 06              1208 	lda	sp,6(sp)
+                           1209 ; genLabel
+   04B7                    1210 00116$:
+                           1211 ;	menu_test.c 214
+                           1212 ; genAnd
+                           1213 ; AOP_STK for _main_input_1_1
+   04B7 F8 06              1214 	lda	hl,6(sp)
+   04B9 7E                 1215 	ld	a,(hl)
+   04BA CB 5F              1216 	bit	3,a
+   04BC CA 8A 05           1217 	jp	z,00125$
+                           1218 ;	menu_test.c 216
+                           1219 ; genCall
+   04BF CD 00 00           1220 	call	_waitpadup
+                           1221 ;	menu_test.c 217
+                           1222 ; genIpush
+                           1223 ; AOP_STK for _main_cursorPosition_1_1
+   04C2 F8 08              1224 	lda	hl,8(sp)
+   04C4 7E                 1225 	ld	a,(hl)
+   04C5 F5                 1226 	push	af
+   04C6 33                 1227 	inc	sp
+                           1228 ; genIpush
+   04C7 3E 01              1229 	ld	a,#0x01
+   04C9 F5                 1230 	push	af
+   04CA 33                 1231 	inc	sp
+                           1232 ; genCall
+   04CB CD 00 00           1233 	call	_gotoxy
+   04CE E8 02              1234 	lda	sp,2(sp)
+                           1235 ; genIpush
+   04D0 3E 20              1236 	ld	a,#0x20
+   04D2 F5                 1237 	push	af
+   04D3 33                 1238 	inc	sp
+                           1239 ; genCall
+   04D4 CD 00 00           1240 	call	_setchar
+   04D7 E8 01              1241 	lda	sp,1(sp)
+                           1242 ;	menu_test.c 218
+                           1243 ; genIpush
+                           1244 ; AOP_STK for _main_cursorPosition_1_1
+   04D9 F8 08              1245 	lda	hl,8(sp)
+   04DB 7E                 1246 	ld	a,(hl)
+   04DC F5                 1247 	push	af
+   04DD 33                 1248 	inc	sp
+                           1249 ; genIpush
+   04DE 3E 00              1250 	ld	a,#0x00
+   04E0 F5                 1251 	push	af
+   04E1 33                 1252 	inc	sp
+                           1253 ; genCall
+   04E2 CD 00 00           1254 	call	_gotoxy
+   04E5 E8 02              1255 	lda	sp,2(sp)
+                           1256 ; genIpush
+   04E7 3E 20              1257 	ld	a,#0x20
+   04E9 F5                 1258 	push	af
+   04EA 33                 1259 	inc	sp
+                           1260 ; genCall
+   04EB CD 00 00           1261 	call	_setchar
+   04EE E8 01              1262 	lda	sp,1(sp)
+                           1263 ;	menu_test.c 219
+                           1264 ; genPlus
+                           1265 ; AOP_STK for _main_cursorPosition_1_1
+                           1266 ; genPlusIncr
+   04F0 F8 08              1267 	lda	hl,8(sp)
+   04F2 34                 1268 	inc	(hl)
+                           1269 ;	menu_test.c 221
+                           1270 ; genCmpGt
+                           1271 ; AOP_STK for _main_cursorPosition_1_1
+                           1272 ; AOP_STK for _main_counter_1_1
+   04F3 AF                 1273 	xor	a,a
+   04F4 2B                 1274 	dec	hl
+   04F5 2A                 1275 	ld	a,(hl+)
+   04F6 9E                 1276 	sbc	a,(hl) ; 2
+   04F7 D2 FD 04           1277 	jp	nc,00118$
+                           1278 ;	menu_test.c 222
+                           1279 ; genAssign
+                           1280 ; AOP_STK for _main_counter_1_1
+                           1281 ; AOP_STK for _main_cursorPosition_1_1
+   04FA 2B                 1282 	dec	hl
+   04FB 2A                 1283 	ld	a,(hl+)
+   04FC 77                 1284 	ld	(hl),a
+                           1285 ; genLabel
+   04FD                    1286 00118$:
+                           1287 ;	menu_test.c 224
+                           1288 ; genMinus
+                           1289 ; AOP_STK for _main_cursorPosition_1_1
+   04FD F8 08              1290 	lda	hl,8(sp)
+   04FF 7E                 1291 	ld	a,(hl)
+   0500 C6 FF              1292 	add	a,#0xFF
+   0502 4F                 1293 	ld	c,a
+                           1294 ; genLeftShift
+   0503 79                 1295 	ld	a,c
+   0504 87                 1296 	add	a,a
+   0505 87                 1297 	add	a,a
+   0506 4F                 1298 	ld	c,a
+                           1299 ; genPlus
+                           1300 ; AOP_HL for _currentScreenPointer
+                           1301 ;	genPlusIncr failed
+   0507 21 1C 00           1302 	ld	hl,#_currentScreenPointer + 0
+   050A 7E                 1303 	ld	a,(hl)
+   050B 81                 1304 	add	a,c
+   050C 4F                 1305 	ld	c,a
+   050D 23                 1306 	inc	hl
+   050E 7E                 1307 	ld	a,(hl)
+   050F CE 00              1308 	adc	a,#0x00
+   0511 47                 1309 	ld	b,a
+                           1310 ; genPlus
+                           1311 ; genPlusIncr
+   0512 59                 1312 	ld	e,c
+   0513 50                 1313 	ld	d,b
+   0514 13                 1314 	inc	de
+   0515 13                 1315 	inc	de
+                           1316 ; genPointerGet
+   0516 1A                 1317 	ld	a,(de)
+   0517 4F                 1318 	ld	c,a
+                           1319 ; genAnd
+   0518 79                 1320 	ld	a,c
+   0519 CB 4F              1321 	bit	1,a
+   051B CA 21 05           1322 	jp	z,00120$
+                           1323 ;	menu_test.c 225
+                           1324 ; genPlus
+                           1325 ; AOP_STK for _main_cursorPosition_1_1
+                           1326 ; genPlusIncr
+   051E F8 08              1327 	lda	hl,8(sp)
+   0520 34                 1328 	inc	(hl)
+                           1329 ; genLabel
+   0521                    1330 00120$:
+                           1331 ;	menu_test.c 227
+                           1332 ; genMinus
+                           1333 ; AOP_STK for _main_cursorPosition_1_1
+   0521 F8 08              1334 	lda	hl,8(sp)
+   0523 7E                 1335 	ld	a,(hl)
+   0524 C6 FF              1336 	add	a,#0xFF
+   0526 4F                 1337 	ld	c,a
+                           1338 ; genLeftShift
+   0527 79                 1339 	ld	a,c
+   0528 87                 1340 	add	a,a
+   0529 87                 1341 	add	a,a
+   052A 4F                 1342 	ld	c,a
+                           1343 ; genPlus
+                           1344 ; AOP_HL for _currentScreenPointer
+                           1345 ;	genPlusIncr failed
+   052B 21 1C 00           1346 	ld	hl,#_currentScreenPointer + 0
+   052E 7E                 1347 	ld	a,(hl)
+   052F 81                 1348 	add	a,c
+   0530 4F                 1349 	ld	c,a
+   0531 23                 1350 	inc	hl
+   0532 7E                 1351 	ld	a,(hl)
+   0533 CE 00              1352 	adc	a,#0x00
+   0535 47                 1353 	ld	b,a
+                           1354 ; genPlus
+                           1355 ; genPlusIncr
+   0536 59                 1356 	ld	e,c
+   0537 50                 1357 	ld	d,b
+   0538 13                 1358 	inc	de
+   0539 13                 1359 	inc	de
+                           1360 ; genPointerGet
+   053A 1A                 1361 	ld	a,(de)
+   053B 4F                 1362 	ld	c,a
+                           1363 ; genAnd
+   053C 79                 1364 	ld	a,c
+   053D CB 47              1365 	bit	0,a
+   053F CA 73 05           1366 	jp	z,00122$
+                           1367 ;	menu_test.c 229
+                           1368 ; genIpush
+                           1369 ; AOP_STK for _main_cursorPosition_1_1
+   0542 F8 08              1370 	lda	hl,8(sp)
+   0544 7E                 1371 	ld	a,(hl)
+   0545 F5                 1372 	push	af
+   0546 33                 1373 	inc	sp
+                           1374 ; genIpush
+   0547 3E 00              1375 	ld	a,#0x00
+   0549 F5                 1376 	push	af
+   054A 33                 1377 	inc	sp
+                           1378 ; genCall
+   054B CD 00 00           1379 	call	_gotoxy
+   054E E8 02              1380 	lda	sp,2(sp)
+                           1381 ; genIpush
+   0550 3E 04              1382 	ld	a,#0x04
+   0552 F5                 1383 	push	af
+   0553 33                 1384 	inc	sp
+                           1385 ; genCall
+   0554 CD 00 00           1386 	call	_setchar
+   0557 E8 01              1387 	lda	sp,1(sp)
+                           1388 ;	menu_test.c 230
+                           1389 ; genIpush
+                           1390 ; AOP_STK for _main_cursorPosition_1_1
+   0559 F8 08              1391 	lda	hl,8(sp)
+   055B 7E                 1392 	ld	a,(hl)
+   055C F5                 1393 	push	af
+   055D 33                 1394 	inc	sp
+                           1395 ; genIpush
+   055E 3E 01              1396 	ld	a,#0x01
+   0560 F5                 1397 	push	af
+   0561 33                 1398 	inc	sp
+                           1399 ; genCall
+   0562 CD 00 00           1400 	call	_gotoxy
+   0565 E8 02              1401 	lda	sp,2(sp)
+                           1402 ; genIpush
+   0567 3E 03              1403 	ld	a,#0x03
+   0569 F5                 1404 	push	af
+   056A 33                 1405 	inc	sp
+                           1406 ; genCall
+   056B CD 00 00           1407 	call	_setchar
+   056E E8 01              1408 	lda	sp,1(sp)
+                           1409 ; genGoto
+   0570 C3 8A 05           1410 	jp	00125$
+                           1411 ; genLabel
+   0573                    1412 00122$:
+                           1413 ;	menu_test.c 234
+                           1414 ; genIpush
+                           1415 ; AOP_STK for _main_cursorPosition_1_1
+   0573 F8 08              1416 	lda	hl,8(sp)
+   0575 7E                 1417 	ld	a,(hl)
+   0576 F5                 1418 	push	af
+   0577 33                 1419 	inc	sp
+                           1420 ; genIpush
+   0578 3E 01              1421 	ld	a,#0x01
+   057A F5                 1422 	push	af
+   057B 33                 1423 	inc	sp
+                           1424 ; genCall
+   057C CD 00 00           1425 	call	_gotoxy
+   057F E8 02              1426 	lda	sp,2(sp)
+                           1427 ; genIpush
+   0581 3E 03              1428 	ld	a,#0x03
+   0583 F5                 1429 	push	af
+   0584 33                 1430 	inc	sp
+                           1431 ; genCall
+   0585 CD 00 00           1432 	call	_setchar
+   0588 E8 01              1433 	lda	sp,1(sp)
+                           1434 ; genLabel
+   058A                    1435 00125$:
+                           1436 ;	menu_test.c 238
+                           1437 ; genAnd
+                           1438 ; AOP_STK for _main_input_1_1
+   058A F8 06              1439 	lda	hl,6(sp)
+   058C 7E                 1440 	ld	a,(hl)
+   058D CB 57              1441 	bit	2,a
+   058F CA E3 02           1442 	jp	z,00136$
+                           1443 ;	menu_test.c 240
+                           1444 ; genCall
+   0592 CD 00 00           1445 	call	_waitpadup
+                           1446 ;	menu_test.c 241
+                           1447 ; genIpush
+                           1448 ; AOP_STK for _main_cursorPosition_1_1
+   0595 F8 08              1449 	lda	hl,8(sp)
+   0597 7E                 1450 	ld	a,(hl)
+   0598 F5                 1451 	push	af
+   0599 33                 1452 	inc	sp
+                           1453 ; genIpush
+   059A 3E 01              1454 	ld	a,#0x01
+   059C F5                 1455 	push	af
+   059D 33                 1456 	inc	sp
+                           1457 ; genCall
+   059E CD 00 00           1458 	call	_gotoxy
+   05A1 E8 02              1459 	lda	sp,2(sp)
+                           1460 ; genIpush
+   05A3 3E 20              1461 	ld	a,#0x20
+   05A5 F5                 1462 	push	af
+   05A6 33                 1463 	inc	sp
+                           1464 ; genCall
+   05A7 CD 00 00           1465 	call	_setchar
+   05AA E8 01              1466 	lda	sp,1(sp)
+                           1467 ;	menu_test.c 242
+                           1468 ; genIpush
+                           1469 ; AOP_STK for _main_cursorPosition_1_1
+   05AC F8 08              1470 	lda	hl,8(sp)
+   05AE 7E                 1471 	ld	a,(hl)
+   05AF F5                 1472 	push	af
+   05B0 33                 1473 	inc	sp
+                           1474 ; genIpush
+   05B1 3E 00              1475 	ld	a,#0x00
+   05B3 F5                 1476 	push	af
+   05B4 33                 1477 	inc	sp
+                           1478 ; genCall
+   05B5 CD 00 00           1479 	call	_gotoxy
+   05B8 E8 02              1480 	lda	sp,2(sp)
+                           1481 ; genIpush
+   05BA 3E 20              1482 	ld	a,#0x20
+   05BC F5                 1483 	push	af
+   05BD 33                 1484 	inc	sp
+                           1485 ; genCall
+   05BE CD 00 00           1486 	call	_setchar
+   05C1 E8 01              1487 	lda	sp,1(sp)
+                           1488 ;	menu_test.c 243
+                           1489 ; genMinus
+                           1490 ; AOP_STK for _main_cursorPosition_1_1
+   05C3 F8 08              1491 	lda	hl,8(sp)
+   05C5 35                 1492 	dec	(hl)
+                           1493 ;	menu_test.c 245
+                           1494 ; genCmpLt
+                           1495 ; AOP_STK for _main_cursorPosition_1_1
+   05C6 7E                 1496 	ld	a,(hl)
+   05C7 FE 01              1497 	cp	#0x01
+   05C9 D2 CE 05           1498 	jp	nc,00127$
+                           1499 ;	menu_test.c 246
+                           1500 ; genAssign
+                           1501 ; AOP_STK for _main_cursorPosition_1_1
+   05CC 36 01              1502 	ld	(hl),#0x01
+                           1503 ; genLabel
+   05CE                    1504 00127$:
+                           1505 ;	menu_test.c 249
+                           1506 ; genMinus
+                           1507 ; AOP_STK for _main_cursorPosition_1_1
+                           1508 ; AOP_STK for _main_sloc2_1_0
+   05CE F8 08              1509 	lda	hl,8(sp)
+   05D0 7E                 1510 	ld	a,(hl)
+   05D1 C6 FF              1511 	add	a,#0xFF
+   05D3 F8 00              1512 	lda	hl,0(sp)
+   05D5 77                 1513 	ld	(hl),a
+                           1514 ; genLeftShift
+                           1515 ; AOP_STK for _main_sloc2_1_0
+   05D6 7E                 1516 	ld	a,(hl)
+   05D7 87                 1517 	add	a,a
+   05D8 87                 1518 	add	a,a
+   05D9 47                 1519 	ld	b,a
+                           1520 ; genPlus
+                           1521 ; AOP_HL for _currentScreenPointer
+                           1522 ;	genPlusIncr failed
+   05DA 21 1C 00           1523 	ld	hl,#_currentScreenPointer + 0
+   05DD 7E                 1524 	ld	a,(hl)
+   05DE 80                 1525 	add	a,b
+   05DF 47                 1526 	ld	b,a
+   05E0 23                 1527 	inc	hl
+   05E1 7E                 1528 	ld	a,(hl)
+   05E2 CE 00              1529 	adc	a,#0x00
+   05E4 4F                 1530 	ld	c,a
+                           1531 ; genPlus
+                           1532 ; genPlusIncr
+   05E5 58                 1533 	ld	e,b
+   05E6 51                 1534 	ld	d,c
+   05E7 13                 1535 	inc	de
+   05E8 13                 1536 	inc	de
+                           1537 ; genPointerGet
+   05E9 1A                 1538 	ld	a,(de)
+   05EA 4F                 1539 	ld	c,a
+                           1540 ; genAnd
+   05EB 79                 1541 	ld	a,c
+   05EC CB 4F              1542 	bit	1,a
+   05EE CA F7 05           1543 	jp	z,00129$
+                           1544 ;	menu_test.c 250
+                           1545 ; genAssign
+                           1546 ; AOP_STK for _main_sloc2_1_0
+                           1547 ; AOP_STK for _main_cursorPosition_1_1
+   05F1 F8 00              1548 	lda	hl,0(sp)
+   05F3 7E                 1549 	ld	a,(hl)
+   05F4 F8 08              1550 	lda	hl,8(sp)
+   05F6 77                 1551 	ld	(hl),a
+                           1552 ; genLabel
+   05F7                    1553 00129$:
+                           1554 ;	menu_test.c 252
+                           1555 ; genMinus
+                           1556 ; AOP_STK for _main_cursorPosition_1_1
+   05F7 F8 08              1557 	lda	hl,8(sp)
+   05F9 7E                 1558 	ld	a,(hl)
+   05FA C6 FF              1559 	add	a,#0xFF
+   05FC 4F                 1560 	ld	c,a
+                           1561 ; genLeftShift
+   05FD 79                 1562 	ld	a,c
+   05FE 87                 1563 	add	a,a
+   05FF 87                 1564 	add	a,a
+   0600 4F                 1565 	ld	c,a
+                           1566 ; genPlus
+                           1567 ; AOP_HL for _currentScreenPointer
+                           1568 ;	genPlusIncr failed
+   0601 21 1C 00           1569 	ld	hl,#_currentScreenPointer + 0
+   0604 7E                 1570 	ld	a,(hl)
+   0605 81                 1571 	add	a,c
+   0606 4F                 1572 	ld	c,a
+   0607 23                 1573 	inc	hl
+   0608 7E                 1574 	ld	a,(hl)
+   0609 CE 00              1575 	adc	a,#0x00
+   060B 47                 1576 	ld	b,a
+                           1577 ; genPlus
+                           1578 ; genPlusIncr
+   060C 59                 1579 	ld	e,c
+   060D 50                 1580 	ld	d,b
+   060E 13                 1581 	inc	de
+   060F 13                 1582 	inc	de
+                           1583 ; genPointerGet
+   0610 1A                 1584 	ld	a,(de)
+   0611 4F                 1585 	ld	c,a
+                           1586 ; genAnd
+   0612 79                 1587 	ld	a,c
+   0613 CB 47              1588 	bit	0,a
+   0615 CA 49 06           1589 	jp	z,00131$
+                           1590 ;	menu_test.c 254
+                           1591 ; genIpush
+                           1592 ; AOP_STK for _main_cursorPosition_1_1
+   0618 F8 08              1593 	lda	hl,8(sp)
+   061A 7E                 1594 	ld	a,(hl)
+   061B F5                 1595 	push	af
+   061C 33                 1596 	inc	sp
+                           1597 ; genIpush
+   061D 3E 00              1598 	ld	a,#0x00
+   061F F5                 1599 	push	af
+   0620 33                 1600 	inc	sp
+                           1601 ; genCall
+   0621 CD 00 00           1602 	call	_gotoxy
+   0624 E8 02              1603 	lda	sp,2(sp)
+                           1604 ; genIpush
+   0626 3E 04              1605 	ld	a,#0x04
+   0628 F5                 1606 	push	af
+   0629 33                 1607 	inc	sp
+                           1608 ; genCall
+   062A CD 00 00           1609 	call	_setchar
+   062D E8 01              1610 	lda	sp,1(sp)
+                           1611 ;	menu_test.c 255
+                           1612 ; genIpush
+                           1613 ; AOP_STK for _main_cursorPosition_1_1
+   062F F8 08              1614 	lda	hl,8(sp)
+   0631 7E                 1615 	ld	a,(hl)
+   0632 F5                 1616 	push	af
+   0633 33                 1617 	inc	sp
+                           1618 ; genIpush
+   0634 3E 01              1619 	ld	a,#0x01
+   0636 F5                 1620 	push	af
+   0637 33                 1621 	inc	sp
+                           1622 ; genCall
+   0638 CD 00 00           1623 	call	_gotoxy
+   063B E8 02              1624 	lda	sp,2(sp)
+                           1625 ; genIpush
+   063D 3E 03              1626 	ld	a,#0x03
+   063F F5                 1627 	push	af
+   0640 33                 1628 	inc	sp
+                           1629 ; genCall
+   0641 CD 00 00           1630 	call	_setchar
+   0644 E8 01              1631 	lda	sp,1(sp)
+                           1632 ; genGoto
+   0646 C3 E3 02           1633 	jp	00136$
+                           1634 ; genLabel
+   0649                    1635 00131$:
+                           1636 ;	menu_test.c 260
+                           1637 ; genIpush
+                           1638 ; AOP_STK for _main_cursorPosition_1_1
+   0649 F8 08              1639 	lda	hl,8(sp)
+   064B 7E                 1640 	ld	a,(hl)
+   064C F5                 1641 	push	af
+   064D 33                 1642 	inc	sp
+                           1643 ; genIpush
+   064E 3E 01              1644 	ld	a,#0x01
+   0650 F5                 1645 	push	af
+   0651 33                 1646 	inc	sp
+                           1647 ; genCall
+   0652 CD 00 00           1648 	call	_gotoxy
+   0655 E8 02              1649 	lda	sp,2(sp)
+                           1650 ; genIpush
+   0657 3E 03              1651 	ld	a,#0x03
+   0659 F5                 1652 	push	af
+   065A 33                 1653 	inc	sp
+                           1654 ; genCall
+   065B CD 00 00           1655 	call	_setchar
+   065E E8 01              1656 	lda	sp,1(sp)
+                           1657 ; genGoto
+   0660 C3 E3 02           1658 	jp	00136$
+                           1659 ; genLabel
+   0663                    1660 00138$:
+                           1661 ; genEndFunction
+   0663 E8 0B              1662 	lda	sp,11(sp)
+   0665 C1                 1663 	pop	bc
+   0666 C9                 1664 	ret
+   0667                    1665 ___main_end:
+   0667                    1666 __str_24:
+   0667 25 73 20 25 64     1667 	.ascii "%s %d"
+   066C 00                 1668 	.db 0x00
+   066D                    1669 __str_25:
+   066D 25 73 20 25 64     1670 	.ascii "%s %d"
+   0672 00                 1671 	.db 0x00
+                           1672 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___cls_end                         003F R
+  0 ___cls_start                       0000 R
+  0 ___drawScreen_end                  02B0 R
+  0 ___drawScreen_start                01B8 R
+  0 ___main_end                        0667 R
+  0 ___main_start                      02B9 R
+    __cpu                              **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+  0 __str_0                            00A3 R
+  0 __str_22                           02B0 R
+  0 __str_23                           02B6 R
+  0 __str_24                           0667 R
+  0 __str_25                           066D R
+  0 _cls                               0000 GR
+  1 _configValues                      0000 GR
+  1 _currentScreenPointer              001C GR
+  0 _drawScreen                        01B8 GR
+    _gotoxy                            **** GX
+    _joypad                            **** GX
+  0 _main                              02B9 GR
+    _printf                            **** GX
+  0 _screen_0                          003F GR
+  0 _screen_1                          0067 GR
+  0 _screen_2                          007B GR
+  0 _screen_3                          008F GR
+  1 _screens_array                     0014 GR
+    _setchar                           **** GX
+  0 _str_1                             00B8 R
+  0 _str_10                            010F R
+  0 _str_11                            011D R
+  0 _str_12                            012B R
+  0 _str_13                            0139 R
+  0 _str_14                            0147 R
+  0 _str_15                            0155 R
+  0 _str_16                            0163 R
+  0 _str_17                            0171 R
+  0 _str_18                            017F R
+  0 _str_19                            018E R
+  0 _str_2                             00C6 R
+  0 _str_20                            019C R
+  0 _str_21                            01AA R
+  0 _str_3                             00D4 R
+  0 _str_4                             00D5 R
+  0 _str_5                             00E3 R
+  0 _str_6                             00F1 R
+  0 _str_7                             00FF R
+  0 _str_8                             0100 R
+  0 _str_9                             0101 R
+    _sys_time                          **** GX
+    _waitpadup                         **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size  673   flags 0
+   1 _DATA                              size   1E   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size   28   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

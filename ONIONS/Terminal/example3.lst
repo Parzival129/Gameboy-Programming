@@ -1,0 +1,584 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Sat Apr 03 12:28:38 2021
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc68880
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _cls
+                             13 	.globl _gets
+                             14 	.globl _puts
+                             15 	.globl _password
+                             16 	.globl _string
+                             17 	.globl _main
+                             18 	.globl _cls
+                             19 ;--------------------------------------------------------
+                             20 ; Externals used
+                             21 ;--------------------------------------------------------
+                             22 	.globl __io_out
+                             23 	.globl __io_in
+                             24 	.globl __io_status
+                             25 	.globl _sys_time
+                             26 	.globl __cpu
+                             27 ;--------------------------------------------------------
+                             28 ; special function registers
+                             29 ;--------------------------------------------------------
+                             30 ;--------------------------------------------------------
+                             31 ; special function bits 
+                             32 ;--------------------------------------------------------
+                             33 ;--------------------------------------------------------
+                             34 ; internal ram data
+                             35 ;--------------------------------------------------------
+                             36 	.area _DATA
+   0000                      37 _string::
+   0000                      38 	.ds 10
+   000A                      39 _password::
+   000A                      40 	.ds 5
+                             41 ;--------------------------------------------------------
+                             42 ; overlayable items in internal ram 
+                             43 ;--------------------------------------------------------
+                             44 	.area _OVERLAY
+                             45 ;--------------------------------------------------------
+                             46 ; indirectly addressable internal ram data
+                             47 ;--------------------------------------------------------
+                             48 	.area _ISEG
+                             49 ;--------------------------------------------------------
+                             50 ; bit data
+                             51 ;--------------------------------------------------------
+                             52 	.area _BSEG
+                             53 ;--------------------------------------------------------
+                             54 ; external ram data
+                             55 ;--------------------------------------------------------
+                             56 	.area _XSEG
+                             57 ;--------------------------------------------------------
+                             58 ; global & static initialisations
+                             59 ;--------------------------------------------------------
+                             60 	.area _GSINIT
+                             61 	.area _GSFINAL
+                             62 	.area _GSINIT
+                             63 ;	example3.c 88
+                             64 ; genAssign (pointer)
+   0000 11 0A 00             65 	ld	de,#_password + 0
+   0003 3E 54                66 	ld	a,#0x54
+   0005 12                   67 	ld	(de),a
+                             68 ; genPlus
+                             69 ; genPlusIncr
+   0006 11 0B 00             70 	ld	de,#_password + 0 + 1
+                             71 ; genAssign (pointer)
+   0009 3E 45                72 	ld	a,#0x45
+   000B 12                   73 	ld	(de),a
+                             74 ; genPlus
+                             75 ; genPlusIncr
+   000C 11 0C 00             76 	ld	de,#_password + 0 + 2
+                             77 ; genAssign (pointer)
+   000F 3E 53                78 	ld	a,#0x53
+   0011 12                   79 	ld	(de),a
+                             80 ; genPlus
+                             81 ; genPlusIncr
+   0012 11 0D 00             82 	ld	de,#_password + 0 + 3
+                             83 ; genAssign (pointer)
+   0015 3E 54                84 	ld	a,#0x54
+   0017 12                   85 	ld	(de),a
+                             86 ; genPlus
+                             87 ; genPlusIncr
+   0018 11 0E 00             88 	ld	de,#_password + 0 + 4
+                             89 ; genAssign (pointer)
+   001B 3E 00                90 	ld	a,#0x00
+   001D 12                   91 	ld	(de),a
+                             92 ;--------------------------------------------------------
+                             93 ; Home
+                             94 ;--------------------------------------------------------
+                             95 	.area _HOME
+                             96 	.area _CODE
+                             97 ;--------------------------------------------------------
+                             98 ; code
+                             99 ;--------------------------------------------------------
+                            100 	.area _CODE
+                            101 ;	example3.c 24
+                            102 ; genLabel
+                            103 ; genFunction
+                            104 ;	---------------------------------
+                            105 ; Function cls
+                            106 ; ---------------------------------
+   0000                     107 ___cls_start:
+   0000                     108 _cls:
+   0000 C5                  109 	push	bc
+   0001 E8 FB               110 	lda	sp,-5(sp)
+                            111 ;	example3.c 28
+                            112 ; genAssign
+                            113 ; AOP_STK for _cls_y_1_1
+   0003 F8 03               114 	lda	hl,3(sp)
+   0005 36 00               115 	ld	(hl),#0x00
+   0007 23                  116 	inc	hl
+   0008 36 00               117 	ld	(hl),#0x00
+                            118 ; genLabel
+   000A                     119 00105$:
+                            120 ; genCmpLt
+                            121 ; AOP_STK for _cls_y_1_1
+   000A F8 03               122 	lda	hl,3(sp)
+   000C 5E                  123 	ld	e,(hl)
+   000D 23                  124 	inc	hl
+   000E 7E                  125 	ld	a,(hl)
+   000F EE 80               126 	xor	a,#0x80
+   0011 57                  127 	ld	d,a
+   0012 21 EC 7F            128 	ld	hl,#0x7FEC
+   0015 19                  129 	add	hl,de
+   0016 DA 61 00            130 	jp	c,00108$
+                            131 ;	example3.c 29
+                            132 ; genAssign
+   0019 01 00 00            133 	ld	bc,#0x0000
+                            134 ; genLabel
+   001C                     135 00101$:
+                            136 ; genCmpLt
+                            137 ; AOP_STK for _cls_sloc0_1_0
+   001C 59                  138 	ld	e,c
+   001D 78                  139 	ld	a,b
+   001E EE 80               140 	xor	a,#0x80
+   0020 57                  141 	ld	d,a
+   0021 21 E2 7F            142 	ld	hl,#0x7FE2
+   0024 19                  143 	add	hl,de
+   0025 3E 00               144 	ld	a,#0x00
+   0027 17                  145 	rla
+   0028 EE 01               146 	xor	a,#0x01
+   002A F8 02               147 	lda	hl,2(sp)
+   002C 77                  148 	ld	(hl),a
+                            149 ; genIfx
+                            150 ; AOP_STK for _cls_sloc0_1_0
+                            151 ; Removed redundent or a,a
+   002D AF                  152 	xor	a,a
+   002E B6                  153 	or	a,(hl)
+   002F CA 57 00            154 	jp	z,00107$
+                            155 ;	example3.c 31
+                            156 ; genIpush
+                            157 ; AOP_STK for _cls_y_1_1
+   0032 23                  158 	inc	hl
+   0033 2A                  159 	ld	a,(hl+)
+   0034 66                  160 	ld	h,(hl)
+   0035 6F                  161 	ld	l,a
+   0036 E5                  162 	push	hl
+                            163 ; genIpush
+   0037 C5                  164 	push	bc
+                            165 ; genCall
+   0038 CD 00 00            166 	call	gotoxy
+   003B E8 04               167 	lda	sp,4(sp)
+                            168 ;	example3.c 32
+                            169 ; genIpush
+   003D 3E 20               170 	ld	a,#0x20
+   003F F5                  171 	push	af
+   0040 33                  172 	inc	sp
+                            173 ; genCall
+   0041 CD 00 00            174 	call	setchar
+   0044 E8 01               175 	lda	sp,1(sp)
+                            176 ;	example3.c 29
+                            177 ; genPlus
+                            178 ; AOP_STK for _cls_sloc1_1_0
+                            179 ; genPlusIncr
+                            180 ;	genPlusIncr failed
+   0046 21 01 00            181 	ld	hl,#0x0001
+   0049 09                  182 	add	hl,bc
+   004A 7D                  183 	ld	a,l
+   004B 54                  184 	ld	d,h
+   004C F8 00               185 	lda	hl,0(sp)
+   004E 22                  186 	ld	(hl+),a
+   004F 72                  187 	ld	(hl),d
+                            188 ; genAssign
+                            189 ; AOP_STK for _cls_sloc1_1_0
+   0050 2B                  190 	dec	hl
+   0051 4E                  191 	ld	c,(hl)
+   0052 23                  192 	inc	hl
+   0053 46                  193 	ld	b,(hl)
+                            194 ; genGoto
+   0054 C3 1C 00            195 	jp	00101$
+                            196 ; genLabel
+   0057                     197 00107$:
+                            198 ;	example3.c 28
+                            199 ; genPlus
+                            200 ; AOP_STK for _cls_y_1_1
+                            201 ; genPlusIncr
+   0057 F8 03               202 	lda	hl,3(sp)
+   0059 34                  203 	inc	(hl)
+   005A 20 02               204 	jr	nz,00115$
+   005C 23                  205 	inc	hl
+   005D 34                  206 	inc	(hl)
+   005E                     207 00115$:
+                            208 ; genGoto
+   005E C3 0A 00            209 	jp	00105$
+                            210 ; genLabel
+   0061                     211 00108$:
+                            212 ;	example3.c 34
+                            213 ; genIpush
+   0061 3E 00               214 	ld	a,#0x00
+   0063 F5                  215 	push	af
+   0064 33                  216 	inc	sp
+                            217 ; genIpush
+   0065 3E 00               218 	ld	a,#0x00
+   0067 F5                  219 	push	af
+   0068 33                  220 	inc	sp
+                            221 ; genCall
+   0069 CD 00 00            222 	call	gotoxy
+   006C E8 02               223 	lda	sp,2(sp)
+                            224 ; genLabel
+   006E                     225 00109$:
+                            226 ; genEndFunction
+   006E E8 05               227 	lda	sp,5(sp)
+   0070 C1                  228 	pop	bc
+   0071 C9                  229 	ret
+   0072                     230 ___cls_end:
+                            231 ;	example3.c 38
+                            232 ; genLabel
+                            233 ; genFunction
+                            234 ;	---------------------------------
+                            235 ; Function main
+                            236 ; ---------------------------------
+   0072                     237 ___main_start:
+   0072                     238 _main:
+   0072 C5                  239 	push	bc
+   0073 E8 FB               240 	lda	sp,-5(sp)
+                            241 ;	example3.c 40
+                            242 ; genAssign
+                            243 ; AOP_STK for _main_c_1_1
+   0075 F8 04               244 	lda	hl,4(sp)
+   0077 36 61               245 	ld	(hl),#0x61
+                            246 ;	example3.c 41
+                            247 ; genAssign
+                            248 ; AOP_STK for _main_x_1_1
+   0079 2B                  249 	dec	hl
+   007A 2B                  250 	dec	hl
+   007B 36 00               251 	ld	(hl),#0x00
+   007D 23                  252 	inc	hl
+   007E 36 00               253 	ld	(hl),#0x00
+                            254 ;	example3.c 43
+                            255 ; genIpush
+   0080 21 5A 01            256 	ld	hl,#__str_0 + 0
+   0083 E5                  257 	push	hl
+                            258 ; genCall
+   0084 CD 00 00            259 	call	_puts
+   0087 E8 02               260 	lda	sp,2(sp)
+                            261 ;	example3.c 44
+                            262 ; genIpush
+   0089 21 00 00            263 	ld	hl,#_string + 0
+   008C E5                  264 	push	hl
+                            265 ; genCall
+   008D CD 00 00            266 	call	_gets
+   0090 E8 02               267 	lda	sp,2(sp)
+                            268 ;	example3.c 46
+                            269 ; genLabel
+   0092                     270 00101$:
+                            271 ; genIfx
+                            272 ; AOP_STK for _main_c_1_1
+   0092 AF                  273 	xor	a,a
+   0093 F8 04               274 	lda	hl,4(sp)
+   0095 B6                  275 	or	a,(hl)
+   0096 B7                  276 	or	a,a
+   0097 CA D1 00            277 	jp	z,00103$
+                            278 ;	example3.c 48
+                            279 ; genPlus
+                            280 ; AOP_STK for _main_x_1_1
+                            281 ; AOP_STK for _main_sloc0_1_0
+                            282 ;	genPlusIncr failed
+   009A 11 00 00            283 	ld	de,#_string + 0
+   009D 2B                  284 	dec	hl
+   009E 2B                  285 	dec	hl
+   009F 2A                  286 	ld	a,(hl+)
+   00A0 66                  287 	ld	h,(hl)
+   00A1 6F                  288 	ld	l,a
+   00A2 19                  289 	add	hl,de
+   00A3 7D                  290 	ld	a,l
+   00A4 54                  291 	ld	d,h
+   00A5 F8 00               292 	lda	hl,0(sp)
+   00A7 22                  293 	ld	(hl+),a
+   00A8 72                  294 	ld	(hl),d
+                            295 ; genPointerGet
+                            296 ; AOP_STK for _main_sloc0_1_0
+                            297 ; AOP_STK for _main_c_1_1
+   00A9 2B                  298 	dec	hl
+   00AA 5E                  299 	ld	e,(hl)
+   00AB 23                  300 	inc	hl
+   00AC 56                  301 	ld	d,(hl)
+   00AD 1A                  302 	ld	a,(de)
+   00AE F8 04               303 	lda	hl,4(sp)
+   00B0 77                  304 	ld	(hl),a
+                            305 ;	example3.c 49
+                            306 ; genIpush
+                            307 ; AOP_STK for _main_c_1_1
+   00B1 7E                  308 	ld	a,(hl)
+   00B2 F5                  309 	push	af
+   00B3 33                  310 	inc	sp
+                            311 ; genCall
+   00B4 CD 00 00            312 	call	toupper
+   00B7 42                  313 	ld	b,d
+   00B8 4B                  314 	ld	c,e
+   00B9 E8 01               315 	lda	sp,1(sp)
+                            316 ; genCast
+                            317 ; AOP_STK for _main_c_1_1
+   00BB F8 04               318 	lda	hl,4(sp)
+   00BD 71                  319 	ld	(hl),c
+                            320 ;	example3.c 50
+                            321 ; genAssign (pointer)
+                            322 ; AOP_STK for _main_sloc0_1_0
+                            323 ; AOP_STK for _main_c_1_1
+   00BE F8 00               324 	lda	hl,0(sp)
+   00C0 5E                  325 	ld	e,(hl)
+   00C1 23                  326 	inc	hl
+   00C2 56                  327 	ld	d,(hl)
+   00C3 F8 04               328 	lda	hl,4(sp)
+   00C5 7E                  329 	ld	a,(hl)
+   00C6 12                  330 	ld	(de),a
+                            331 ;	example3.c 51
+                            332 ; genPlus
+                            333 ; AOP_STK for _main_x_1_1
+                            334 ; genPlusIncr
+   00C7 2B                  335 	dec	hl
+   00C8 2B                  336 	dec	hl
+   00C9 34                  337 	inc	(hl)
+   00CA 20 02               338 	jr	nz,00112$
+   00CC 23                  339 	inc	hl
+   00CD 34                  340 	inc	(hl)
+   00CE                     341 00112$:
+                            342 ; genGoto
+   00CE C3 92 00            343 	jp	00101$
+                            344 ; genLabel
+   00D1                     345 00103$:
+                            346 ;	example3.c 54
+                            347 ; genCall
+   00D1 CD 00 00            348 	call	_cls
+                            349 ;	example3.c 57
+                            350 ; genIpush
+   00D4 21 0A 00            351 	ld	hl,#_password + 0
+   00D7 E5                  352 	push	hl
+                            353 ; genIpush
+   00D8 21 00 00            354 	ld	hl,#_string + 0
+   00DB E5                  355 	push	hl
+                            356 ; genCall
+   00DC CD 00 00            357 	call	strcmp
+                            358 ; AOP_STK for _main_x_1_1
+   00DF F8 07               359 	lda	hl,7(sp)
+   00E1 72                  360 	ld	(hl),d
+   00E2 2B                  361 	dec	hl
+   00E3 73                  362 	ld	(hl),e
+   00E4 E8 04               363 	lda	sp,4(sp)
+                            364 ;	example3.c 58
+                            365 ; genCmpEq
+                            366 ; AOP_STK for _main_x_1_1
+   00E6 2A                  367 	ld	a,(hl+)
+   00E7 B6                  368 	or	a,(hl)
+   00E8 C2 ED 00            369 	jp	nz,00113$
+   00EB 18 03               370 	jr	00114$
+   00ED                     371 00113$:
+   00ED C3 3B 01            372 	jp	00105$
+   00F0                     373 00114$:
+                            374 ;	example3.c 60
+                            375 ; genIpush
+   00F0 21 6C 01            376 	ld	hl,#__str_1 + 0
+   00F3 E5                  377 	push	hl
+                            378 ; genCall
+   00F4 CD 00 00            379 	call	_puts
+   00F7 E8 02               380 	lda	sp,2(sp)
+                            381 ;	example3.c 61
+                            382 ; genIpush
+   00F9 21 80 01            383 	ld	hl,#__str_2 + 0
+   00FC E5                  384 	push	hl
+                            385 ; genCall
+   00FD CD 00 00            386 	call	_puts
+   0100 E8 02               387 	lda	sp,2(sp)
+                            388 ;	example3.c 62
+                            389 ; genIpush
+   0102 21 91 01            390 	ld	hl,#__str_3 + 0
+   0105 E5                  391 	push	hl
+                            392 ; genCall
+   0106 CD 00 00            393 	call	_puts
+   0109 E8 02               394 	lda	sp,2(sp)
+                            395 ;	example3.c 63
+                            396 ; genIpush
+   010B 21 9B 01            397 	ld	hl,#__str_4 + 0
+   010E E5                  398 	push	hl
+                            399 ; genCall
+   010F CD 00 00            400 	call	_puts
+   0112 E8 02               401 	lda	sp,2(sp)
+                            402 ;	example3.c 64
+                            403 ; genIpush
+   0114 21 AB 01            404 	ld	hl,#__str_5 + 0
+   0117 E5                  405 	push	hl
+                            406 ; genCall
+   0118 CD 00 00            407 	call	_puts
+   011B E8 02               408 	lda	sp,2(sp)
+                            409 ;	example3.c 65
+                            410 ; genIpush
+   011D 21 BE 01            411 	ld	hl,#__str_6 + 0
+   0120 E5                  412 	push	hl
+                            413 ; genCall
+   0121 CD 00 00            414 	call	_puts
+   0124 E8 02               415 	lda	sp,2(sp)
+                            416 ;	example3.c 66
+                            417 ; genIpush
+   0126 21 D1 01            418 	ld	hl,#__str_7 + 0
+   0129 E5                  419 	push	hl
+                            420 ; genCall
+   012A CD 00 00            421 	call	_puts
+   012D E8 02               422 	lda	sp,2(sp)
+                            423 ;	example3.c 67
+                            424 ; genIpush
+   012F 21 E1 01            425 	ld	hl,#__str_8 + 0
+   0132 E5                  426 	push	hl
+                            427 ; genCall
+   0133 CD 00 00            428 	call	_puts
+   0136 E8 02               429 	lda	sp,2(sp)
+                            430 ; genGoto
+   0138 C3 56 01            431 	jp	00107$
+                            432 ; genLabel
+   013B                     433 00105$:
+                            434 ;	example3.c 71
+                            435 ; genIpush
+   013B 21 F5 01            436 	ld	hl,#__str_9 + 0
+   013E E5                  437 	push	hl
+                            438 ; genCall
+   013F CD 00 00            439 	call	_puts
+   0142 E8 02               440 	lda	sp,2(sp)
+                            441 ;	example3.c 72
+                            442 ; genIpush
+   0144 21 05 02            443 	ld	hl,#__str_10 + 0
+   0147 E5                  444 	push	hl
+                            445 ; genCall
+   0148 CD 00 00            446 	call	_puts
+   014B E8 02               447 	lda	sp,2(sp)
+                            448 ;	example3.c 73
+                            449 ; genIpush
+   014D 21 19 02            450 	ld	hl,#__str_11 + 0
+   0150 E5                  451 	push	hl
+                            452 ; genCall
+   0151 CD 00 00            453 	call	_puts
+   0154 E8 02               454 	lda	sp,2(sp)
+                            455 ; genLabel
+   0156                     456 00107$:
+                            457 ; genEndFunction
+   0156 E8 05               458 	lda	sp,5(sp)
+   0158 C1                  459 	pop	bc
+   0159 C9                  460 	ret
+   015A                     461 ___main_end:
+   015A                     462 __str_0:
+   015A 4C 6F 67 69 6E 20   463 	.ascii "Login Password :"
+        50 61 73 73 77 6F
+        72 64 20 3A
+   016A 0A                  464 	.db 0x0A
+   016B 00                  465 	.db 0x00
+   016C                     466 __str_1:
+   016C 43 6F 72 72 65 63   467 	.ascii "Correct Password !"
+        74 20 50 61 73 73
+        77 6F 72 64 20 21
+   017E 0A                  468 	.db 0x0A
+   017F 00                  469 	.db 0x00
+   0180                     470 __str_2:
+   0180 59 6F 75 20 68 61   471 	.ascii "You have gained "
+        76 65 20 67 61 69
+        6E 65 64 20
+   0190 00                  472 	.db 0x00
+   0191                     473 __str_3:
+   0191 61 63 63 65 73 73   474 	.ascii "access to"
+        20 74 6F
+   019A 00                  475 	.db 0x00
+   019B                     476 __str_4:
+   019B 0A                  477 	.db 0x0A
+   019C 20 20 20 20 20 43   478 	.ascii "     City Bank"
+        69 74 79 20 42 61
+        6E 6B
+   01AA 00                  479 	.db 0x00
+   01AB                     480 __str_5:
+   01AB 0A                  481 	.db 0x0A
+   01AC 59 6F 75 72 20 61   482 	.ascii "Your account has "
+        63 63 6F 75 6E 74
+        20 68 61 73 20
+   01BD 00                  483 	.db 0x00
+   01BE                     484 __str_6:
+   01BE 62 65 65 6E 20 63   485 	.ascii "been credited with"
+        72 65 64 69 74 65
+        64 20 77 69 74 68
+   01D0 00                  486 	.db 0x00
+   01D1                     487 __str_7:
+   01D1 0A                  488 	.db 0x0A
+   01D2 20 20 20 20 24 31   489 	.ascii "    $1,000,000"
+        2C 30 30 30 2C 30
+        30 30
+   01E0 00                  490 	.db 0x00
+   01E1                     491 __str_8:
+   01E1 0A                  492 	.db 0x0A
+   01E2 0A                  493 	.db 0x0A
+   01E3 48 61 76 65 20 61   494 	.ascii "Have a Nice Day !"
+        20 4E 69 63 65 20
+        44 61 79 20 21
+   01F4 00                  495 	.db 0x00
+   01F5                     496 __str_9:
+   01F5 0A                  497 	.db 0x0A
+   01F6 0A                  498 	.db 0x0A
+   01F7 20 20 20 20 49 6E   499 	.ascii "    Incorrect"
+        63 6F 72 72 65 63
+        74
+   0204 00                  500 	.db 0x00
+   0205                     501 __str_10:
+   0205 0A                  502 	.db 0x0A
+   0206 20 54 68 65 20 46   503 	.ascii " The FBI have been"
+        42 49 20 68 61 76
+        65 20 62 65 65 6E
+   0218 00                  504 	.db 0x00
+   0219                     505 __str_11:
+   0219 20 20 20 20 20 6E   506 	.ascii "     notified"
+        6F 74 69 66 69 65
+        64
+   0226 00                  507 	.db 0x00
+                            508 	.area _CODE
+   0227                     509 __str_12:
+   0227 54 45 53 54         510 	.ascii "TEST"
+   022B 00                  511 	.db 0x00
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___cls_end                         0072 R
+  0 ___cls_start                       0000 R
+  0 ___main_end                        015A R
+  0 ___main_start                      0072 R
+    __cpu                              **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+  0 __str_0                            015A R
+  0 __str_1                            016C R
+  0 __str_10                           0205 R
+  0 __str_11                           0219 R
+  0 __str_12                           0227 R
+  0 __str_2                            0180 R
+  0 __str_3                            0191 R
+  0 __str_4                            019B R
+  0 __str_5                            01AB R
+  0 __str_6                            01BE R
+  0 __str_7                            01D1 R
+  0 __str_8                            01E1 R
+  0 __str_9                            01F5 R
+  0 _cls                               0000 GR
+    _gets                              **** GX
+  0 _main                              0072 GR
+  1 _password                          000A GR
+    _puts                              **** GX
+  1 _string                            0000 GR
+    _sys_time                          **** GX
+    gotoxy                             **** GX
+    setchar                            **** GX
+    strcmp                             **** GX
+    toupper                            **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size  22C   flags 0
+   1 _DATA                              size    F   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size   1E   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

@@ -1,0 +1,179 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Thu Apr 01 05:52:42 2021
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc67160
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _joypad
+                             13 	.globl _delay
+                             14 	.globl _main
+                             15 ;--------------------------------------------------------
+                             16 ; Externals used
+                             17 ;--------------------------------------------------------
+                             18 	.globl __io_out
+                             19 	.globl __io_in
+                             20 	.globl __io_status
+                             21 	.globl _sys_time
+                             22 	.globl __cpu
+                             23 ;--------------------------------------------------------
+                             24 ; special function registers
+                             25 ;--------------------------------------------------------
+                             26 ;--------------------------------------------------------
+                             27 ; special function bits 
+                             28 ;--------------------------------------------------------
+                             29 ;--------------------------------------------------------
+                             30 ; internal ram data
+                             31 ;--------------------------------------------------------
+                             32 	.area _DATA
+                             33 ;--------------------------------------------------------
+                             34 ; overlayable items in internal ram 
+                             35 ;--------------------------------------------------------
+                             36 	.area _OVERLAY
+                             37 ;--------------------------------------------------------
+                             38 ; indirectly addressable internal ram data
+                             39 ;--------------------------------------------------------
+                             40 	.area _ISEG
+                             41 ;--------------------------------------------------------
+                             42 ; bit data
+                             43 ;--------------------------------------------------------
+                             44 	.area _BSEG
+                             45 ;--------------------------------------------------------
+                             46 ; external ram data
+                             47 ;--------------------------------------------------------
+                             48 	.area _XSEG
+                             49 ;--------------------------------------------------------
+                             50 ; global & static initialisations
+                             51 ;--------------------------------------------------------
+                             52 	.area _GSINIT
+                             53 	.area _GSFINAL
+                             54 	.area _GSINIT
+                             55 ;--------------------------------------------------------
+                             56 ; Home
+                             57 ;--------------------------------------------------------
+                             58 	.area _HOME
+                             59 	.area _CODE
+                             60 ;--------------------------------------------------------
+                             61 ; code
+                             62 ;--------------------------------------------------------
+                             63 	.area _CODE
+                             64 ;	main.c 5
+                             65 ; genLabel
+                             66 ; genFunction
+                             67 ;	---------------------------------
+                             68 ; Function main
+                             69 ; ---------------------------------
+   0000                      70 ___main_start:
+   0000                      71 _main:
+   0000 C5                   72 	push	bc
+                             73 	
+                             74 ;	main.c 7
+                             75 ; genAssign
+   0001 11 26 FF             76 	ld	de,#0xFF26
+                             77 ; genAssign (pointer)
+   0004 3E 80                78 	ld	a,#0x80
+   0006 12                   79 	ld	(de),a
+                             80 ;	main.c 8
+                             81 ; genAssign
+   0007 11 24 FF             82 	ld	de,#0xFF24
+                             83 ; genAssign (pointer)
+   000A 3E 77                84 	ld	a,#0x77
+   000C 12                   85 	ld	(de),a
+                             86 ;	main.c 9
+                             87 ; genAssign
+   000D 11 25 FF             88 	ld	de,#0xFF25
+                             89 ; genAssign (pointer)
+   0010 3E FF                90 	ld	a,#0xFF
+   0012 12                   91 	ld	(de),a
+                             92 ;	main.c 12
+                             93 ; genLabel
+   0013                      94 00104$:
+                             95 ;	main.c 13
+                             96 ; genCall
+   0013 CD 00 00             97 	call	_joypad
+   0016 4B                   98 	ld	c,e
+                             99 ;	main.c 15
+                            100 ; genIfx
+                            101 ; Removed redundent or a,a
+   0017 AF                  102 	xor	a,a
+   0018 B1                  103 	or	a,c
+   0019 CA 13 00            104 	jp	z,00104$
+                            105 ;	main.c 23
+                            106 ; genAssign
+   001C 11 10 FF            107 	ld	de,#0xFF10
+                            108 ; genAssign (pointer)
+   001F 3E 16               109 	ld	a,#0x16
+   0021 12                  110 	ld	(de),a
+                            111 ;	main.c 30
+                            112 ; genAssign
+   0022 11 11 FF            113 	ld	de,#0xFF11
+                            114 ; genAssign (pointer)
+   0025 3E 40               115 	ld	a,#0x40
+   0027 12                  116 	ld	(de),a
+                            117 ;	main.c 39
+                            118 ; genAssign
+   0028 11 12 FF            119 	ld	de,#0xFF12
+                            120 ; genAssign (pointer)
+   002B 3E 73               121 	ld	a,#0x73
+   002D 12                  122 	ld	(de),a
+                            123 ;	main.c 44
+                            124 ; genAssign
+   002E 11 13 FF            125 	ld	de,#0xFF13
+                            126 ; genAssign (pointer)
+   0031 3E 00               127 	ld	a,#0x00
+   0033 12                  128 	ld	(de),a
+                            129 ;	main.c 53
+                            130 ; genAssign
+   0034 11 14 FF            131 	ld	de,#0xFF14
+                            132 ; genAssign (pointer)
+   0037 3E C3               133 	ld	a,#0xC3
+   0039 12                  134 	ld	(de),a
+                            135 ;	main.c 55
+                            136 ; genIpush
+   003A 21 E8 03            137 	ld	hl,#0x03E8
+   003D E5                  138 	push	hl
+                            139 ; genCall
+   003E CD 00 00            140 	call	_delay
+   0041 E8 02               141 	lda	sp,2(sp)
+                            142 ; genGoto
+   0043 C3 13 00            143 	jp	00104$
+                            144 ; genLabel
+   0046                     145 00106$:
+                            146 ; genEndFunction
+                            147 	
+   0046 C1                  148 	pop	bc
+   0047 C9                  149 	ret
+   0048                     150 ___main_end:
+                            151 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___main_end                        0048 R
+  0 ___main_start                      0000 R
+    __cpu                              **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+    _delay                             **** GX
+    _joypad                            **** GX
+  0 _main                              0000 GR
+    _sys_time                          **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size   48   flags 0
+   1 _DATA                              size    0   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size    0   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

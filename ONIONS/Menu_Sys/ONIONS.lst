@@ -1,0 +1,1761 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : FreeWare ANSI-C Compiler
+                              3 ; Version 2.2.1 Fri Apr 02 13:18:31 2021
+                              4 
+                              5 ;--------------------------------------------------------
+                              6 	.module lcc56360
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _drawScreen
+                             13 	.globl _cls
+                             14 	.globl _setchar
+                             15 	.globl _gotoxy
+                             16 	.globl _printf
+                             17 	.globl _waitpadup
+                             18 	.globl _joypad
+                             19 	.globl _currentScreenPointer
+                             20 	.globl _screens_array
+                             21 	.globl _configValues
+                             22 	.globl _main
+                             23 	.globl _drawScreen
+                             24 	.globl _screen_3
+                             25 	.globl _screen_2
+                             26 	.globl _screen_1
+                             27 	.globl _screen_0
+                             28 	.globl _cls
+                             29 ;--------------------------------------------------------
+                             30 ; Externals used
+                             31 ;--------------------------------------------------------
+                             32 	.globl __io_out
+                             33 	.globl __io_in
+                             34 	.globl __io_status
+                             35 	.globl _sys_time
+                             36 	.globl __cpu
+                             37 ;--------------------------------------------------------
+                             38 ; special function registers
+                             39 ;--------------------------------------------------------
+                             40 ;--------------------------------------------------------
+                             41 ; special function bits 
+                             42 ;--------------------------------------------------------
+                             43 ;--------------------------------------------------------
+                             44 ; internal ram data
+                             45 ;--------------------------------------------------------
+                             46 	.area _DATA
+   0000                      47 _configValues::
+   0000                      48 	.ds 20
+   0014                      49 _screens_array::
+   0014                      50 	.ds 8
+   001C                      51 _currentScreenPointer::
+   001C                      52 	.ds 2
+                             53 ;--------------------------------------------------------
+                             54 ; overlayable items in internal ram 
+                             55 ;--------------------------------------------------------
+                             56 	.area _OVERLAY
+                             57 ;--------------------------------------------------------
+                             58 ; indirectly addressable internal ram data
+                             59 ;--------------------------------------------------------
+                             60 	.area _ISEG
+                             61 ;--------------------------------------------------------
+                             62 ; bit data
+                             63 ;--------------------------------------------------------
+                             64 	.area _BSEG
+                             65 ;--------------------------------------------------------
+                             66 ; external ram data
+                             67 ;--------------------------------------------------------
+                             68 	.area _XSEG
+                             69 ;--------------------------------------------------------
+                             70 ; global & static initialisations
+                             71 ;--------------------------------------------------------
+                             72 	.area _GSINIT
+                             73 	.area _GSFINAL
+                             74 	.area _GSINIT
+                             75 ;	ONIONS.c 266
+                             76 ; genAssign (pointer)
+   0000 11 14 00             77 	ld	de,#_screens_array + 0
+   0003 3E 3F                78 	ld	a,#<_screen_0
+   0005 12                   79 	ld	(de),a
+   0006 13                   80 	inc	de
+   0007 3E 00                81 	ld	a,#>_screen_0
+   0009 12                   82 	ld	(de),a
+                             83 ; genPlus
+                             84 ; genPlusIncr
+   000A 11 16 00             85 	ld	de,#_screens_array + 0 + 2
+                             86 ; genAssign (pointer)
+   000D 3E 6B                87 	ld	a,#<_screen_1
+   000F 12                   88 	ld	(de),a
+   0010 13                   89 	inc	de
+   0011 3E 00                90 	ld	a,#>_screen_1
+   0013 12                   91 	ld	(de),a
+                             92 ; genPlus
+                             93 ; genPlusIncr
+   0014 11 18 00             94 	ld	de,#_screens_array + 0 + 4
+                             95 ; genAssign (pointer)
+   0017 3E 7F                96 	ld	a,#<_screen_2
+   0019 12                   97 	ld	(de),a
+   001A 13                   98 	inc	de
+   001B 3E 00                99 	ld	a,#>_screen_2
+   001D 12                  100 	ld	(de),a
+                            101 ; genPlus
+                            102 ; genPlusIncr
+   001E 11 1A 00            103 	ld	de,#_screens_array + 0 + 6
+                            104 ; genAssign (pointer)
+   0021 3E 93               105 	ld	a,#<_screen_3
+   0023 12                  106 	ld	(de),a
+   0024 13                  107 	inc	de
+   0025 3E 00               108 	ld	a,#>_screen_3
+   0027 12                  109 	ld	(de),a
+                            110 ;--------------------------------------------------------
+                            111 ; Home
+                            112 ;--------------------------------------------------------
+                            113 	.area _HOME
+                            114 	.area _CODE
+                            115 ;--------------------------------------------------------
+                            116 ; code
+                            117 ;--------------------------------------------------------
+                            118 	.area _CODE
+                            119 ;	ONIONS.c 76
+                            120 ; genLabel
+                            121 ; genFunction
+                            122 ;	---------------------------------
+                            123 ; Function cls
+                            124 ; ---------------------------------
+   0000                     125 ___cls_start:
+   0000                     126 _cls:
+   0000 C5                  127 	push	bc
+   0001 E8 FF               128 	lda	sp,-1(sp)
+                            129 ;	ONIONS.c 80
+                            130 ; genAssign
+   0003 01 00 00            131 	ld	bc,#0x0000
+                            132 ; genLabel
+   0006                     133 00101$:
+                            134 ; genCmpLt
+   0006 59                  135 	ld	e,c
+   0007 78                  136 	ld	a,b
+   0008 EE 80               137 	xor	a,#0x80
+   000A 57                  138 	ld	d,a
+   000B 21 EE 7F            139 	ld	hl,#0x7FEE
+   000E 19                  140 	add	hl,de
+   000F DA 2E 00            141 	jp	c,00104$
+                            142 ;	ONIONS.c 82
+                            143 ; genCast
+                            144 ; AOP_STK for _cls_sloc0_1_0
+   0012 F8 00               145 	lda	hl,0(sp)
+   0014 71                  146 	ld	(hl),c
+                            147 ; genIpush
+                            148 ; AOP_STK for _cls_sloc0_1_0
+   0015 7E                  149 	ld	a,(hl)
+   0016 F5                  150 	push	af
+   0017 33                  151 	inc	sp
+                            152 ; genIpush
+   0018 3E 01               153 	ld	a,#0x01
+   001A F5                  154 	push	af
+   001B 33                  155 	inc	sp
+                            156 ; genCall
+   001C CD 00 00            157 	call	_gotoxy
+   001F E8 02               158 	lda	sp,2(sp)
+                            159 ;	ONIONS.c 83
+                            160 ; genIpush
+   0021 21 9B 00            161 	ld	hl,#__str_0 + 0
+   0024 E5                  162 	push	hl
+                            163 ; genCall
+   0025 CD 00 00            164 	call	_printf
+   0028 E8 02               165 	lda	sp,2(sp)
+                            166 ;	ONIONS.c 80
+                            167 ; genPlus
+                            168 ; genPlusIncr
+   002A 03                  169 	inc	bc
+                            170 ; genGoto
+   002B C3 06 00            171 	jp	00101$
+                            172 ; genLabel
+   002E                     173 00104$:
+                            174 ;	ONIONS.c 85
+                            175 ; genIpush
+   002E 3E 01               176 	ld	a,#0x01
+   0030 F5                  177 	push	af
+   0031 33                  178 	inc	sp
+                            179 ; genIpush
+   0032 3E 01               180 	ld	a,#0x01
+   0034 F5                  181 	push	af
+   0035 33                  182 	inc	sp
+                            183 ; genCall
+   0036 CD 00 00            184 	call	_gotoxy
+   0039 E8 02               185 	lda	sp,2(sp)
+                            186 ; genLabel
+   003B                     187 00105$:
+                            188 ; genEndFunction
+   003B E8 01               189 	lda	sp,1(sp)
+   003D C1                  190 	pop	bc
+   003E C9                  191 	ret
+   003F                     192 ___cls_end:
+   003F                     193 _screen_0:
+   003F B0 00               194 	.dw _str_1
+   0041 04                  195 	.db #0x04
+   0042 01                  196 	.db #0x01
+   0043 BE 00               197 	.dw _str_2
+   0045 04                  198 	.db #0x04
+   0046 02                  199 	.db #0x02
+   0047 CC 00               200 	.dw _str_3
+   0049 04                  201 	.db #0x04
+   004A 03                  202 	.db #0x03
+   004B D5 00               203 	.dw _str_4
+   004D 02                  204 	.db #0x02
+   004E 00                  205 	.db #0x00
+   004F D6 00               206 	.dw _str_5
+   0051 01                  207 	.db #0x01
+   0052 00                  208 	.db #0x00
+   0053 E4 00               209 	.dw _str_6
+   0055 08                  210 	.db #0x08
+   0056 00                  211 	.db #0x00
+   0057 F2 00               212 	.dw _str_7
+   0059 08                  213 	.db #0x08
+   005A 00                  214 	.db #0x00
+   005B 00 01               215 	.dw _str_8
+   005D 02                  216 	.db #0x02
+   005E 00                  217 	.db #0x00
+   005F 01 01               218 	.dw _str_9
+   0061 02                  219 	.db #0x02
+   0062 00                  220 	.db #0x00
+   0063 02 01               221 	.dw _str_10
+   0065 00                  222 	.db #0x00
+   0066 00                  223 	.db #0x00
+   0067 00 00               224 	.dw #0x0000
+   0069 00                  225 	.db #0x00
+   006A 00                  226 	.db #0x00
+   006B                     227 _screen_1:
+   006B 10 01               228 	.dw _str_11
+   006D 00                  229 	.db #0x00
+   006E 00                  230 	.db #0x00
+   006F 1E 01               231 	.dw _str_12
+   0071 00                  232 	.db #0x00
+   0072 00                  233 	.db #0x00
+   0073 2C 01               234 	.dw _str_13
+   0075 00                  235 	.db #0x00
+   0076 00                  236 	.db #0x00
+   0077 3A 01               237 	.dw _str_14
+   0079 00                  238 	.db #0x00
+   007A 00                  239 	.db #0x00
+   007B 00 00               240 	.dw #0x0000
+   007D 00                  241 	.db #0x00
+   007E 00                  242 	.db #0x00
+   007F                     243 _screen_2:
+   007F 48 01               244 	.dw _str_15
+   0081 00                  245 	.db #0x00
+   0082 00                  246 	.db #0x00
+   0083 56 01               247 	.dw _str_16
+   0085 00                  248 	.db #0x00
+   0086 00                  249 	.db #0x00
+   0087 64 01               250 	.dw _str_17
+   0089 00                  251 	.db #0x00
+   008A 00                  252 	.db #0x00
+   008B 72 01               253 	.dw _str_18
+   008D 00                  254 	.db #0x00
+   008E 00                  255 	.db #0x00
+   008F 00 00               256 	.dw #0x0000
+   0091 00                  257 	.db #0x00
+   0092 00                  258 	.db #0x00
+   0093                     259 _screen_3:
+   0093 80 01               260 	.dw _str_19
+   0095 00                  261 	.db #0x00
+   0096 00                  262 	.db #0x00
+   0097 00 00               263 	.dw #0x0000
+   0099 00                  264 	.db #0x00
+   009A 00                  265 	.db #0x00
+   009B                     266 __str_0:
+   009B 20 20 20 20 20 20   267 	.ascii "                    "
+        20 20 20 20 20 20
+        20 20 20 20 20 20
+        20 20
+   00AF 00                  268 	.db 0x00
+   00B0                     269 _str_1:
+   00B0 42 61 73 69 63 20   270 	.ascii "Basic Setup  "
+        53 65 74 75 70 20
+        20
+   00BD 00                  271 	.db 0x00
+   00BE                     272 _str_2:
+   00BE 43 6F 6D 70 6C 65   273 	.ascii "Complex Setup"
+        78 20 53 65 74 75
+        70
+   00CB 00                  274 	.db 0x00
+   00CC                     275 _str_3:
+   00CC 54 45 53 54 20 41   276 	.ascii "TEST APP"
+        50 50
+   00D4 00                  277 	.db 0x00
+   00D5                     278 _str_4:
+   00D5 00                  279 	.db 0x00
+   00D6                     280 _str_5:
+   00D6 4F 70 74 69 6F 6E   281 	.ascii "Option 1     "
+        20 31 20 20 20 20
+        20
+   00E3 00                  282 	.db 0x00
+   00E4                     283 _str_6:
+   00E4 4F 70 74 69 6F 6E   284 	.ascii "Option 2     "
+        20 32 20 20 20 20
+        20
+   00F1 00                  285 	.db 0x00
+   00F2                     286 _str_7:
+   00F2 4F 70 74 69 6F 6E   287 	.ascii "Option 3     "
+        20 33 20 20 20 20
+        20
+   00FF 00                  288 	.db 0x00
+   0100                     289 _str_8:
+   0100 00                  290 	.db 0x00
+   0101                     291 _str_9:
+   0101 00                  292 	.db 0x00
+   0102                     293 _str_10:
+   0102 54 61 6B 65 20 41   294 	.ascii "Take Action  "
+        63 74 69 6F 6E 20
+        20
+   010F 00                  295 	.db 0x00
+   0110                     296 _str_11:
+   0110 42 4F 70 74 69 6F   297 	.ascii "BOption 1    "
+        6E 20 31 20 20 20
+        20
+   011D 00                  298 	.db 0x00
+   011E                     299 _str_12:
+   011E 42 4F 70 74 69 6F   300 	.ascii "BOption 2    "
+        6E 20 32 20 20 20
+        20
+   012B 00                  301 	.db 0x00
+   012C                     302 _str_13:
+   012C 42 4F 70 74 69 6F   303 	.ascii "BOption 3    "
+        6E 20 33 20 20 20
+        20
+   0139 00                  304 	.db 0x00
+   013A                     305 _str_14:
+   013A 42 4F 70 74 69 6F   306 	.ascii "BOption 4    "
+        6E 20 34 20 20 20
+        20
+   0147 00                  307 	.db 0x00
+   0148                     308 _str_15:
+   0148 43 4F 70 74 69 6F   309 	.ascii "COption 1    "
+        6E 20 31 20 20 20
+        20
+   0155 00                  310 	.db 0x00
+   0156                     311 _str_16:
+   0156 43 4F 70 74 69 6F   312 	.ascii "COption 2    "
+        6E 20 32 20 20 20
+        20
+   0163 00                  313 	.db 0x00
+   0164                     314 _str_17:
+   0164 43 4F 70 74 69 6F   315 	.ascii "COption 3    "
+        6E 20 33 20 20 20
+        20
+   0171 00                  316 	.db 0x00
+   0172                     317 _str_18:
+   0172 43 4F 70 74 69 6F   318 	.ascii "COption 4    "
+        6E 20 34 20 20 20
+        20
+   017F 00                  319 	.db 0x00
+   0180                     320 _str_19:
+   0180 54 65 73 74 20 41   321 	.ascii "Test App    "
+        70 70 20 20 20 20
+   018C 00                  322 	.db 0x00
+                            323 ;	ONIONS.c 88
+                            324 ; genLabel
+                            325 ; genFunction
+                            326 ;	---------------------------------
+                            327 ; Function drawScreen
+                            328 ; ---------------------------------
+   018D                     329 ___drawScreen_start:
+   018D                     330 _drawScreen:
+   018D C5                  331 	push	bc
+   018E E8 F9               332 	lda	sp,-7(sp)
+                            333 ;	ONIONS.c 93
+                            334 ; genCall
+   0190 CD 00 00            335 	call	_cls
+                            336 ;	ONIONS.c 95
+                            337 ; genAssign
+                            338 ; AOP_STK for _drawScreen_counter_1_1
+   0193 F8 06               339 	lda	hl,6(sp)
+   0195 36 00               340 	ld	(hl),#0x00
+                            341 ; genLabel
+   0197                     342 00108$:
+                            343 ; genLeftShift
+                            344 ; AOP_STK for _drawScreen_counter_1_1
+   0197 F8 06               345 	lda	hl,6(sp)
+   0199 7E                  346 	ld	a,(hl)
+   019A 87                  347 	add	a,a
+   019B 87                  348 	add	a,a
+   019C 47                  349 	ld	b,a
+                            350 ; genPlus
+                            351 ; AOP_HL for _currentScreenPointer
+                            352 ; AOP_STK for _drawScreen_sloc1_1_0
+                            353 ;	genPlusIncr failed
+   019D 21 1C 00            354 	ld	hl,#_currentScreenPointer + 0
+   01A0 5E                  355 	ld	e,(hl)
+   01A1 23                  356 	inc	hl
+   01A2 56                  357 	ld	d,(hl)
+   01A3 68                  358 	ld	l,b
+   01A4 26 00               359 	ld	h,#0x00
+   01A6 19                  360 	add	hl,de
+   01A7 7D                  361 	ld	a,l
+   01A8 54                  362 	ld	d,h
+   01A9 F8 02               363 	lda	hl,2(sp)
+   01AB 22                  364 	ld	(hl+),a
+   01AC 72                  365 	ld	(hl),d
+                            366 ; genPointerGet
+                            367 ; AOP_STK for _drawScreen_sloc1_1_0
+                            368 ; AOP_STK for _drawScreen_sloc0_1_0
+   01AD 2B                  369 	dec	hl
+   01AE 5E                  370 	ld	e,(hl)
+   01AF 23                  371 	inc	hl
+   01B0 56                  372 	ld	d,(hl)
+   01B1 1A                  373 	ld	a,(de)
+   01B2 23                  374 	inc	hl
+   01B3 77                  375 	ld	(hl),a
+   01B4 13                  376 	inc	de
+   01B5 1A                  377 	ld	a,(de)
+   01B6 23                  378 	inc	hl
+   01B7 77                  379 	ld	(hl),a
+                            380 ; genIfx
+                            381 ; AOP_STK for _drawScreen_sloc0_1_0
+   01B8 2B                  382 	dec	hl
+                            383 ; Rule 8
+   01B9 2A                  384 	ld	a,(hl+)
+   01BA B6                  385 	or	a,(hl)
+   01BB CA 68 02            386 	jp	z,00111$
+                            387 ;	ONIONS.c 97
+                            388 ; genPlus
+                            389 ; AOP_STK for _drawScreen_counter_1_1
+                            390 ; AOP_STK for _drawScreen_sloc3_1_0
+                            391 ; genPlusIncr
+                            392 ;	genPlusIncr failed
+   01BE 23                  393 	inc	hl
+   01BF 7E                  394 	ld	a,(hl)
+   01C0 C6 01               395 	add	a,#0x01
+   01C2 F8 00               396 	lda	hl,0(sp)
+   01C4 77                  397 	ld	(hl),a
+                            398 ; genIpush
+                            399 ; AOP_STK for _drawScreen_sloc3_1_0
+   01C5 7E                  400 	ld	a,(hl)
+   01C6 F5                  401 	push	af
+   01C7 33                  402 	inc	sp
+                            403 ; genIpush
+   01C8 3E 02               404 	ld	a,#0x02
+   01CA F5                  405 	push	af
+   01CB 33                  406 	inc	sp
+                            407 ; genCall
+   01CC CD 00 00            408 	call	_gotoxy
+   01CF E8 02               409 	lda	sp,2(sp)
+                            410 ;	ONIONS.c 98
+                            411 ; genPlus
+                            412 ; AOP_STK for _drawScreen_sloc1_1_0
+                            413 ; genPlusIncr
+   01D1 F8 02               414 	lda	hl,2(sp)
+   01D3 5E                  415 	ld	e,(hl)
+   01D4 23                  416 	inc	hl
+   01D5 56                  417 	ld	d,(hl)
+   01D6 13                  418 	inc	de
+   01D7 13                  419 	inc	de
+                            420 ; genPointerGet
+                            421 ; AOP_STK for _drawScreen_sloc2_1_0
+   01D8 1A                  422 	ld	a,(de)
+   01D9 2B                  423 	dec	hl
+   01DA 2B                  424 	dec	hl
+   01DB 77                  425 	ld	(hl),a
+                            426 ; genAnd
+                            427 ; AOP_STK for _drawScreen_sloc2_1_0
+   01DC 7E                  428 	ld	a,(hl)
+   01DD CB 47               429 	bit	0,a
+   01DF CA 14 02            430 	jp	z,00102$
+                            431 ;	ONIONS.c 99
+                            432 ; genPlus
+                            433 ; AOP_STK for _drawScreen_sloc1_1_0
+                            434 ; genPlusIncr
+                            435 ;	genPlusIncr failed
+   01E2 23                  436 	inc	hl
+   01E3 5E                  437 	ld	e,(hl)
+   01E4 23                  438 	inc	hl
+   01E5 56                  439 	ld	d,(hl)
+   01E6 21 03 00            440 	ld	hl,#0x0003
+   01E9 19                  441 	add	hl,de
+   01EA 5D                  442 	ld	e,l
+   01EB 54                  443 	ld	d,h
+                            444 ; genPointerGet
+   01EC 1A                  445 	ld	a,(de)
+   01ED 47                  446 	ld	b,a
+                            447 ; genLeftShift
+   01EE 78                  448 	ld	a,b
+   01EF 87                  449 	add	a,a
+   01F0 47                  450 	ld	b,a
+                            451 ; genPlus
+                            452 ;	genPlusIncr failed
+   01F1 3E 00               453 	ld	a,#<_configValues
+   01F3 80                  454 	add	a,b
+   01F4 5F                  455 	ld	e,a
+   01F5 3E 00               456 	ld	a,#>_configValues
+   01F7 CE 00               457 	adc	a,#0x00
+   01F9 57                  458 	ld	d,a
+                            459 ; genPointerGet
+                            460 ; Removed redundent load
+                            461 ; Removed redundent load
+   01FA 1A                  462 	ld	a,(de)
+   01FB 47                  463 	ld	b,a
+   01FC 13                  464 	inc	de
+   01FD 1A                  465 	ld	a,(de)
+   01FE 4F                  466 	ld	c,a
+                            467 ; genIpush
+   01FF 68                  468 	ld	l,b
+   0200 61                  469 	ld	h,c
+   0201 E5                  470 	push	hl
+                            471 ; genIpush
+                            472 ; AOP_STK for _drawScreen_sloc0_1_0
+   0202 F8 06               473 	lda	hl,6(sp)
+   0204 2A                  474 	ld	a,(hl+)
+   0205 66                  475 	ld	h,(hl)
+   0206 6F                  476 	ld	l,a
+   0207 E5                  477 	push	hl
+                            478 ; genIpush
+   0208 21 85 02            479 	ld	hl,#__str_20 + 0
+   020B E5                  480 	push	hl
+                            481 ; genCall
+   020C CD 00 00            482 	call	_printf
+   020F E8 06               483 	lda	sp,6(sp)
+                            484 ; genGoto
+   0211 C3 23 02            485 	jp	00103$
+                            486 ; genLabel
+   0214                     487 00102$:
+                            488 ;	ONIONS.c 101
+                            489 ; genIpush
+                            490 ; AOP_STK for _drawScreen_sloc0_1_0
+   0214 F8 04               491 	lda	hl,4(sp)
+   0216 2A                  492 	ld	a,(hl+)
+   0217 66                  493 	ld	h,(hl)
+   0218 6F                  494 	ld	l,a
+   0219 E5                  495 	push	hl
+                            496 ; genIpush
+   021A 21 8B 02            497 	ld	hl,#__str_21 + 0
+   021D E5                  498 	push	hl
+                            499 ; genCall
+   021E CD 00 00            500 	call	_printf
+   0221 E8 04               501 	lda	sp,4(sp)
+                            502 ; genLabel
+   0223                     503 00103$:
+                            504 ;	ONIONS.c 105
+                            505 ; genAnd
+                            506 ; AOP_STK for _drawScreen_sloc2_1_0
+   0223 F8 01               507 	lda	hl,1(sp)
+   0225 7E                  508 	ld	a,(hl)
+   0226 CB 57               509 	bit	2,a
+   0228 CA 41 02            510 	jp	z,00105$
+                            511 ;	ONIONS.c 107
+                            512 ; genIpush
+                            513 ; AOP_STK for _drawScreen_sloc3_1_0
+   022B 2B                  514 	dec	hl
+   022C 7E                  515 	ld	a,(hl)
+   022D F5                  516 	push	af
+   022E 33                  517 	inc	sp
+                            518 ; genIpush
+   022F 3E 10               519 	ld	a,#0x10
+   0231 F5                  520 	push	af
+   0232 33                  521 	inc	sp
+                            522 ; genCall
+   0233 CD 00 00            523 	call	_gotoxy
+   0236 E8 02               524 	lda	sp,2(sp)
+                            525 ;	ONIONS.c 108
+                            526 ; genIpush
+   0238 3E 06               527 	ld	a,#0x06
+   023A F5                  528 	push	af
+   023B 33                  529 	inc	sp
+                            530 ; genCall
+   023C CD 00 00            531 	call	_setchar
+   023F E8 01               532 	lda	sp,1(sp)
+                            533 ; genLabel
+   0241                     534 00105$:
+                            535 ;	ONIONS.c 112
+                            536 ; genAnd
+                            537 ; AOP_STK for _drawScreen_sloc2_1_0
+   0241 F8 01               538 	lda	hl,1(sp)
+   0243 7E                  539 	ld	a,(hl)
+   0244 CB 5F               540 	bit	3,a
+   0246 CA 5F 02            541 	jp	z,00110$
+                            542 ;	ONIONS.c 114
+                            543 ; genIpush
+                            544 ; AOP_STK for _drawScreen_sloc3_1_0
+   0249 2B                  545 	dec	hl
+   024A 7E                  546 	ld	a,(hl)
+   024B F5                  547 	push	af
+   024C 33                  548 	inc	sp
+                            549 ; genIpush
+   024D 3E 10               550 	ld	a,#0x10
+   024F F5                  551 	push	af
+   0250 33                  552 	inc	sp
+                            553 ; genCall
+   0251 CD 00 00            554 	call	_gotoxy
+   0254 E8 02               555 	lda	sp,2(sp)
+                            556 ;	ONIONS.c 115
+                            557 ; genIpush
+   0256 3E 05               558 	ld	a,#0x05
+   0258 F5                  559 	push	af
+   0259 33                  560 	inc	sp
+                            561 ; genCall
+   025A CD 00 00            562 	call	_setchar
+   025D E8 01               563 	lda	sp,1(sp)
+                            564 ; genLabel
+   025F                     565 00110$:
+                            566 ;	ONIONS.c 95
+                            567 ; genAssign
+                            568 ; AOP_STK for _drawScreen_sloc3_1_0
+                            569 ; AOP_STK for _drawScreen_counter_1_1
+   025F F8 00               570 	lda	hl,0(sp)
+   0261 7E                  571 	ld	a,(hl)
+   0262 F8 06               572 	lda	hl,6(sp)
+   0264 77                  573 	ld	(hl),a
+                            574 ; genGoto
+   0265 C3 97 01            575 	jp	00108$
+                            576 ; genLabel
+   0268                     577 00111$:
+                            578 ;	ONIONS.c 120
+                            579 ; genIpush
+   0268 3E 01               580 	ld	a,#0x01
+   026A F5                  581 	push	af
+   026B 33                  582 	inc	sp
+                            583 ; genIpush
+   026C 3E 01               584 	ld	a,#0x01
+   026E F5                  585 	push	af
+   026F 33                  586 	inc	sp
+                            587 ; genCall
+   0270 CD 00 00            588 	call	_gotoxy
+   0273 E8 02               589 	lda	sp,2(sp)
+                            590 ;	ONIONS.c 121
+                            591 ; genIpush
+   0275 3E 03               592 	ld	a,#0x03
+   0277 F5                  593 	push	af
+   0278 33                  594 	inc	sp
+                            595 ; genCall
+   0279 CD 00 00            596 	call	_setchar
+   027C E8 01               597 	lda	sp,1(sp)
+                            598 ;	ONIONS.c 125
+                            599 ; genRet
+                            600 ; AOP_STK for _drawScreen_counter_1_1
+   027E F8 06               601 	lda	hl,6(sp)
+   0280 5E                  602 	ld	e,(hl)
+                            603 ; genLabel
+   0281                     604 00112$:
+                            605 ; genEndFunction
+   0281 E8 07               606 	lda	sp,7(sp)
+   0283 C1                  607 	pop	bc
+   0284 C9                  608 	ret
+   0285                     609 ___drawScreen_end:
+   0285                     610 __str_20:
+   0285 25 73 20 25 64      611 	.ascii "%s %d"
+   028A 00                  612 	.db 0x00
+   028B                     613 __str_21:
+   028B 25 73               614 	.ascii "%s"
+   028D 00                  615 	.db 0x00
+                            616 ;	ONIONS.c 128
+                            617 ; genLabel
+                            618 ; genFunction
+                            619 ;	---------------------------------
+                            620 ; Function main
+                            621 ; ---------------------------------
+   028E                     622 ___main_start:
+   028E                     623 _main:
+   028E C5                  624 	push	bc
+   028F E8 F5               625 	lda	sp,-11(sp)
+                            626 ;	ONIONS.c 130
+                            627 ; genAssign
+                            628 ; AOP_STK for _main_currentScreen_1_1
+   0291 F8 0A               629 	lda	hl,10(sp)
+   0293 36 00               630 	ld	(hl),#0x00
+                            631 ;	ONIONS.c 132
+                            632 ; genAssign
+                            633 ; AOP_STK for _main_cursorPosition_1_1
+   0295 2B                  634 	dec	hl
+   0296 2B                  635 	dec	hl
+   0297 36 01               636 	ld	(hl),#0x01
+                            637 ;	ONIONS.c 140
+                            638 ; genAssign
+                            639 ; AOP_STK for _main_previousScreen_1_1
+   0299 23                  640 	inc	hl
+   029A 36 00               641 	ld	(hl),#0x00
+                            642 ;	ONIONS.c 141
+                            643 ; genAssign (pointer)
+   029C 11 00 00            644 	ld	de,#_configValues + 0
+   029F 3E 28               645 	ld	a,#0x28
+   02A1 12                  646 	ld	(de),a
+   02A2 13                  647 	inc	de
+   02A3 3E 00               648 	ld	a,#0x00
+   02A5 12                  649 	ld	(de),a
+                            650 ;	ONIONS.c 144
+                            651 ; genPointerGet
+                            652 ; AOP_HL for _currentScreenPointer
+   02A6 11 14 00            653 	ld	de,#_screens_array + 0
+   02A9 1A                  654 	ld	a,(de)
+   02AA 21 1C 00            655 	ld	hl,#_currentScreenPointer + 0
+   02AD 77                  656 	ld	(hl),a
+   02AE 13                  657 	inc	de
+   02AF 1A                  658 	ld	a,(de)
+   02B0 23                  659 	inc	hl
+   02B1 77                  660 	ld	(hl),a
+                            661 ;	ONIONS.c 145
+                            662 ; genCall
+   02B2 CD 8D 01            663 	call	_drawScreen
+                            664 ; AOP_STK for _main_counter_1_1
+   02B5 F8 07               665 	lda	hl,7(sp)
+   02B7 73                  666 	ld	(hl),e
+                            667 ;	ONIONS.c 147
+                            668 ; genLabel
+   02B8                     669 00136$:
+                            670 ;	ONIONS.c 149
+                            671 ; genCall
+   02B8 CD 00 00            672 	call	_joypad
+                            673 ; AOP_STK for _main_input_1_1
+   02BB F8 06               674 	lda	hl,6(sp)
+   02BD 73                  675 	ld	(hl),e
+                            676 ;	ONIONS.c 152
+                            677 ; genAnd
+                            678 ; AOP_STK for _main_input_1_1
+   02BE 7E                  679 	ld	a,(hl)
+   02BF CB 67               680 	bit	4,a
+   02C1 CA 21 03            681 	jp	z,00104$
+                            682 ;	ONIONS.c 154
+                            683 ; genCall
+   02C4 CD 00 00            684 	call	_waitpadup
+                            685 ;	ONIONS.c 156
+                            686 ; genMinus
+                            687 ; AOP_STK for _main_cursorPosition_1_1
+   02C7 F8 08               688 	lda	hl,8(sp)
+   02C9 7E                  689 	ld	a,(hl)
+   02CA C6 FF               690 	add	a,#0xFF
+   02CC 4F                  691 	ld	c,a
+                            692 ; genLeftShift
+   02CD 79                  693 	ld	a,c
+   02CE 87                  694 	add	a,a
+   02CF 87                  695 	add	a,a
+   02D0 4F                  696 	ld	c,a
+                            697 ; genPlus
+                            698 ; AOP_HL for _currentScreenPointer
+                            699 ; AOP_STK for _main_sloc0_1_0
+                            700 ;	genPlusIncr failed
+   02D1 21 1C 00            701 	ld	hl,#_currentScreenPointer + 0
+   02D4 5E                  702 	ld	e,(hl)
+   02D5 23                  703 	inc	hl
+   02D6 56                  704 	ld	d,(hl)
+   02D7 69                  705 	ld	l,c
+   02D8 26 00               706 	ld	h,#0x00
+   02DA 19                  707 	add	hl,de
+   02DB 7D                  708 	ld	a,l
+   02DC 54                  709 	ld	d,h
+   02DD F8 04               710 	lda	hl,4(sp)
+   02DF 22                  711 	ld	(hl+),a
+   02E0 72                  712 	ld	(hl),d
+                            713 ; genPlus
+                            714 ; AOP_STK for _main_sloc0_1_0
+                            715 ; genPlusIncr
+   02E1 2B                  716 	dec	hl
+   02E2 5E                  717 	ld	e,(hl)
+   02E3 23                  718 	inc	hl
+   02E4 56                  719 	ld	d,(hl)
+   02E5 13                  720 	inc	de
+   02E6 13                  721 	inc	de
+                            722 ; genPointerGet
+   02E7 1A                  723 	ld	a,(de)
+   02E8 4F                  724 	ld	c,a
+                            725 ; genAnd
+   02E9 79                  726 	ld	a,c
+   02EA CB 57               727 	bit	2,a
+   02EC CA 21 03            728 	jp	z,00104$
+                            729 ;	ONIONS.c 160
+                            730 ; genAssign
+                            731 ; AOP_STK for _main_currentScreen_1_1
+                            732 ; AOP_STK for _main_previousScreen_1_1
+   02EF F8 0A               733 	lda	hl,10(sp)
+   02F1 7E                  734 	ld	a,(hl)
+   02F2 2B                  735 	dec	hl
+   02F3 77                  736 	ld	(hl),a
+                            737 ;	ONIONS.c 161
+                            738 ; genPlus
+                            739 ; AOP_STK for _main_sloc0_1_0
+                            740 ; genPlusIncr
+                            741 ;	genPlusIncr failed
+   02F4 F8 04               742 	lda	hl,4(sp)
+   02F6 5E                  743 	ld	e,(hl)
+   02F7 23                  744 	inc	hl
+   02F8 56                  745 	ld	d,(hl)
+   02F9 21 03 00            746 	ld	hl,#0x0003
+   02FC 19                  747 	add	hl,de
+   02FD 5D                  748 	ld	e,l
+   02FE 54                  749 	ld	d,h
+                            750 ; genPointerGet
+                            751 ; AOP_STK for _main_currentScreen_1_1
+   02FF 1A                  752 	ld	a,(de)
+   0300 F8 0A               753 	lda	hl,10(sp)
+   0302 77                  754 	ld	(hl),a
+                            755 ;	ONIONS.c 162
+                            756 ; genLeftShift
+                            757 ; AOP_STK for _main_currentScreen_1_1
+   0303 7E                  758 	ld	a,(hl)
+   0304 87                  759 	add	a,a
+   0305 4F                  760 	ld	c,a
+                            761 ; genPlus
+                            762 ;	genPlusIncr failed
+   0306 3E 14               763 	ld	a,#<_screens_array
+   0308 81                  764 	add	a,c
+   0309 5F                  765 	ld	e,a
+   030A 3E 00               766 	ld	a,#>_screens_array
+   030C CE 00               767 	adc	a,#0x00
+   030E 57                  768 	ld	d,a
+                            769 ; genPointerGet
+                            770 ; AOP_HL for _currentScreenPointer
+                            771 ; Removed redundent load
+                            772 ; Removed redundent load
+   030F 1A                  773 	ld	a,(de)
+   0310 21 1C 00            774 	ld	hl,#_currentScreenPointer + 0
+   0313 77                  775 	ld	(hl),a
+   0314 13                  776 	inc	de
+   0315 1A                  777 	ld	a,(de)
+   0316 23                  778 	inc	hl
+   0317 77                  779 	ld	(hl),a
+                            780 ;	ONIONS.c 163
+                            781 ; genCall
+   0318 CD 8D 01            782 	call	_drawScreen
+                            783 ; AOP_STK for _main_counter_1_1
+   031B F8 07               784 	lda	hl,7(sp)
+   031D 73                  785 	ld	(hl),e
+                            786 ;	ONIONS.c 165
+                            787 ; genAssign
+                            788 ; AOP_STK for _main_cursorPosition_1_1
+   031E 23                  789 	inc	hl
+   031F 36 01               790 	ld	(hl),#0x01
+                            791 ; genLabel
+   0321                     792 00104$:
+                            793 ;	ONIONS.c 172
+                            794 ; genAnd
+                            795 ; AOP_STK for _main_input_1_1
+   0321 F8 06               796 	lda	hl,6(sp)
+   0323 7E                  797 	ld	a,(hl)
+   0324 CB 6F               798 	bit	5,a
+   0326 CA 58 03            799 	jp	z,00108$
+                            800 ;	ONIONS.c 174
+                            801 ; genCall
+   0329 CD 00 00            802 	call	_waitpadup
+                            803 ;	ONIONS.c 176
+                            804 ; genCmpEq
+                            805 ; AOP_STK for _main_currentScreen_1_1
+                            806 ; AOP_STK for _main_previousScreen_1_1
+   032C F8 09               807 	lda	hl,9(sp)
+   032E 2A                  808 	ld	a,(hl+)
+   032F BE                  809 	cp	(hl) ; 5
+   0330 20 03               810 	jr	nz,00157$
+   0332 C3 58 03            811 	jp	00108$
+   0335                     812 00157$:
+                            813 ;	ONIONS.c 178
+                            814 ; genAssign
+                            815 ; AOP_STK for _main_previousScreen_1_1
+                            816 ; AOP_STK for _main_currentScreen_1_1
+   0335 F8 09               817 	lda	hl,9(sp)
+   0337 2A                  818 	ld	a,(hl+)
+   0338 77                  819 	ld	(hl),a
+                            820 ;	ONIONS.c 179
+                            821 ; genLeftShift
+                            822 ; AOP_STK for _main_previousScreen_1_1
+   0339 2B                  823 	dec	hl
+   033A 7E                  824 	ld	a,(hl)
+   033B 87                  825 	add	a,a
+   033C 4F                  826 	ld	c,a
+                            827 ; genPlus
+                            828 ;	genPlusIncr failed
+   033D 3E 14               829 	ld	a,#<_screens_array
+   033F 81                  830 	add	a,c
+   0340 5F                  831 	ld	e,a
+   0341 3E 00               832 	ld	a,#>_screens_array
+   0343 CE 00               833 	adc	a,#0x00
+   0345 57                  834 	ld	d,a
+                            835 ; genPointerGet
+                            836 ; AOP_HL for _currentScreenPointer
+                            837 ; Removed redundent load
+                            838 ; Removed redundent load
+   0346 1A                  839 	ld	a,(de)
+   0347 21 1C 00            840 	ld	hl,#_currentScreenPointer + 0
+   034A 77                  841 	ld	(hl),a
+   034B 13                  842 	inc	de
+   034C 1A                  843 	ld	a,(de)
+   034D 23                  844 	inc	hl
+   034E 77                  845 	ld	(hl),a
+                            846 ;	ONIONS.c 180
+                            847 ; genCall
+   034F CD 8D 01            848 	call	_drawScreen
+                            849 ; AOP_STK for _main_counter_1_1
+   0352 F8 07               850 	lda	hl,7(sp)
+   0354 73                  851 	ld	(hl),e
+                            852 ;	ONIONS.c 181
+                            853 ; genAssign
+                            854 ; AOP_STK for _main_cursorPosition_1_1
+   0355 23                  855 	inc	hl
+   0356 36 01               856 	ld	(hl),#0x01
+                            857 ; genLabel
+   0358                     858 00108$:
+                            859 ;	ONIONS.c 186
+                            860 ; genAnd
+                            861 ; AOP_STK for _main_input_1_1
+   0358 F8 06               862 	lda	hl,6(sp)
+   035A 7E                  863 	ld	a,(hl)
+   035B CB 4F               864 	bit	1,a
+   035D CA F7 03            865 	jp	z,00112$
+                            866 ;	ONIONS.c 188
+                            867 ; genCall
+   0360 CD 00 00            868 	call	_waitpadup
+                            869 ;	ONIONS.c 190
+                            870 ; genMinus
+                            871 ; AOP_STK for _main_cursorPosition_1_1
+   0363 F8 08               872 	lda	hl,8(sp)
+   0365 7E                  873 	ld	a,(hl)
+   0366 C6 FF               874 	add	a,#0xFF
+   0368 4F                  875 	ld	c,a
+                            876 ; genLeftShift
+   0369 79                  877 	ld	a,c
+   036A 87                  878 	add	a,a
+   036B 87                  879 	add	a,a
+   036C 4F                  880 	ld	c,a
+                            881 ; genPlus
+                            882 ; AOP_HL for _currentScreenPointer
+                            883 ; AOP_STK for _main_sloc0_1_0
+                            884 ;	genPlusIncr failed
+   036D 21 1C 00            885 	ld	hl,#_currentScreenPointer + 0
+   0370 5E                  886 	ld	e,(hl)
+   0371 23                  887 	inc	hl
+   0372 56                  888 	ld	d,(hl)
+   0373 69                  889 	ld	l,c
+   0374 26 00               890 	ld	h,#0x00
+   0376 19                  891 	add	hl,de
+   0377 7D                  892 	ld	a,l
+   0378 54                  893 	ld	d,h
+   0379 F8 04               894 	lda	hl,4(sp)
+   037B 22                  895 	ld	(hl+),a
+   037C 72                  896 	ld	(hl),d
+                            897 ; genPlus
+                            898 ; AOP_STK for _main_sloc0_1_0
+                            899 ; genPlusIncr
+   037D 2B                  900 	dec	hl
+   037E 5E                  901 	ld	e,(hl)
+   037F 23                  902 	inc	hl
+   0380 56                  903 	ld	d,(hl)
+   0381 13                  904 	inc	de
+   0382 13                  905 	inc	de
+                            906 ; genPointerGet
+   0383 1A                  907 	ld	a,(de)
+   0384 4F                  908 	ld	c,a
+                            909 ; genAnd
+   0385 79                  910 	ld	a,c
+   0386 CB 47               911 	bit	0,a
+   0388 CA F7 03            912 	jp	z,00112$
+                            913 ;	ONIONS.c 193
+                            914 ; genPlus
+                            915 ; AOP_STK for _main_sloc0_1_0
+                            916 ; genPlusIncr
+                            917 ;	genPlusIncr failed
+   038B 2B                  918 	dec	hl
+   038C 5E                  919 	ld	e,(hl)
+   038D 23                  920 	inc	hl
+   038E 56                  921 	ld	d,(hl)
+   038F 21 03 00            922 	ld	hl,#0x0003
+   0392 19                  923 	add	hl,de
+   0393 5D                  924 	ld	e,l
+   0394 54                  925 	ld	d,h
+                            926 ; genPointerGet
+   0395 1A                  927 	ld	a,(de)
+   0396 4F                  928 	ld	c,a
+                            929 ; genLeftShift
+   0397 79                  930 	ld	a,c
+   0398 87                  931 	add	a,a
+   0399 4F                  932 	ld	c,a
+                            933 ; genPlus
+                            934 ; AOP_STK for _main_sloc2_1_0
+                            935 ;	genPlusIncr failed
+   039A 11 00 00            936 	ld	de,#_configValues + 0
+   039D 69                  937 	ld	l,c
+   039E 26 00               938 	ld	h,#0x00
+   03A0 19                  939 	add	hl,de
+   03A1 7D                  940 	ld	a,l
+   03A2 54                  941 	ld	d,h
+   03A3 F8 00               942 	lda	hl,0(sp)
+   03A5 22                  943 	ld	(hl+),a
+   03A6 72                  944 	ld	(hl),d
+                            945 ; genPointerGet
+                            946 ; AOP_STK for _main_sloc2_1_0
+                            947 ; AOP_STK for _main_sloc1_1_0
+   03A7 2B                  948 	dec	hl
+   03A8 5E                  949 	ld	e,(hl)
+   03A9 23                  950 	inc	hl
+   03AA 56                  951 	ld	d,(hl)
+   03AB 1A                  952 	ld	a,(de)
+   03AC 23                  953 	inc	hl
+   03AD 77                  954 	ld	(hl),a
+   03AE 13                  955 	inc	de
+   03AF 1A                  956 	ld	a,(de)
+   03B0 23                  957 	inc	hl
+   03B1 77                  958 	ld	(hl),a
+                            959 ; genMinus
+                            960 ; AOP_STK for _main_sloc1_1_0
+   03B2 2B                  961 	dec	hl
+   03B3 5E                  962 	ld	e,(hl)
+   03B4 23                  963 	inc	hl
+   03B5 56                  964 	ld	d,(hl)
+   03B6 21 01 00            965 	ld	hl,#0x0001
+   03B9 7B                  966 	ld	a,e
+   03BA 95                  967 	sub	a,l
+   03BB 5F                  968 	ld	e,a
+   03BC 7A                  969 	ld	a,d
+   03BD 9C                  970 	sbc	a,h
+   03BE F8 03               971 	lda	hl,3(sp)
+   03C0 77                  972 	ld	(hl),a
+   03C1 2B                  973 	dec	hl
+   03C2 73                  974 	ld	(hl),e
+                            975 ; genAssign (pointer)
+                            976 ; AOP_STK for _main_sloc2_1_0
+                            977 ; AOP_STK for _main_sloc1_1_0
+   03C3 2B                  978 	dec	hl
+   03C4 2B                  979 	dec	hl
+   03C5 5E                  980 	ld	e,(hl)
+   03C6 23                  981 	inc	hl
+   03C7 56                  982 	ld	d,(hl)
+   03C8 23                  983 	inc	hl
+   03C9 7E                  984 	ld	a,(hl)
+   03CA 12                  985 	ld	(de),a
+   03CB 13                  986 	inc	de
+   03CC 23                  987 	inc	hl
+   03CD 7E                  988 	ld	a,(hl)
+   03CE 12                  989 	ld	(de),a
+                            990 ;	ONIONS.c 194
+                            991 ; genIpush
+                            992 ; AOP_STK for _main_cursorPosition_1_1
+   03CF F8 08               993 	lda	hl,8(sp)
+   03D1 7E                  994 	ld	a,(hl)
+   03D2 F5                  995 	push	af
+   03D3 33                  996 	inc	sp
+                            997 ; genIpush
+   03D4 3E 02               998 	ld	a,#0x02
+   03D6 F5                  999 	push	af
+   03D7 33                 1000 	inc	sp
+                           1001 ; genCall
+   03D8 CD 00 00           1002 	call	_gotoxy
+   03DB E8 02              1003 	lda	sp,2(sp)
+                           1004 ;	ONIONS.c 195
+                           1005 ; genPointerGet
+                           1006 ; AOP_STK for _main_sloc0_1_0
+   03DD F8 04              1007 	lda	hl,4(sp)
+   03DF 5E                 1008 	ld	e,(hl)
+   03E0 23                 1009 	inc	hl
+   03E1 56                 1010 	ld	d,(hl)
+   03E2 1A                 1011 	ld	a,(de)
+   03E3 4F                 1012 	ld	c,a
+   03E4 13                 1013 	inc	de
+   03E5 1A                 1014 	ld	a,(de)
+   03E6 47                 1015 	ld	b,a
+                           1016 ; genIpush
+                           1017 ; AOP_STK for _main_sloc1_1_0
+   03E7 F8 02              1018 	lda	hl,2(sp)
+   03E9 2A                 1019 	ld	a,(hl+)
+   03EA 66                 1020 	ld	h,(hl)
+   03EB 6F                 1021 	ld	l,a
+   03EC E5                 1022 	push	hl
+                           1023 ; genIpush
+   03ED C5                 1024 	push	bc
+                           1025 ; genIpush
+   03EE 21 3C 06           1026 	ld	hl,#__str_22 + 0
+   03F1 E5                 1027 	push	hl
+                           1028 ; genCall
+   03F2 CD 00 00           1029 	call	_printf
+   03F5 E8 06              1030 	lda	sp,6(sp)
+                           1031 ; genLabel
+   03F7                    1032 00112$:
+                           1033 ;	ONIONS.c 199
+                           1034 ; genAnd
+                           1035 ; AOP_STK for _main_input_1_1
+   03F7 F8 06              1036 	lda	hl,6(sp)
+   03F9 7E                 1037 	ld	a,(hl)
+   03FA CB 47              1038 	bit	0,a
+   03FC CA 8C 04           1039 	jp	z,00116$
+                           1040 ;	ONIONS.c 201
+                           1041 ; genCall
+   03FF CD 00 00           1042 	call	_waitpadup
+                           1043 ;	ONIONS.c 203
+                           1044 ; genMinus
+                           1045 ; AOP_STK for _main_cursorPosition_1_1
+   0402 F8 08              1046 	lda	hl,8(sp)
+   0404 7E                 1047 	ld	a,(hl)
+   0405 C6 FF              1048 	add	a,#0xFF
+   0407 4F                 1049 	ld	c,a
+                           1050 ; genLeftShift
+   0408 79                 1051 	ld	a,c
+   0409 87                 1052 	add	a,a
+   040A 87                 1053 	add	a,a
+   040B 4F                 1054 	ld	c,a
+                           1055 ; genPlus
+                           1056 ; AOP_HL for _currentScreenPointer
+                           1057 ; AOP_STK for _main_sloc2_1_0
+                           1058 ;	genPlusIncr failed
+   040C 21 1C 00           1059 	ld	hl,#_currentScreenPointer + 0
+   040F 5E                 1060 	ld	e,(hl)
+   0410 23                 1061 	inc	hl
+   0411 56                 1062 	ld	d,(hl)
+   0412 69                 1063 	ld	l,c
+   0413 26 00              1064 	ld	h,#0x00
+   0415 19                 1065 	add	hl,de
+   0416 7D                 1066 	ld	a,l
+   0417 54                 1067 	ld	d,h
+   0418 F8 00              1068 	lda	hl,0(sp)
+   041A 22                 1069 	ld	(hl+),a
+   041B 72                 1070 	ld	(hl),d
+                           1071 ; genPlus
+                           1072 ; AOP_STK for _main_sloc2_1_0
+                           1073 ; genPlusIncr
+   041C 2B                 1074 	dec	hl
+   041D 5E                 1075 	ld	e,(hl)
+   041E 23                 1076 	inc	hl
+   041F 56                 1077 	ld	d,(hl)
+   0420 13                 1078 	inc	de
+   0421 13                 1079 	inc	de
+                           1080 ; genPointerGet
+   0422 1A                 1081 	ld	a,(de)
+   0423 4F                 1082 	ld	c,a
+                           1083 ; genAnd
+   0424 79                 1084 	ld	a,c
+   0425 CB 47              1085 	bit	0,a
+   0427 CA 8C 04           1086 	jp	z,00116$
+                           1087 ;	ONIONS.c 206
+                           1088 ; genPlus
+                           1089 ; AOP_STK for _main_sloc2_1_0
+                           1090 ; genPlusIncr
+                           1091 ;	genPlusIncr failed
+   042A 2B                 1092 	dec	hl
+   042B 5E                 1093 	ld	e,(hl)
+   042C 23                 1094 	inc	hl
+   042D 56                 1095 	ld	d,(hl)
+   042E 21 03 00           1096 	ld	hl,#0x0003
+   0431 19                 1097 	add	hl,de
+   0432 5D                 1098 	ld	e,l
+   0433 54                 1099 	ld	d,h
+                           1100 ; genPointerGet
+   0434 1A                 1101 	ld	a,(de)
+   0435 4F                 1102 	ld	c,a
+                           1103 ; genLeftShift
+   0436 79                 1104 	ld	a,c
+   0437 87                 1105 	add	a,a
+   0438 4F                 1106 	ld	c,a
+                           1107 ; genPlus
+                           1108 ; AOP_STK for _main_sloc0_1_0
+                           1109 ;	genPlusIncr failed
+   0439 11 00 00           1110 	ld	de,#_configValues + 0
+   043C 69                 1111 	ld	l,c
+   043D 26 00              1112 	ld	h,#0x00
+   043F 19                 1113 	add	hl,de
+   0440 7D                 1114 	ld	a,l
+   0441 54                 1115 	ld	d,h
+   0442 F8 04              1116 	lda	hl,4(sp)
+   0444 22                 1117 	ld	(hl+),a
+   0445 72                 1118 	ld	(hl),d
+                           1119 ; genPointerGet
+                           1120 ; AOP_STK for _main_sloc0_1_0
+                           1121 ; AOP_STK for _main_sloc1_1_0
+   0446 2B                 1122 	dec	hl
+   0447 5E                 1123 	ld	e,(hl)
+   0448 23                 1124 	inc	hl
+   0449 56                 1125 	ld	d,(hl)
+   044A 1A                 1126 	ld	a,(de)
+   044B F8 02              1127 	lda	hl,2(sp)
+   044D 77                 1128 	ld	(hl),a
+   044E 13                 1129 	inc	de
+   044F 1A                 1130 	ld	a,(de)
+   0450 23                 1131 	inc	hl
+   0451 77                 1132 	ld	(hl),a
+                           1133 ; genPlus
+                           1134 ; AOP_STK for _main_sloc1_1_0
+                           1135 ; genPlusIncr
+   0452 2B                 1136 	dec	hl
+   0453 34                 1137 	inc	(hl)
+   0454 20 02              1138 	jr	nz,00158$
+   0456 23                 1139 	inc	hl
+   0457 34                 1140 	inc	(hl)
+   0458                    1141 00158$:
+                           1142 ; genAssign (pointer)
+                           1143 ; AOP_STK for _main_sloc0_1_0
+                           1144 ; AOP_STK for _main_sloc1_1_0
+   0458 F8 04              1145 	lda	hl,4(sp)
+   045A 5E                 1146 	ld	e,(hl)
+   045B 23                 1147 	inc	hl
+   045C 56                 1148 	ld	d,(hl)
+   045D F8 02              1149 	lda	hl,2(sp)
+   045F 7E                 1150 	ld	a,(hl)
+   0460 12                 1151 	ld	(de),a
+   0461 13                 1152 	inc	de
+   0462 23                 1153 	inc	hl
+   0463 7E                 1154 	ld	a,(hl)
+   0464 12                 1155 	ld	(de),a
+                           1156 ;	ONIONS.c 207
+                           1157 ; genIpush
+                           1158 ; AOP_STK for _main_cursorPosition_1_1
+   0465 F8 08              1159 	lda	hl,8(sp)
+   0467 7E                 1160 	ld	a,(hl)
+   0468 F5                 1161 	push	af
+   0469 33                 1162 	inc	sp
+                           1163 ; genIpush
+   046A 3E 02              1164 	ld	a,#0x02
+   046C F5                 1165 	push	af
+   046D 33                 1166 	inc	sp
+                           1167 ; genCall
+   046E CD 00 00           1168 	call	_gotoxy
+   0471 E8 02              1169 	lda	sp,2(sp)
+                           1170 ;	ONIONS.c 208
+                           1171 ; genPointerGet
+                           1172 ; AOP_STK for _main_sloc2_1_0
+   0473 F8 00              1173 	lda	hl,0(sp)
+   0475 5E                 1174 	ld	e,(hl)
+   0476 23                 1175 	inc	hl
+   0477 56                 1176 	ld	d,(hl)
+   0478 1A                 1177 	ld	a,(de)
+   0479 4F                 1178 	ld	c,a
+   047A 13                 1179 	inc	de
+   047B 1A                 1180 	ld	a,(de)
+   047C 47                 1181 	ld	b,a
+                           1182 ; genIpush
+                           1183 ; AOP_STK for _main_sloc1_1_0
+   047D 23                 1184 	inc	hl
+   047E 2A                 1185 	ld	a,(hl+)
+   047F 66                 1186 	ld	h,(hl)
+   0480 6F                 1187 	ld	l,a
+   0481 E5                 1188 	push	hl
+                           1189 ; genIpush
+   0482 C5                 1190 	push	bc
+                           1191 ; genIpush
+   0483 21 42 06           1192 	ld	hl,#__str_23 + 0
+   0486 E5                 1193 	push	hl
+                           1194 ; genCall
+   0487 CD 00 00           1195 	call	_printf
+   048A E8 06              1196 	lda	sp,6(sp)
+                           1197 ; genLabel
+   048C                    1198 00116$:
+                           1199 ;	ONIONS.c 213
+                           1200 ; genAnd
+                           1201 ; AOP_STK for _main_input_1_1
+   048C F8 06              1202 	lda	hl,6(sp)
+   048E 7E                 1203 	ld	a,(hl)
+   048F CB 5F              1204 	bit	3,a
+   0491 CA 5F 05           1205 	jp	z,00125$
+                           1206 ;	ONIONS.c 215
+                           1207 ; genCall
+   0494 CD 00 00           1208 	call	_waitpadup
+                           1209 ;	ONIONS.c 216
+                           1210 ; genIpush
+                           1211 ; AOP_STK for _main_cursorPosition_1_1
+   0497 F8 08              1212 	lda	hl,8(sp)
+   0499 7E                 1213 	ld	a,(hl)
+   049A F5                 1214 	push	af
+   049B 33                 1215 	inc	sp
+                           1216 ; genIpush
+   049C 3E 01              1217 	ld	a,#0x01
+   049E F5                 1218 	push	af
+   049F 33                 1219 	inc	sp
+                           1220 ; genCall
+   04A0 CD 00 00           1221 	call	_gotoxy
+   04A3 E8 02              1222 	lda	sp,2(sp)
+                           1223 ; genIpush
+   04A5 3E 20              1224 	ld	a,#0x20
+   04A7 F5                 1225 	push	af
+   04A8 33                 1226 	inc	sp
+                           1227 ; genCall
+   04A9 CD 00 00           1228 	call	_setchar
+   04AC E8 01              1229 	lda	sp,1(sp)
+                           1230 ;	ONIONS.c 217
+                           1231 ; genIpush
+                           1232 ; AOP_STK for _main_cursorPosition_1_1
+   04AE F8 08              1233 	lda	hl,8(sp)
+   04B0 7E                 1234 	ld	a,(hl)
+   04B1 F5                 1235 	push	af
+   04B2 33                 1236 	inc	sp
+                           1237 ; genIpush
+   04B3 3E 00              1238 	ld	a,#0x00
+   04B5 F5                 1239 	push	af
+   04B6 33                 1240 	inc	sp
+                           1241 ; genCall
+   04B7 CD 00 00           1242 	call	_gotoxy
+   04BA E8 02              1243 	lda	sp,2(sp)
+                           1244 ; genIpush
+   04BC 3E 20              1245 	ld	a,#0x20
+   04BE F5                 1246 	push	af
+   04BF 33                 1247 	inc	sp
+                           1248 ; genCall
+   04C0 CD 00 00           1249 	call	_setchar
+   04C3 E8 01              1250 	lda	sp,1(sp)
+                           1251 ;	ONIONS.c 218
+                           1252 ; genPlus
+                           1253 ; AOP_STK for _main_cursorPosition_1_1
+                           1254 ; genPlusIncr
+   04C5 F8 08              1255 	lda	hl,8(sp)
+   04C7 34                 1256 	inc	(hl)
+                           1257 ;	ONIONS.c 220
+                           1258 ; genCmpGt
+                           1259 ; AOP_STK for _main_cursorPosition_1_1
+                           1260 ; AOP_STK for _main_counter_1_1
+   04C8 AF                 1261 	xor	a,a
+   04C9 2B                 1262 	dec	hl
+   04CA 2A                 1263 	ld	a,(hl+)
+   04CB 9E                 1264 	sbc	a,(hl) ; 2
+   04CC D2 D2 04           1265 	jp	nc,00118$
+                           1266 ;	ONIONS.c 221
+                           1267 ; genAssign
+                           1268 ; AOP_STK for _main_counter_1_1
+                           1269 ; AOP_STK for _main_cursorPosition_1_1
+   04CF 2B                 1270 	dec	hl
+   04D0 2A                 1271 	ld	a,(hl+)
+   04D1 77                 1272 	ld	(hl),a
+                           1273 ; genLabel
+   04D2                    1274 00118$:
+                           1275 ;	ONIONS.c 223
+                           1276 ; genMinus
+                           1277 ; AOP_STK for _main_cursorPosition_1_1
+   04D2 F8 08              1278 	lda	hl,8(sp)
+   04D4 7E                 1279 	ld	a,(hl)
+   04D5 C6 FF              1280 	add	a,#0xFF
+   04D7 4F                 1281 	ld	c,a
+                           1282 ; genLeftShift
+   04D8 79                 1283 	ld	a,c
+   04D9 87                 1284 	add	a,a
+   04DA 87                 1285 	add	a,a
+   04DB 4F                 1286 	ld	c,a
+                           1287 ; genPlus
+                           1288 ; AOP_HL for _currentScreenPointer
+                           1289 ;	genPlusIncr failed
+   04DC 21 1C 00           1290 	ld	hl,#_currentScreenPointer + 0
+   04DF 7E                 1291 	ld	a,(hl)
+   04E0 81                 1292 	add	a,c
+   04E1 4F                 1293 	ld	c,a
+   04E2 23                 1294 	inc	hl
+   04E3 7E                 1295 	ld	a,(hl)
+   04E4 CE 00              1296 	adc	a,#0x00
+   04E6 47                 1297 	ld	b,a
+                           1298 ; genPlus
+                           1299 ; genPlusIncr
+   04E7 59                 1300 	ld	e,c
+   04E8 50                 1301 	ld	d,b
+   04E9 13                 1302 	inc	de
+   04EA 13                 1303 	inc	de
+                           1304 ; genPointerGet
+   04EB 1A                 1305 	ld	a,(de)
+   04EC 4F                 1306 	ld	c,a
+                           1307 ; genAnd
+   04ED 79                 1308 	ld	a,c
+   04EE CB 4F              1309 	bit	1,a
+   04F0 CA F6 04           1310 	jp	z,00120$
+                           1311 ;	ONIONS.c 224
+                           1312 ; genPlus
+                           1313 ; AOP_STK for _main_cursorPosition_1_1
+                           1314 ; genPlusIncr
+   04F3 F8 08              1315 	lda	hl,8(sp)
+   04F5 34                 1316 	inc	(hl)
+                           1317 ; genLabel
+   04F6                    1318 00120$:
+                           1319 ;	ONIONS.c 226
+                           1320 ; genMinus
+                           1321 ; AOP_STK for _main_cursorPosition_1_1
+   04F6 F8 08              1322 	lda	hl,8(sp)
+   04F8 7E                 1323 	ld	a,(hl)
+   04F9 C6 FF              1324 	add	a,#0xFF
+   04FB 4F                 1325 	ld	c,a
+                           1326 ; genLeftShift
+   04FC 79                 1327 	ld	a,c
+   04FD 87                 1328 	add	a,a
+   04FE 87                 1329 	add	a,a
+   04FF 4F                 1330 	ld	c,a
+                           1331 ; genPlus
+                           1332 ; AOP_HL for _currentScreenPointer
+                           1333 ;	genPlusIncr failed
+   0500 21 1C 00           1334 	ld	hl,#_currentScreenPointer + 0
+   0503 7E                 1335 	ld	a,(hl)
+   0504 81                 1336 	add	a,c
+   0505 4F                 1337 	ld	c,a
+   0506 23                 1338 	inc	hl
+   0507 7E                 1339 	ld	a,(hl)
+   0508 CE 00              1340 	adc	a,#0x00
+   050A 47                 1341 	ld	b,a
+                           1342 ; genPlus
+                           1343 ; genPlusIncr
+   050B 59                 1344 	ld	e,c
+   050C 50                 1345 	ld	d,b
+   050D 13                 1346 	inc	de
+   050E 13                 1347 	inc	de
+                           1348 ; genPointerGet
+   050F 1A                 1349 	ld	a,(de)
+   0510 4F                 1350 	ld	c,a
+                           1351 ; genAnd
+   0511 79                 1352 	ld	a,c
+   0512 CB 47              1353 	bit	0,a
+   0514 CA 48 05           1354 	jp	z,00122$
+                           1355 ;	ONIONS.c 228
+                           1356 ; genIpush
+                           1357 ; AOP_STK for _main_cursorPosition_1_1
+   0517 F8 08              1358 	lda	hl,8(sp)
+   0519 7E                 1359 	ld	a,(hl)
+   051A F5                 1360 	push	af
+   051B 33                 1361 	inc	sp
+                           1362 ; genIpush
+   051C 3E 00              1363 	ld	a,#0x00
+   051E F5                 1364 	push	af
+   051F 33                 1365 	inc	sp
+                           1366 ; genCall
+   0520 CD 00 00           1367 	call	_gotoxy
+   0523 E8 02              1368 	lda	sp,2(sp)
+                           1369 ; genIpush
+   0525 3E 04              1370 	ld	a,#0x04
+   0527 F5                 1371 	push	af
+   0528 33                 1372 	inc	sp
+                           1373 ; genCall
+   0529 CD 00 00           1374 	call	_setchar
+   052C E8 01              1375 	lda	sp,1(sp)
+                           1376 ;	ONIONS.c 229
+                           1377 ; genIpush
+                           1378 ; AOP_STK for _main_cursorPosition_1_1
+   052E F8 08              1379 	lda	hl,8(sp)
+   0530 7E                 1380 	ld	a,(hl)
+   0531 F5                 1381 	push	af
+   0532 33                 1382 	inc	sp
+                           1383 ; genIpush
+   0533 3E 01              1384 	ld	a,#0x01
+   0535 F5                 1385 	push	af
+   0536 33                 1386 	inc	sp
+                           1387 ; genCall
+   0537 CD 00 00           1388 	call	_gotoxy
+   053A E8 02              1389 	lda	sp,2(sp)
+                           1390 ; genIpush
+   053C 3E 03              1391 	ld	a,#0x03
+   053E F5                 1392 	push	af
+   053F 33                 1393 	inc	sp
+                           1394 ; genCall
+   0540 CD 00 00           1395 	call	_setchar
+   0543 E8 01              1396 	lda	sp,1(sp)
+                           1397 ; genGoto
+   0545 C3 5F 05           1398 	jp	00125$
+                           1399 ; genLabel
+   0548                    1400 00122$:
+                           1401 ;	ONIONS.c 233
+                           1402 ; genIpush
+                           1403 ; AOP_STK for _main_cursorPosition_1_1
+   0548 F8 08              1404 	lda	hl,8(sp)
+   054A 7E                 1405 	ld	a,(hl)
+   054B F5                 1406 	push	af
+   054C 33                 1407 	inc	sp
+                           1408 ; genIpush
+   054D 3E 01              1409 	ld	a,#0x01
+   054F F5                 1410 	push	af
+   0550 33                 1411 	inc	sp
+                           1412 ; genCall
+   0551 CD 00 00           1413 	call	_gotoxy
+   0554 E8 02              1414 	lda	sp,2(sp)
+                           1415 ; genIpush
+   0556 3E 03              1416 	ld	a,#0x03
+   0558 F5                 1417 	push	af
+   0559 33                 1418 	inc	sp
+                           1419 ; genCall
+   055A CD 00 00           1420 	call	_setchar
+   055D E8 01              1421 	lda	sp,1(sp)
+                           1422 ; genLabel
+   055F                    1423 00125$:
+                           1424 ;	ONIONS.c 237
+                           1425 ; genAnd
+                           1426 ; AOP_STK for _main_input_1_1
+   055F F8 06              1427 	lda	hl,6(sp)
+   0561 7E                 1428 	ld	a,(hl)
+   0562 CB 57              1429 	bit	2,a
+   0564 CA B8 02           1430 	jp	z,00136$
+                           1431 ;	ONIONS.c 239
+                           1432 ; genCall
+   0567 CD 00 00           1433 	call	_waitpadup
+                           1434 ;	ONIONS.c 240
+                           1435 ; genIpush
+                           1436 ; AOP_STK for _main_cursorPosition_1_1
+   056A F8 08              1437 	lda	hl,8(sp)
+   056C 7E                 1438 	ld	a,(hl)
+   056D F5                 1439 	push	af
+   056E 33                 1440 	inc	sp
+                           1441 ; genIpush
+   056F 3E 01              1442 	ld	a,#0x01
+   0571 F5                 1443 	push	af
+   0572 33                 1444 	inc	sp
+                           1445 ; genCall
+   0573 CD 00 00           1446 	call	_gotoxy
+   0576 E8 02              1447 	lda	sp,2(sp)
+                           1448 ; genIpush
+   0578 3E 20              1449 	ld	a,#0x20
+   057A F5                 1450 	push	af
+   057B 33                 1451 	inc	sp
+                           1452 ; genCall
+   057C CD 00 00           1453 	call	_setchar
+   057F E8 01              1454 	lda	sp,1(sp)
+                           1455 ;	ONIONS.c 241
+                           1456 ; genIpush
+                           1457 ; AOP_STK for _main_cursorPosition_1_1
+   0581 F8 08              1458 	lda	hl,8(sp)
+   0583 7E                 1459 	ld	a,(hl)
+   0584 F5                 1460 	push	af
+   0585 33                 1461 	inc	sp
+                           1462 ; genIpush
+   0586 3E 00              1463 	ld	a,#0x00
+   0588 F5                 1464 	push	af
+   0589 33                 1465 	inc	sp
+                           1466 ; genCall
+   058A CD 00 00           1467 	call	_gotoxy
+   058D E8 02              1468 	lda	sp,2(sp)
+                           1469 ; genIpush
+   058F 3E 20              1470 	ld	a,#0x20
+   0591 F5                 1471 	push	af
+   0592 33                 1472 	inc	sp
+                           1473 ; genCall
+   0593 CD 00 00           1474 	call	_setchar
+   0596 E8 01              1475 	lda	sp,1(sp)
+                           1476 ;	ONIONS.c 242
+                           1477 ; genMinus
+                           1478 ; AOP_STK for _main_cursorPosition_1_1
+   0598 F8 08              1479 	lda	hl,8(sp)
+   059A 35                 1480 	dec	(hl)
+                           1481 ;	ONIONS.c 244
+                           1482 ; genCmpLt
+                           1483 ; AOP_STK for _main_cursorPosition_1_1
+   059B 7E                 1484 	ld	a,(hl)
+   059C FE 01              1485 	cp	#0x01
+   059E D2 A3 05           1486 	jp	nc,00127$
+                           1487 ;	ONIONS.c 245
+                           1488 ; genAssign
+                           1489 ; AOP_STK for _main_cursorPosition_1_1
+   05A1 36 01              1490 	ld	(hl),#0x01
+                           1491 ; genLabel
+   05A3                    1492 00127$:
+                           1493 ;	ONIONS.c 248
+                           1494 ; genMinus
+                           1495 ; AOP_STK for _main_cursorPosition_1_1
+                           1496 ; AOP_STK for _main_sloc2_1_0
+   05A3 F8 08              1497 	lda	hl,8(sp)
+   05A5 7E                 1498 	ld	a,(hl)
+   05A6 C6 FF              1499 	add	a,#0xFF
+   05A8 F8 00              1500 	lda	hl,0(sp)
+   05AA 77                 1501 	ld	(hl),a
+                           1502 ; genLeftShift
+                           1503 ; AOP_STK for _main_sloc2_1_0
+   05AB 7E                 1504 	ld	a,(hl)
+   05AC 87                 1505 	add	a,a
+   05AD 87                 1506 	add	a,a
+   05AE 47                 1507 	ld	b,a
+                           1508 ; genPlus
+                           1509 ; AOP_HL for _currentScreenPointer
+                           1510 ;	genPlusIncr failed
+   05AF 21 1C 00           1511 	ld	hl,#_currentScreenPointer + 0
+   05B2 7E                 1512 	ld	a,(hl)
+   05B3 80                 1513 	add	a,b
+   05B4 47                 1514 	ld	b,a
+   05B5 23                 1515 	inc	hl
+   05B6 7E                 1516 	ld	a,(hl)
+   05B7 CE 00              1517 	adc	a,#0x00
+   05B9 4F                 1518 	ld	c,a
+                           1519 ; genPlus
+                           1520 ; genPlusIncr
+   05BA 58                 1521 	ld	e,b
+   05BB 51                 1522 	ld	d,c
+   05BC 13                 1523 	inc	de
+   05BD 13                 1524 	inc	de
+                           1525 ; genPointerGet
+   05BE 1A                 1526 	ld	a,(de)
+   05BF 4F                 1527 	ld	c,a
+                           1528 ; genAnd
+   05C0 79                 1529 	ld	a,c
+   05C1 CB 4F              1530 	bit	1,a
+   05C3 CA CC 05           1531 	jp	z,00129$
+                           1532 ;	ONIONS.c 249
+                           1533 ; genAssign
+                           1534 ; AOP_STK for _main_sloc2_1_0
+                           1535 ; AOP_STK for _main_cursorPosition_1_1
+   05C6 F8 00              1536 	lda	hl,0(sp)
+   05C8 7E                 1537 	ld	a,(hl)
+   05C9 F8 08              1538 	lda	hl,8(sp)
+   05CB 77                 1539 	ld	(hl),a
+                           1540 ; genLabel
+   05CC                    1541 00129$:
+                           1542 ;	ONIONS.c 251
+                           1543 ; genMinus
+                           1544 ; AOP_STK for _main_cursorPosition_1_1
+   05CC F8 08              1545 	lda	hl,8(sp)
+   05CE 7E                 1546 	ld	a,(hl)
+   05CF C6 FF              1547 	add	a,#0xFF
+   05D1 4F                 1548 	ld	c,a
+                           1549 ; genLeftShift
+   05D2 79                 1550 	ld	a,c
+   05D3 87                 1551 	add	a,a
+   05D4 87                 1552 	add	a,a
+   05D5 4F                 1553 	ld	c,a
+                           1554 ; genPlus
+                           1555 ; AOP_HL for _currentScreenPointer
+                           1556 ;	genPlusIncr failed
+   05D6 21 1C 00           1557 	ld	hl,#_currentScreenPointer + 0
+   05D9 7E                 1558 	ld	a,(hl)
+   05DA 81                 1559 	add	a,c
+   05DB 4F                 1560 	ld	c,a
+   05DC 23                 1561 	inc	hl
+   05DD 7E                 1562 	ld	a,(hl)
+   05DE CE 00              1563 	adc	a,#0x00
+   05E0 47                 1564 	ld	b,a
+                           1565 ; genPlus
+                           1566 ; genPlusIncr
+   05E1 59                 1567 	ld	e,c
+   05E2 50                 1568 	ld	d,b
+   05E3 13                 1569 	inc	de
+   05E4 13                 1570 	inc	de
+                           1571 ; genPointerGet
+   05E5 1A                 1572 	ld	a,(de)
+   05E6 4F                 1573 	ld	c,a
+                           1574 ; genAnd
+   05E7 79                 1575 	ld	a,c
+   05E8 CB 47              1576 	bit	0,a
+   05EA CA 1E 06           1577 	jp	z,00131$
+                           1578 ;	ONIONS.c 253
+                           1579 ; genIpush
+                           1580 ; AOP_STK for _main_cursorPosition_1_1
+   05ED F8 08              1581 	lda	hl,8(sp)
+   05EF 7E                 1582 	ld	a,(hl)
+   05F0 F5                 1583 	push	af
+   05F1 33                 1584 	inc	sp
+                           1585 ; genIpush
+   05F2 3E 00              1586 	ld	a,#0x00
+   05F4 F5                 1587 	push	af
+   05F5 33                 1588 	inc	sp
+                           1589 ; genCall
+   05F6 CD 00 00           1590 	call	_gotoxy
+   05F9 E8 02              1591 	lda	sp,2(sp)
+                           1592 ; genIpush
+   05FB 3E 04              1593 	ld	a,#0x04
+   05FD F5                 1594 	push	af
+   05FE 33                 1595 	inc	sp
+                           1596 ; genCall
+   05FF CD 00 00           1597 	call	_setchar
+   0602 E8 01              1598 	lda	sp,1(sp)
+                           1599 ;	ONIONS.c 254
+                           1600 ; genIpush
+                           1601 ; AOP_STK for _main_cursorPosition_1_1
+   0604 F8 08              1602 	lda	hl,8(sp)
+   0606 7E                 1603 	ld	a,(hl)
+   0607 F5                 1604 	push	af
+   0608 33                 1605 	inc	sp
+                           1606 ; genIpush
+   0609 3E 01              1607 	ld	a,#0x01
+   060B F5                 1608 	push	af
+   060C 33                 1609 	inc	sp
+                           1610 ; genCall
+   060D CD 00 00           1611 	call	_gotoxy
+   0610 E8 02              1612 	lda	sp,2(sp)
+                           1613 ; genIpush
+   0612 3E 03              1614 	ld	a,#0x03
+   0614 F5                 1615 	push	af
+   0615 33                 1616 	inc	sp
+                           1617 ; genCall
+   0616 CD 00 00           1618 	call	_setchar
+   0619 E8 01              1619 	lda	sp,1(sp)
+                           1620 ; genGoto
+   061B C3 B8 02           1621 	jp	00136$
+                           1622 ; genLabel
+   061E                    1623 00131$:
+                           1624 ;	ONIONS.c 259
+                           1625 ; genIpush
+                           1626 ; AOP_STK for _main_cursorPosition_1_1
+   061E F8 08              1627 	lda	hl,8(sp)
+   0620 7E                 1628 	ld	a,(hl)
+   0621 F5                 1629 	push	af
+   0622 33                 1630 	inc	sp
+                           1631 ; genIpush
+   0623 3E 01              1632 	ld	a,#0x01
+   0625 F5                 1633 	push	af
+   0626 33                 1634 	inc	sp
+                           1635 ; genCall
+   0627 CD 00 00           1636 	call	_gotoxy
+   062A E8 02              1637 	lda	sp,2(sp)
+                           1638 ; genIpush
+   062C 3E 03              1639 	ld	a,#0x03
+   062E F5                 1640 	push	af
+   062F 33                 1641 	inc	sp
+                           1642 ; genCall
+   0630 CD 00 00           1643 	call	_setchar
+   0633 E8 01              1644 	lda	sp,1(sp)
+                           1645 ; genGoto
+   0635 C3 B8 02           1646 	jp	00136$
+                           1647 ; genLabel
+   0638                    1648 00138$:
+                           1649 ; genEndFunction
+   0638 E8 0B              1650 	lda	sp,11(sp)
+   063A C1                 1651 	pop	bc
+   063B C9                 1652 	ret
+   063C                    1653 ___main_end:
+   063C                    1654 __str_22:
+   063C 25 73 20 25 64     1655 	.ascii "%s %d"
+   0641 00                 1656 	.db 0x00
+   0642                    1657 __str_23:
+   0642 25 73 20 25 64     1658 	.ascii "%s %d"
+   0647 00                 1659 	.db 0x00
+                           1660 	.area _CODE
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 1.
+
+Symbol Table
+
+  0 ___cls_end                         003F R
+  0 ___cls_start                       0000 R
+  0 ___drawScreen_end                  0285 R
+  0 ___drawScreen_start                018D R
+  0 ___main_end                        063C R
+  0 ___main_start                      028E R
+    __cpu                              **** GX
+    __io_in                            **** GX
+    __io_out                           **** GX
+    __io_status                        **** GX
+  0 __str_0                            009B R
+  0 __str_20                           0285 R
+  0 __str_21                           028B R
+  0 __str_22                           063C R
+  0 __str_23                           0642 R
+  0 _cls                               0000 GR
+  1 _configValues                      0000 GR
+  1 _currentScreenPointer              001C GR
+  0 _drawScreen                        018D GR
+    _gotoxy                            **** GX
+    _joypad                            **** GX
+  0 _main                              028E GR
+    _printf                            **** GX
+  0 _screen_0                          003F GR
+  0 _screen_1                          006B GR
+  0 _screen_2                          007F GR
+  0 _screen_3                          0093 GR
+  1 _screens_array                     0014 GR
+    _setchar                           **** GX
+  0 _str_1                             00B0 R
+  0 _str_10                            0102 R
+  0 _str_11                            0110 R
+  0 _str_12                            011E R
+  0 _str_13                            012C R
+  0 _str_14                            013A R
+  0 _str_15                            0148 R
+  0 _str_16                            0156 R
+  0 _str_17                            0164 R
+  0 _str_18                            0172 R
+  0 _str_19                            0180 R
+  0 _str_2                             00BE R
+  0 _str_3                             00CC R
+  0 _str_4                             00D5 R
+  0 _str_5                             00D6 R
+  0 _str_6                             00E4 R
+  0 _str_7                             00F2 R
+  0 _str_8                             0100 R
+  0 _str_9                             0101 R
+    _sys_time                          **** GX
+    _waitpadup                         **** GX
+
+ASxxxx Assembler V01.75  (GameBoy Z80-like CPU), page 2.
+
+Area Table
+
+   0 _CODE                              size  648   flags 0
+   1 _DATA                              size   1E   flags 0
+   2 _OVERLAY                           size    0   flags 0
+   3 _ISEG                              size    0   flags 0
+   4 _BSEG                              size    0   flags 0
+   5 _XSEG                              size    0   flags 0
+   6 _GSINIT                            size   28   flags 0
+   7 _GSFINAL                           size    0   flags 0
+   8 _HOME                              size    0   flags 0

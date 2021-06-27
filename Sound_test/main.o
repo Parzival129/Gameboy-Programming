@@ -1,0 +1,32 @@
+XL
+H 9 areas 8 global symbols
+M lcc67160
+S __cpu Ref0000
+S _sys_time Ref0000
+S __io_in Ref0000
+S __io_out Ref0000
+S __io_status Ref0000
+S _joypad Ref0000
+S _delay Ref0000
+A _CODE size 48 flags 0
+S _main Def0000
+A _DATA size 0 flags 0
+A _OVERLAY size 0 flags 0
+A _ISEG size 0 flags 0
+A _BSEG size 0 flags 0
+A _XSEG size 0 flags 0
+A _GSINIT size 0 flags 0
+A _GSFINAL size 0 flags 0
+A _HOME size 0 flags 0
+T 00 00 C5 11 26 FF 3E 80 12 11 24 FF 3E 77 12 11
+R 00 00 00 00
+T 0E 00 25 FF 3E FF 12 CD 00 00 4B AF B1 CA 13 00
+R 00 00 00 00 02 08 05 00 00 0E 00 00
+T 1C 00 11 10 FF 3E 16 12 11 11 FF 3E 40 12 11
+R 00 00 00 00
+T 29 00 12 FF 3E 73 12 11 13 FF 3E 00 12 11 14 FF
+R 00 00 00 00
+T 37 00 3E C3 12 21 E8 03 E5 CD 00 00 E8 02 C3
+R 00 00 00 00 02 0A 06 00
+T 44 00 13 00 C1 C9
+R 00 00 00 00 00 02 00 00
